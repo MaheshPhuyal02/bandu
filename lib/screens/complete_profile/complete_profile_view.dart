@@ -21,38 +21,44 @@ class Complete_profilePage extends StatelessWidget {
   }
 
   Widget _buildPage(BuildContext context) {
-    final provider = context.read<Complete_profileProvider>();
-
-    return PaddingScaffold(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        30.verticalSpace,
-        Text("Role",
-            style: TextStyle(fontSize: 34.sp, fontWeight: FontWeight.bold)),
-        4.verticalSpace,
-        Text(
-          " Select your role",
-          textAlign: TextAlign.start,
-          style: Theme.of(context).textTheme.labelSmall,
-        ),
-        30.verticalSpace,
-        _buildItem(false, "Freelancer", "I'm a freelancer", () {},
-            "assets/illu/freelancer.svg", context),
-        20.verticalSpace,
-        Container(
-          width: double.infinity,
-          alignment: Alignment.center,
-          child: Text("OR",
-              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
-        ),
-        20.verticalSpace,
-        _buildItem(false, "Employee", "I'm work at office", () {},
-            "assets/illu/office.svg", context),
-        1.flex,
-        PrimaryButton(text: "Continue", onPressed: () {}),
-      ],
+    return PaddingScaffold(child: Consumer<Complete_profileProvider>(
+      builder: (context, provider, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            30.verticalSpace,
+            Text("Role",
+                style: TextStyle(fontSize: 34.sp, fontWeight: FontWeight.bold)),
+            4.verticalSpace,
+            Text(
+              " Select your role",
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+            30.verticalSpace,
+            _buildItem(provider.selected == 0, "Freelancer", "I'm a freelancer",
+                () {
+              provider.setSelected(0);
+            }, "assets/illu/freelancer.svg", context),
+            20.verticalSpace,
+            Container(
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: Text("OR",
+                  style:
+                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+            ),
+            20.verticalSpace,
+            _buildItem(provider.selected == 1, "Employee", "I'm work at office",
+                () {
+              provider.setSelected(1);
+            }, "assets/illu/office.svg", context),
+            1.flex,
+            PrimaryButton(text: "Continue", onPressed: () {}),
+          ],
+        );
+      },
     ));
   }
 
