@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'home_provider.dart';
+import 'task_provider.dart';
 
-class HomePage extends StatelessWidget {
+class TodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (BuildContext context) => HomeProvider(),
+      create: (BuildContext context) => TodoProvider(),
       builder: (context, child) => _buildPage(context),
     );
   }
 
   Widget _buildPage(BuildContext context) {
-    final provider = context.read<HomeProvider>();
+    final provider = context.read<TodoProvider>();
 
     return Container();
   }
