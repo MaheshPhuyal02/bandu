@@ -118,32 +118,37 @@ class LoginPage extends StatelessWidget {
               Container(
                   alignment: Alignment.center, child: Text("or continue with")),
               30.verticalSpace,
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                      color: Theme.of(context).primaryColor,
-                      style: BorderStyle.solid,
-                      width: 1),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/icons/google.svg",
-                      width: 20.w,
-                      height: 20.w,
-                    ),
-                    12.horizontalSpace,
-                    Text(
-                      "Continue with Google",
-                      style: TextStyle(
-                        fontSize: 16.sp,
+              InkWell(
+                onTap: () {
+                  provider.loginWithGoogle(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                        style: BorderStyle.solid,
+                        width: 1),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/google.svg",
+                        width: 20.w,
+                        height: 20.w,
                       ),
-                    ),
-                  ],
+                      12.horizontalSpace,
+                      Text(
+                        "Continue with Google",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               5.verticalSpace,

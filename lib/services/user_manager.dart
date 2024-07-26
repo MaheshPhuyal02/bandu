@@ -38,6 +38,7 @@ class AuthManager {
   }
 
   Future<void> loginWithEmailPass(String email, String pass) async {
+    status = AuthStatus.loading;
     print("AuthManager ::: Logging in with email and password");
     _auth
         .signInWithEmailAndPassword(email: email, password: pass)
@@ -52,9 +53,10 @@ class AuthManager {
   }
 
   Future<void> loginWithGoogle() async {
+    status = AuthStatus.loading;
     print("AuthManager ::: Logging in with Google");
     AuthProvider provider = GoogleAuthProvider();
-    _auth.signInWithPopup(provider).then((value) async {
+    _auth.signInWithProvider(provider).then((value) async {
       status = AuthStatus.authenticated;
       await initializeUser();
       validateUser();
@@ -66,6 +68,7 @@ class AuthManager {
 
   Future<void> register(String name, String email, String pass) async {
     print("AuthManager ::: Registering with email and password");
+    status = AuthStatus.loading;
     _auth
         .createUserWithEmailAndPassword(email: email, password: pass)
         .then((value) {
@@ -78,6 +81,7 @@ class AuthManager {
   }
 
   Future<void> validateUser() async {
+
     print("AuthManager ::: Validating user :: " + _user.toString());
     if (_user == null) {
       appRouter.pushAndPopUntil(Complete_profileRoute(),
