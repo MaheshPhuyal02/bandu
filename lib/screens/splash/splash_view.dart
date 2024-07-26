@@ -17,9 +17,14 @@ class SplashPage extends StatelessWidget {
   Widget _buildPage(BuildContext context) {
     final provider = context.read<SplashProvider>();
 
+
     return Scaffold(
       body: SafeArea(
-        child: Text("Splash Page"),
+        child: Center(
+          child: Text(
+            "TaskGen AI"
+          ),
+        ),
       ),
     );
   }

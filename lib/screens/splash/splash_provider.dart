@@ -8,14 +8,15 @@ import '../../routes/app_router.gr.dart';
 
 class SplashProvider extends ChangeNotifier {
   SplashProvider() {
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () async {
       if (SharedPref.instance.getValue("showedGuide") == null ||
           SharedPref.instance.getValue("showedGuide") == false) {
+        print("SplashProvider ::: Showing Guide");
         appRouter.replace(GuideRoute());
         return;
       }
       if (AuthManager.instance.hasLoggedIn()) {
-        appRouter.replace(HomeMainRoute());
+        await AuthManager.instance.validateUser();
       } else {
         appRouter.replace(LoginRoute());
       }

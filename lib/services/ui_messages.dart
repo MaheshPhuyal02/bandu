@@ -6,7 +6,22 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../constants/ColorsConst.dart';
 
 class UiMessages {
-  static void showError(String msg) {}
+  static void showError(BuildContext context, String msg) {
+    showAdaptiveDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text('Error'),
+        content: Text(msg),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    });
+  }
 
   static void showLoading(BuildContext context) {
     showDialog(
@@ -24,5 +39,9 @@ class UiMessages {
         ),
       ),
     );
+  }
+
+  static void hideLoading(BuildContext context) {
+    Navigator.of(context).pop();
   }
 }
