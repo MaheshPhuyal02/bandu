@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "272383080122",
+    "project_id": "taskgen-ai",
+    "storage_bucket": "taskgen-ai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272383080122:android:4f341c38da8235de71b483",
+        "android_client_info": {
+          "package_name": "com.mk.bandu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272383080122-6momp58dubje4sar7fujkoql10cu1790.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_fbTgCEIrkmgB4hVlpgSeh7_f3G2SKxY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272383080122-6momp58dubje4sar7fujkoql10cu1790.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

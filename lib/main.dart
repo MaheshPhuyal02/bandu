@@ -1,9 +1,20 @@
 
+import 'package:bandu/routes/app_router.dart';
+import 'package:bandu/services/gemini_manager.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await GeminiManager.instance.init();
   runApp(const MyApp());
 }
+
+final appRouter = AppRouter();
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -15,21 +26,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(
-        title:
-            const Text('Hello World App'),
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Center(
-              child: Text("Hello world"),
-            )
-          ],
-        ),
-      ),
-    ));
+    return MaterialApp.router(
+      theme: ThemeData.light(),
+      routerDelegate: appRouter.delegate(),
+      routeInformationParser: appRouter.defaultRouteParser(),
+    );
   }
 }

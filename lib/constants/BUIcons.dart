@@ -1,21 +1,4 @@
 class BUIcons {
-  // activity.svg
-  // arrow_left.svg
-  // camera.svg
-  // chat.svg
-  // delete.svg
-  // delete_1.svg
-  // filter_2.svg
-  // logout.svg
-  // message.svg
-  // more_circle.svg
-  // notification.svg
-  // paper.svg
-  // plus.svg
-  // search.svg
-  // send.svg
-  // voice_1.svg
-  // voice_2.svg
 
   static String ACTIVITY = iconRoot + "activity.svg";
   static String ARROW_LEFT = iconRoot + "arrow_left.svg";
