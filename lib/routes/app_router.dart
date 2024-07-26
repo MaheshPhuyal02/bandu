@@ -12,6 +12,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: RegisterRoute.page),
         AutoRoute(page: Get_startedRoute.page),
         AutoRoute(page: HomeMainRoute.page),
+        AutoRoute(page: GuideRoute.page),
 
       ];
 }

@@ -32,25 +32,25 @@ class GeminiManager {
     );
     status = GeminiStatus.ready;
 
-    final chat = _gemModel?.startChat();
-    final prompt = 'Dim the lights so the room feels cozy and warm.';
-
-    var response = await chat?.sendMessage(Content.text(prompt));
-
-    final functionCalls = response?.functionCalls.toList();
-    if (functionCalls!.isNotEmpty) {
-      final functionCall = functionCalls.first;
-      final result = switch (functionCall.name) {
-        'setLightValues' => await setLightValues(functionCall.args),
-        _ => throw UnimplementedError(
-            'Function not implemented: ${functionCall.name}')
-      };
-      response = await chat!
-          .sendMessage(Content.functionResponse(functionCall.name, result));
-    }
-    if (response!.text case final text?) {
-      print(text);
-    }
+    // final chat = _gemModel?.startChat();
+    // final prompt = 'Dim the lights so the room feels cozy and warm.';
+    //
+    // var response = await chat?.sendMessage(Content.text(prompt));
+    //
+    // final functionCalls = response?.functionCalls.toList();
+    // if (functionCalls!.isNotEmpty) {
+    //   final functionCall = functionCalls.first;
+    //   final result = switch (functionCall.name) {
+    //     'setLightValues' => await setLightValues(functionCall.args),
+    //     _ => throw UnimplementedError(
+    //         'Function not implemented: ${functionCall.name}')
+    //   };
+    //   response = await chat!
+    //       .sendMessage(Content.functionResponse(functionCall.name, result));
+    // }
+    // if (response!.text case final text?) {
+    //   print(text);
+    // }
   }
 
   Future<Map<String, Object?>> setLightValues(

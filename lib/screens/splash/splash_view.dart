@@ -17,7 +17,11 @@ class SplashPage extends StatelessWidget {
   Widget _buildPage(BuildContext context) {
     final provider = context.read<SplashProvider>();
 
-    return Container();
+    return Scaffold(
+      body: SafeArea(
+        child: Text("Splash Page"),
+      ),
+    );
   }
 }
 

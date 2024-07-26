@@ -35,6 +35,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/filter_2.svg
   SvgGenImage get filter2 => const SvgGenImage('assets/icons/filter_2.svg');
 
+  /// File path: assets/icons/google.svg
+  SvgGenImage get google => const SvgGenImage('assets/icons/google.svg');
+
   /// File path: assets/icons/logout.svg
   SvgGenImage get logout => const SvgGenImage('assets/icons/logout.svg');
 
@@ -76,6 +79,7 @@ class $AssetsIconsGen {
         delete,
         delete1,
         filter2,
+        google,
         logout,
         message,
         moreCircle,
@@ -89,10 +93,104 @@ class $AssetsIconsGen {
       ];
 }
 
+class $AssetsIlluGen {
+  const $AssetsIlluGen();
+
+  /// File path: assets/illu/plan.png
+  AssetGenImage get planPng => const AssetGenImage('assets/illu/plan.png');
+
+  /// File path: assets/illu/plan.svg
+  SvgGenImage get planSvg => const SvgGenImage('assets/illu/plan.svg');
+
+  /// File path: assets/illu/question.png
+  AssetGenImage get question => const AssetGenImage('assets/illu/question.png');
+
+  /// File path: assets/illu/stay_org.png
+  AssetGenImage get stayOrg => const AssetGenImage('assets/illu/stay_org.png');
+
+  /// List of all assets
+  List<dynamic> get values => [planPng, planSvg, question, stayOrg];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsIlluGen illu = $AssetsIlluGen();
+}
+
+class AssetGenImage {
+  const AssetGenImage(this._assetName);
+
+  final String _assetName;
+
+  Image image({
+    Key? key,
+    AssetBundle? bundle,
+    ImageFrameBuilder? frameBuilder,
+    ImageErrorWidgetBuilder? errorBuilder,
+    String? semanticLabel,
+    bool excludeFromSemantics = false,
+    double? scale,
+    double? width,
+    double? height,
+    Color? color,
+    Animation<double>? opacity,
+    BlendMode? colorBlendMode,
+    BoxFit? fit,
+    AlignmentGeometry alignment = Alignment.center,
+    ImageRepeat repeat = ImageRepeat.noRepeat,
+    Rect? centerSlice,
+    bool matchTextDirection = false,
+    bool gaplessPlayback = false,
+    bool isAntiAlias = false,
+    String? package,
+    FilterQuality filterQuality = FilterQuality.low,
+    int? cacheWidth,
+    int? cacheHeight,
+  }) {
+    return Image.asset(
+      _assetName,
+      key: key,
+      bundle: bundle,
+      frameBuilder: frameBuilder,
+      errorBuilder: errorBuilder,
+      semanticLabel: semanticLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      scale: scale,
+      width: width,
+      height: height,
+      color: color,
+      opacity: opacity,
+      colorBlendMode: colorBlendMode,
+      fit: fit,
+      alignment: alignment,
+      repeat: repeat,
+      centerSlice: centerSlice,
+      matchTextDirection: matchTextDirection,
+      gaplessPlayback: gaplessPlayback,
+      isAntiAlias: isAntiAlias,
+      package: package,
+      filterQuality: filterQuality,
+      cacheWidth: cacheWidth,
+      cacheHeight: cacheHeight,
+    );
+  }
+
+  ImageProvider provider({
+    AssetBundle? bundle,
+    String? package,
+  }) {
+    return AssetImage(
+      _assetName,
+      bundle: bundle,
+      package: package,
+    );
+  }
+
+  String get path => _assetName;
+
+  String get keyName => _assetName;
 }
 
 class SvgGenImage {

@@ -104,6 +104,10 @@ class AuthManager {
       _user = DBUser.fromJson(event.data()!);
     });
   }
+
+  bool hasLoggedIn() {
+    return _auth.currentUser != null;
+  }
 }
 
 enum AuthStatus { loading, authenticated, unauthenticated, error }
