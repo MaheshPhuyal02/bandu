@@ -3,6 +3,8 @@ import 'package:bandu/components/padding_scaffold.dart';
 import 'package:bandu/components/primary_button.dart';
 import 'package:bandu/constants/ColorsConst.dart';
 import 'package:bandu/ext/sizes_ext.dart';
+import 'package:bandu/main.dart';
+import 'package:bandu/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,7 +29,18 @@ class Complete_profilePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            30.verticalSpace,
+            10.verticalSpace,
+            TextButton(
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 30.sp,
+                color: ColorsConst.BLACK,
+              ),
+              onPressed: () {
+                provider.exit(context);
+              },
+            ),
+            20.verticalSpace,
             Text("Role",
                 style: TextStyle(fontSize: 34.sp, fontWeight: FontWeight.bold)),
             4.verticalSpace,
@@ -50,12 +63,16 @@ class Complete_profilePage extends StatelessWidget {
                       TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
             ),
             20.verticalSpace,
-            _buildItem(provider.selected == 1, "Employee", "I'm work at office",
+            _buildItem(provider.selected == 1, "Employee", "I work at office",
                 () {
               provider.setSelected(1);
             }, "assets/illu/office.svg", context),
             1.flex,
-            PrimaryButton(text: "Continue", onPressed: () {}),
+            PrimaryButton(
+                text: "Continue",
+                onPressed: () {
+                  provider.submit();
+                }),
           ],
         );
       },

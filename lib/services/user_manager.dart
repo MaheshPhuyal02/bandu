@@ -1,6 +1,7 @@
 import 'package:bandu/main.dart';
 import 'package:bandu/routes/app_router.gr.dart';
 import 'package:bandu/services/db_manager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -44,6 +45,7 @@ class AuthManager {
         .signInWithEmailAndPassword(email: email, password: pass)
         .then((value) async {
       status = AuthStatus.authenticated;
+
       await initializeUser();
       validateUser();
     }).catchError((error) {
@@ -56,8 +58,29 @@ class AuthManager {
     status = AuthStatus.loading;
     print("AuthManager ::: Logging in with Google");
     AuthProvider provider = GoogleAuthProvider();
-    _auth.signInWithProvider(provider).then((value) async {
+    UserCredential val = await _auth.signInWithProvider(provider);
+    if (val.user != null) {
       status = AuthStatus.authenticated;
+      String name = val.user!.displayName ?? "";
+      String email = val.user!.email ?? "";
+
+      await _handleRegister(name, email, "google");
+      await initializeUser();
+      validateUser();
+    } else {
+      _error = "Failed to login with Google";
+      status = AuthStatus.error;
+    }
+  }
+
+  Future<void> register(String name, String email, String pass) async {
+    print("AuthManager ::: Registering with email and password");
+    status = AuthStatus.loading;
+    _auth
+        .createUserWithEmailAndPassword(email: email, password: pass)
+        .then((value) async {
+      status = AuthStatus.authenticated;
+      await _handleRegister(name, email, "email");
       await initializeUser();
       validateUser();
     }).catchError((error) {
@@ -66,22 +89,7 @@ class AuthManager {
     });
   }
 
-  Future<void> register(String name, String email, String pass) async {
-    print("AuthManager ::: Registering with email and password");
-    status = AuthStatus.loading;
-    _auth
-        .createUserWithEmailAndPassword(email: email, password: pass)
-        .then((value) {
-      status = AuthStatus.authenticated;
-      _handleRegister(name, email);
-    }).catchError((error) {
-      _error = error.toString();
-      status = AuthStatus.error;
-    });
-  }
-
   Future<void> validateUser() async {
-
     print("AuthManager ::: Validating user :: " + _user.toString());
     if (_user == null) {
       appRouter.pushAndPopUntil(Complete_profileRoute(),
@@ -94,21 +102,17 @@ class AuthManager {
     }
   }
 
-  void _handleRegister(String name, String email) {
+  Future<void> _handleRegister(String name, String email, String provider) async {
     print("AuthManager ::: Handling register");
-    DBUser user = DBUser(name: name, email: email, completed: false);
+    DBUser user = DBUser(
+        uid: _auth.currentUser!.uid,
+        name: name,
+        email: email,
+        createdAt: DateTime.now(),
+        provider: provider,
+        completed: false);
 
-    dbManager?.addUser(user).then((value) {
-      if (value) {
-        _user = user;
-        status = AuthStatus.authenticated;
-        appRouter.pushAndPopUntil(Complete_profileRoute(),
-            predicate: (route) => false);
-      } else {
-        _error = "Failed to register";
-        status = AuthStatus.error;
-      }
-    });
+    await dbManager?.addUser(user);
   }
 
   Future<bool?> hasUserData() async {
@@ -117,13 +121,18 @@ class AuthManager {
   }
 
   Future<void> initializeUser() async {
-    print("AuthManager ::: Initializing user");
-    dbManager?.listerUser(_auth.currentUser!.uid).listen((event) {
-      if (event.data() == null) {
-        return;
-      }
-      _user = DBUser.fromJson(event.data()!);
-    });
+    if (_auth.currentUser == null) {
+      return;
+    }
+    print("AuthManager ::: Initializing user " + _auth.currentUser!.uid);
+    DocumentSnapshot<Map<String, dynamic>>? data =
+        await dbManager?.getUserData(_auth.currentUser!.uid);
+    if (data?.data() != null) {
+      _user = DBUser.fromJson(data!.data()!);
+    } else {
+      _user = null;
+    }
+    print("AuthManager ::: User initialized :: " + _user.toString());
   }
 
   bool hasLoggedIn() {
@@ -133,6 +142,22 @@ class AuthManager {
 
   String getError() {
     return _error;
+  }
+
+  void updateWorkAs({
+    required String workAs,
+  }) {
+    print("AuthManager ::: Updating user");
+    _user = _user?.copyWith(workAs: workAs, completed: true);
+    dbManager?.updateUser(_user!, _auth.currentUser!.uid);
+  }
+
+  void logout() {
+    print("AuthManager ::: Logging out");
+    _auth.signOut();
+    status = AuthStatus.unauthenticated;
+    _user = null;
+    appRouter.pushAndPopUntil(LoginRoute(), predicate: (route) => false);
   }
 }
 

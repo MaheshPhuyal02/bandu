@@ -13,6 +13,7 @@ class BUTheme {
     highlightColor: ColorsConst.SECONDARY,
     hoverColor: ColorsConst.SECONDARY,
 
+
     scaffoldBackgroundColor: ColorsConst.WHITE,
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(

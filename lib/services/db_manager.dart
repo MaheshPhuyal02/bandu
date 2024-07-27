@@ -25,7 +25,7 @@ class DbManager {
   Future<bool> addUser(DBUser user) {
     return _firestore
         .collection('users')
-        .doc(user.email)
+        .doc(user.uid)
         .set(user.toJson())
         .then((value) => true)
         .catchError((error) => false);
@@ -43,11 +43,16 @@ class DbManager {
   }
   
 
-  getUserData(String uid) {
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserData(String uid) {
     return _firestore.collection('users').doc(uid).get();
   }
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> listerUser(String uid) {
     return _firestore.collection('users').doc(uid).snapshots();
+  }
+
+  void updateUser(DBUser dbUser, String uid) {
+    _firestore.collection('users').doc(uid).update(dbUser.toJson());
+
   }
 }

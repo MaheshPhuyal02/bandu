@@ -20,6 +20,7 @@ DBUser _$DBUserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$DBUser {
+  String get uid => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   List<String>? get role => throw _privateConstructorUsedError;
@@ -40,7 +41,8 @@ abstract class $DBUserCopyWith<$Res> {
       _$DBUserCopyWithImpl<$Res, DBUser>;
   @useResult
   $Res call(
-      {String name,
+      {String uid,
+      String name,
       String email,
       List<String>? role,
       String? workAs,
@@ -65,6 +67,7 @@ class _$DBUserCopyWithImpl<$Res, $Val extends DBUser>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? uid = null,
     Object? name = null,
     Object? email = null,
     Object? role = freezed,
@@ -75,6 +78,10 @@ class _$DBUserCopyWithImpl<$Res, $Val extends DBUser>
     Object? project = freezed,
   }) {
     return _then(_value.copyWith(
+      uid: null == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -131,7 +138,8 @@ abstract class _$$DBUserImplCopyWith<$Res> implements $DBUserCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String name,
+      {String uid,
+      String name,
       String email,
       List<String>? role,
       String? workAs,
@@ -155,6 +163,7 @@ class __$$DBUserImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? uid = null,
     Object? name = null,
     Object? email = null,
     Object? role = freezed,
@@ -165,6 +174,10 @@ class __$$DBUserImplCopyWithImpl<$Res>
     Object? project = freezed,
   }) {
     return _then(_$DBUserImpl(
+      uid: null == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -205,7 +218,8 @@ class __$$DBUserImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DBUserImpl implements _DBUser {
   const _$DBUserImpl(
-      {required this.name,
+      {required this.uid,
+      required this.name,
       required this.email,
       final List<String>? role,
       this.workAs,
@@ -218,6 +232,8 @@ class _$DBUserImpl implements _DBUser {
   factory _$DBUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$DBUserImplFromJson(json);
 
+  @override
+  final String uid;
   @override
   final String name;
   @override
@@ -245,7 +261,7 @@ class _$DBUserImpl implements _DBUser {
 
   @override
   String toString() {
-    return 'DBUser(name: $name, email: $email, role: $role, workAs: $workAs, createdAt: $createdAt, completed: $completed, provider: $provider, project: $project)';
+    return 'DBUser(uid: $uid, name: $name, email: $email, role: $role, workAs: $workAs, createdAt: $createdAt, completed: $completed, provider: $provider, project: $project)';
   }
 
   @override
@@ -253,6 +269,7 @@ class _$DBUserImpl implements _DBUser {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DBUserImpl &&
+            (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.email, email) || other.email == email) &&
             const DeepCollectionEquality().equals(other._role, _role) &&
@@ -270,6 +287,7 @@ class _$DBUserImpl implements _DBUser {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      uid,
       name,
       email,
       const DeepCollectionEquality().hash(_role),
@@ -295,7 +313,8 @@ class _$DBUserImpl implements _DBUser {
 
 abstract class _DBUser implements DBUser {
   const factory _DBUser(
-      {required final String name,
+      {required final String uid,
+      required final String name,
       required final String email,
       final List<String>? role,
       final String? workAs,
@@ -306,6 +325,8 @@ abstract class _DBUser implements DBUser {
 
   factory _DBUser.fromJson(Map<String, dynamic> json) = _$DBUserImpl.fromJson;
 
+  @override
+  String get uid;
   @override
   String get name;
   @override

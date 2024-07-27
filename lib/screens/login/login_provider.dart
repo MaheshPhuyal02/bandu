@@ -38,7 +38,6 @@ class LoginProvider extends ChangeNotifier {
   Future<void> loginWithGoogle(BuildContext context) async {
     setLoading(context, true);
     await AuthManager.instance.loginWithGoogle();
-    await Future.delayed(Duration(seconds: 1));
     setLoading(context, false);
     print("status : " + AuthManager.instance.status.toString());
     if(AuthManager.instance.status == AuthStatus.error) {

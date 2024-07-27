@@ -7,6 +7,7 @@ part of 'db_user.dart';
 // **************************************************************************
 
 _$DBUserImpl _$$DBUserImplFromJson(Map<String, dynamic> json) => _$DBUserImpl(
+      uid: json['uid'] as String,
       name: json['name'] as String,
       email: json['email'] as String,
       role: (json['role'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -23,6 +24,7 @@ _$DBUserImpl _$$DBUserImplFromJson(Map<String, dynamic> json) => _$DBUserImpl(
 
 Map<String, dynamic> _$$DBUserImplToJson(_$DBUserImpl instance) =>
     <String, dynamic>{
+      'uid': instance.uid,
       'name': instance.name,
       'email': instance.email,
       'role': instance.role,

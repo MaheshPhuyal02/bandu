@@ -38,11 +38,20 @@ class $AssetsIconsGen {
   /// File path: assets/icons/google.svg
   SvgGenImage get google => const SvgGenImage('assets/icons/google.svg');
 
+  /// File path: assets/icons/home.svg
+  SvgGenImage get home => const SvgGenImage('assets/icons/home.svg');
+
+  /// File path: assets/icons/logo.svg
+  SvgGenImage get logo => const SvgGenImage('assets/icons/logo.svg');
+
   /// File path: assets/icons/logout.svg
   SvgGenImage get logout => const SvgGenImage('assets/icons/logout.svg');
 
   /// File path: assets/icons/message.svg
   SvgGenImage get message => const SvgGenImage('assets/icons/message.svg');
+
+  /// File path: assets/icons/more.svg
+  SvgGenImage get more => const SvgGenImage('assets/icons/more.svg');
 
   /// File path: assets/icons/more_circle.svg
   SvgGenImage get moreCircle =>
@@ -64,6 +73,15 @@ class $AssetsIconsGen {
   /// File path: assets/icons/send.svg
   SvgGenImage get send => const SvgGenImage('assets/icons/send.svg');
 
+  /// File path: assets/icons/task.svg
+  SvgGenImage get task => const SvgGenImage('assets/icons/task.svg');
+
+  /// File path: assets/icons/task_item.svg
+  SvgGenImage get taskItem => const SvgGenImage('assets/icons/task_item.svg');
+
+  /// File path: assets/icons/timeline.svg
+  SvgGenImage get timeline => const SvgGenImage('assets/icons/timeline.svg');
+
   /// File path: assets/icons/voice_1.svg
   SvgGenImage get voice1 => const SvgGenImage('assets/icons/voice_1.svg');
 
@@ -80,14 +98,20 @@ class $AssetsIconsGen {
         delete1,
         filter2,
         google,
+        home,
+        logo,
         logout,
         message,
+        more,
         moreCircle,
         notification,
         paper,
         plus,
         search,
         send,
+        task,
+        taskItem,
+        timeline,
         voice1,
         voice2
       ];
@@ -95,6 +119,12 @@ class $AssetsIconsGen {
 
 class $AssetsIlluGen {
   const $AssetsIlluGen();
+
+  /// File path: assets/illu/freelancer.svg
+  SvgGenImage get freelancer => const SvgGenImage('assets/illu/freelancer.svg');
+
+  /// File path: assets/illu/office.svg
+  SvgGenImage get office => const SvgGenImage('assets/illu/office.svg');
 
   /// File path: assets/illu/plan.png
   AssetGenImage get planPng => const AssetGenImage('assets/illu/plan.png');
@@ -109,7 +139,8 @@ class $AssetsIlluGen {
   AssetGenImage get stayOrg => const AssetGenImage('assets/illu/stay_org.png');
 
   /// List of all assets
-  List<dynamic> get values => [planPng, planSvg, question, stayOrg];
+  List<dynamic> get values =>
+      [freelancer, office, planPng, planSvg, question, stayOrg];
 }
 
 class Assets {

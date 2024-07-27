@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'home_task_provider.dart';
 
-class Home_todoPage extends StatelessWidget {
+class HomeTaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -15,7 +15,11 @@ class Home_todoPage extends StatelessWidget {
   Widget _buildPage(BuildContext context) {
     final provider = context.read<Home_todoProvider>();
 
-    return Container();
+    return Column(
+      children: [
+
+      ],
+    );
   }
 }
 
