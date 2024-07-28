@@ -22,7 +22,8 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
 mixin _$Message {
   String get id => throw _privateConstructorUsedError;
   String get request => throw _privateConstructorUsedError;
-  String get response => throw _privateConstructorUsedError;
+  String? get response => throw _privateConstructorUsedError;
+  bool? get loading => throw _privateConstructorUsedError;
   ActionType get actionType => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -36,7 +37,11 @@ abstract class $MessageCopyWith<$Res> {
       _$MessageCopyWithImpl<$Res, Message>;
   @useResult
   $Res call(
-      {String id, String request, String response, ActionType actionType});
+      {String id,
+      String request,
+      String? response,
+      bool? loading,
+      ActionType actionType});
 }
 
 /// @nodoc
@@ -54,7 +59,8 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
   $Res call({
     Object? id = null,
     Object? request = null,
-    Object? response = null,
+    Object? response = freezed,
+    Object? loading = freezed,
     Object? actionType = null,
   }) {
     return _then(_value.copyWith(
@@ -66,10 +72,14 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
           ? _value.request
           : request // ignore: cast_nullable_to_non_nullable
               as String,
-      response: null == response
+      response: freezed == response
           ? _value.response
           : response // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      loading: freezed == loading
+          ? _value.loading
+          : loading // ignore: cast_nullable_to_non_nullable
+              as bool?,
       actionType: null == actionType
           ? _value.actionType
           : actionType // ignore: cast_nullable_to_non_nullable
@@ -86,7 +96,11 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id, String request, String response, ActionType actionType});
+      {String id,
+      String request,
+      String? response,
+      bool? loading,
+      ActionType actionType});
 }
 
 /// @nodoc
@@ -102,7 +116,8 @@ class __$$MessageImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? request = null,
-    Object? response = null,
+    Object? response = freezed,
+    Object? loading = freezed,
     Object? actionType = null,
   }) {
     return _then(_$MessageImpl(
@@ -114,10 +129,14 @@ class __$$MessageImplCopyWithImpl<$Res>
           ? _value.request
           : request // ignore: cast_nullable_to_non_nullable
               as String,
-      response: null == response
+      response: freezed == response
           ? _value.response
           : response // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      loading: freezed == loading
+          ? _value.loading
+          : loading // ignore: cast_nullable_to_non_nullable
+              as bool?,
       actionType: null == actionType
           ? _value.actionType
           : actionType // ignore: cast_nullable_to_non_nullable
@@ -133,6 +152,7 @@ class _$MessageImpl implements _Message {
       {required this.id,
       required this.request,
       required this.response,
+      this.loading,
       required this.actionType});
 
   factory _$MessageImpl.fromJson(Map<String, dynamic> json) =>
@@ -143,13 +163,15 @@ class _$MessageImpl implements _Message {
   @override
   final String request;
   @override
-  final String response;
+  final String? response;
+  @override
+  final bool? loading;
   @override
   final ActionType actionType;
 
   @override
   String toString() {
-    return 'Message(id: $id, request: $request, response: $response, actionType: $actionType)';
+    return 'Message(id: $id, request: $request, response: $response, loading: $loading, actionType: $actionType)';
   }
 
   @override
@@ -161,6 +183,7 @@ class _$MessageImpl implements _Message {
             (identical(other.request, request) || other.request == request) &&
             (identical(other.response, response) ||
                 other.response == response) &&
+            (identical(other.loading, loading) || other.loading == loading) &&
             (identical(other.actionType, actionType) ||
                 other.actionType == actionType));
   }
@@ -168,7 +191,7 @@ class _$MessageImpl implements _Message {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, request, response, actionType);
+      Object.hash(runtimeType, id, request, response, loading, actionType);
 
   @JsonKey(ignore: true)
   @override
@@ -188,7 +211,8 @@ abstract class _Message implements Message {
   const factory _Message(
       {required final String id,
       required final String request,
-      required final String response,
+      required final String? response,
+      final bool? loading,
       required final ActionType actionType}) = _$MessageImpl;
 
   factory _Message.fromJson(Map<String, dynamic> json) = _$MessageImpl.fromJson;
@@ -198,7 +222,9 @@ abstract class _Message implements Message {
   @override
   String get request;
   @override
-  String get response;
+  String? get response;
+  @override
+  bool? get loading;
   @override
   ActionType get actionType;
   @override

@@ -12,7 +12,7 @@ _$ChatImpl _$$ChatImplFromJson(Map<String, dynamic> json) => _$ChatImpl(
           : DateTime.parse(json['createdAt'] as String),
       title: json['title'] as String?,
       actions:
-          (json['actions'] as List<dynamic>).map((e) => e as String).toList(),
+          (json['actions'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$ChatImplToJson(_$ChatImpl instance) =>

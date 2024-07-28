@@ -22,7 +22,7 @@ Chat _$ChatFromJson(Map<String, dynamic> json) {
 mixin _$Chat {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
-  List<String> get actions => throw _privateConstructorUsedError;
+  List<String>? get actions => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +34,7 @@ abstract class $ChatCopyWith<$Res> {
   factory $ChatCopyWith(Chat value, $Res Function(Chat) then) =
       _$ChatCopyWithImpl<$Res, Chat>;
   @useResult
-  $Res call({DateTime? createdAt, String? title, List<String> actions});
+  $Res call({DateTime? createdAt, String? title, List<String>? actions});
 }
 
 /// @nodoc
@@ -52,7 +52,7 @@ class _$ChatCopyWithImpl<$Res, $Val extends Chat>
   $Res call({
     Object? createdAt = freezed,
     Object? title = freezed,
-    Object? actions = null,
+    Object? actions = freezed,
   }) {
     return _then(_value.copyWith(
       createdAt: freezed == createdAt
@@ -63,10 +63,10 @@ class _$ChatCopyWithImpl<$Res, $Val extends Chat>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
-      actions: null == actions
+      actions: freezed == actions
           ? _value.actions
           : actions // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
     ) as $Val);
   }
 }
@@ -78,7 +78,7 @@ abstract class _$$ChatImplCopyWith<$Res> implements $ChatCopyWith<$Res> {
       __$$ChatImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({DateTime? createdAt, String? title, List<String> actions});
+  $Res call({DateTime? createdAt, String? title, List<String>? actions});
 }
 
 /// @nodoc
@@ -93,7 +93,7 @@ class __$$ChatImplCopyWithImpl<$Res>
   $Res call({
     Object? createdAt = freezed,
     Object? title = freezed,
-    Object? actions = null,
+    Object? actions = freezed,
   }) {
     return _then(_$ChatImpl(
       createdAt: freezed == createdAt
@@ -104,10 +104,10 @@ class __$$ChatImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
-      actions: null == actions
+      actions: freezed == actions
           ? _value._actions
           : actions // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
     ));
   }
 }
@@ -118,7 +118,7 @@ class _$ChatImpl implements _Chat {
   const _$ChatImpl(
       {required this.createdAt,
       required this.title,
-      required final List<String> actions})
+      required final List<String>? actions})
       : _actions = actions;
 
   factory _$ChatImpl.fromJson(Map<String, dynamic> json) =>
@@ -128,12 +128,14 @@ class _$ChatImpl implements _Chat {
   final DateTime? createdAt;
   @override
   final String? title;
-  final List<String> _actions;
+  final List<String>? _actions;
   @override
-  List<String> get actions {
+  List<String>? get actions {
+    final value = _actions;
+    if (value == null) return null;
     if (_actions is EqualUnmodifiableListView) return _actions;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_actions);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -175,7 +177,7 @@ abstract class _Chat implements Chat {
   const factory _Chat(
       {required final DateTime? createdAt,
       required final String? title,
-      required final List<String> actions}) = _$ChatImpl;
+      required final List<String>? actions}) = _$ChatImpl;
 
   factory _Chat.fromJson(Map<String, dynamic> json) = _$ChatImpl.fromJson;
 
@@ -184,7 +186,7 @@ abstract class _Chat implements Chat {
   @override
   String? get title;
   @override
-  List<String> get actions;
+  List<String>? get actions;
   @override
   @JsonKey(ignore: true)
   _$$ChatImplCopyWith<_$ChatImpl> get copyWith =>

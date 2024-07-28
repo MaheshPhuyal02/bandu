@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class HomeProvider extends ChangeNotifier {
   int selectedIndex = 0;
   bool showChat = false;
+  bool animateChatIc = false;
   double x1 = 100.0,
       x2 = 200.0,
       y1 = 100.0,
@@ -40,6 +41,15 @@ class HomeProvider extends ChangeNotifier {
     y1 = 0;
     y2 = 0;
     showChat = !showChat;
+    notifyListeners();
+  }
+
+  void animateChatIcon() {
+    animateChatIc = true;
+    notifyListeners();
+  }
+  void cancelChatIconAnimation() {
+    animateChatIc = false;
     notifyListeners();
   }
 }

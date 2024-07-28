@@ -73,6 +73,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/send.svg
   SvgGenImage get send => const SvgGenImage('assets/icons/send.svg');
 
+  /// File path: assets/icons/sent.svg
+  SvgGenImage get sent => const SvgGenImage('assets/icons/sent.svg');
+
+  /// File path: assets/icons/side_line.svg
+  SvgGenImage get sideLine => const SvgGenImage('assets/icons/side_line.svg');
+
   /// File path: assets/icons/task.svg
   SvgGenImage get task => const SvgGenImage('assets/icons/task.svg');
 
@@ -109,6 +115,8 @@ class $AssetsIconsGen {
         plus,
         search,
         send,
+        sent,
+        sideLine,
         task,
         taskItem,
         timeline,

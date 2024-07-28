@@ -54,6 +54,11 @@ class AuthManager {
     });
   }
 
+  Future<void> resetPassword(String email) async {
+    print("AuthManager ::: Resetting password");
+    await _auth.sendPasswordResetEmail(email: email);
+  }
+
   Future<void> loginWithGoogle() async {
     status = AuthStatus.loading;
     print("AuthManager ::: Logging in with Google");

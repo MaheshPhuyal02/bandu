@@ -9,7 +9,8 @@ class Message with _$Message {
   const factory Message({
     required String id,
     required String request,
-    required String response,
+    required String? response,
+    bool? loading,
     required ActionType actionType,
 
 
@@ -18,8 +19,10 @@ class Message with _$Message {
 }
 
 enum ActionType{
-  createTask,
-  deleteTask,
-  updateTask,
   chat,
+  analyzeRequirements,
+  createTask,
+  analyzeBudget,
+  analyzeTime,
+  summarize,
 }

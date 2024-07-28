@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../constants/ColorsConst.dart';
+import '../../constants/Options.dart';
 
 class TaskListItem extends StatefulWidget {
   const TaskListItem({super.key});
@@ -50,13 +51,18 @@ class _TaskListItemState extends State<TaskListItem> {
                   ],
                 ),
               ),
-              IconButton(
-                onPressed: () {
+              PopupMenuButton<String>(
+                onSelected: (String item) {
+
                 },
-                icon: Icon(
-                  Icons.more_vert,
-                  color: Colors.black,
-                ),
+                itemBuilder: (BuildContext context) {
+                  return Options.taskOptions.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
               ),
             ],
           ),
@@ -68,11 +74,19 @@ class _TaskListItemState extends State<TaskListItem> {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               itemCount: 3,
-              itemBuilder: (context, index) => TaskSublistItem(),
+              itemBuilder: (context, index) => TaskSublistItem(
+                status: TaskStatus.TO_DO,
+              ),
             ),
           ):Container(),
         ],
       ),
     );
   }
+}
+
+enum TaskStatus {
+  TO_DO,
+  IN_PROGRESS,
+  DONE,
 }

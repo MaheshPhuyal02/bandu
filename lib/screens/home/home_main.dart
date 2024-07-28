@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:bandu/screens/ai_chat/ai_chat_icon.dart';
+import 'package:bandu/screens/ai_chat/ai_chat_view.dart';
 import 'package:bandu/screens/home/home/home_view.dart';
 import 'package:bandu/screens/home/home_gantt/home_gantt_view.dart';
 import 'package:flutter/material.dart';
@@ -108,10 +109,15 @@ class HomeMainPage extends StatelessWidget {
                                 provider.x2,
                                 provider.y2);
                           },
-                          child: AiChatIcon()),
+                          child: AiChatIcon(
+                            animate:provider.animateChatIc,
+                            onEnd: () {
+                              provider.cancelChatIconAnimation();
+                            },
+                          )),
                     ),
 
-                    getChatView(provider.showChat),
+                    getChatView(provider.showChat, provider),
 
                   ],
                 );
@@ -123,30 +129,34 @@ class HomeMainPage extends StatelessWidget {
     );
   }
 
-  getChatView(bool show) {
+  getChatView(bool show, HomeProvider provider) {
 
-    if(show) {
-      return Container(
-        margin: EdgeInsets.only(top: 50.h,),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Center(
-          child: Text('Chat'),
+      return AnimatedScale(
+        duration: Duration(milliseconds: 200),
+        onEnd: () {
+          provider.animateChatIcon();
+        },
+        scale: show ? 1 : 0,
+        alignment: Alignment.topRight,
+        child: Container(
+
+          margin: EdgeInsets.only(top: 50.h, left: 10.w, right: 10.w, bottom: 10.h),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child:_chatView(0),
         ),
       );
-    }
 
-    return Container();
   }
 
   getBody(int selectedIndex) {
@@ -174,13 +184,7 @@ class HomeMainPage extends StatelessWidget {
     );
   }
 
-  showChatView(int selected) {
-    return Container(
-      child: Center(
-        child: Text(
-          'Chat' + selected.toString(),
-        ),
-      ),
-    );
+  _chatView(int selected) {
+    return Ai_chatPage();
   }
 }

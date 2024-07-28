@@ -55,11 +55,12 @@ class GeminiManager {
 
   Future<Map<String, Object?>> setLightValues(
     Map<String, Object?> arguments,
-  ) async =>
-      {
-        'brightness': arguments['brightness'],
-        'colorTemperature': arguments['colorTemp'],
-      };
+  ) async {
+    return {
+      'brightness': arguments['brightness'],
+      'colorTemperature': arguments['colorTemp'],
+    };
+  }
 
   final lightControlTool = FunctionDeclaration(
       'setLightValues',
@@ -75,6 +76,18 @@ class GeminiManager {
         'brightness',
         'colorTemperature'
       ]));
+
+  Future<String> sendMessage(String message) async {
+    if (status != GeminiStatus.ready) {
+      throw Exception('Gemini is not ready');
+    }
+
+    final chat = _gemModel?.startChat();
+    Future<GenerateContentResponse>? sendMessage =
+        chat?.sendMessage(Content.text(message));
+    String response = await sendMessage!.then((value) => value.text!);
+    return response;
+  }
 }
 
 enum GeminiStatus {

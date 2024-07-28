@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import '../../task/task_list_item.dart';
 import 'home_task_provider.dart';
 
 class HomeTaskPage extends StatelessWidget {
@@ -15,11 +17,37 @@ class HomeTaskPage extends StatelessWidget {
   Widget _buildPage(BuildContext context) {
     final provider = context.read<Home_todoProvider>();
 
-    return Column(
-      children: [
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.sp),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            30.verticalSpace,
+            Text(
+              'Your Tasks',
+              style: TextStyle(
+                fontSize: 26.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
 
-      ],
+            10.verticalSpace,
+
+
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount:10,
+              itemBuilder: (context, index) {
+                return TaskListItem();
+              },
+            ),
+
+          ],
+        ),
+      ),
     );
   }
 }
-
