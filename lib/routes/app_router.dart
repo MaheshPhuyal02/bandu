@@ -1,6 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-
-import '../screens/home/home_main.dart';
 import 'app_router.gr.dart';
 
 @AutoRouterConfig()
@@ -14,6 +12,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: Complete_profileRoute.page),
         AutoRoute(page: HomeMainRoute.page),
         AutoRoute(page: GuideRoute.page),
+        AutoRoute(page: SelectProjectRoute.page),
 
       ];
 }
