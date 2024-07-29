@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:bandu/components/padding_scaffold.dart';
+import 'package:bandu/components/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +55,52 @@ class SelectProjectPage extends StatelessWidget {
           },
           decoration: InputDecoration(
             hintText: "Enter project title.",
+          ),
+        ),
+
+        10.verticalSpace,
+        Container(
+          alignment: Alignment.topRight,
+          child: SizedBox(
+            width: 100.w,
+            child: PrimaryButton(
+              onPressed: () {
+                // appRouter.push(SelectProjectRoute());
+              },
+              text: "Create",
+            ),
+          ),
+        ),
+
+        10.verticalSpace,
+        Row(
+          children: [
+            Expanded(child: Container(
+              width: double.infinity,
+              height: 1.h,
+              color: Colors.grey.withOpacity(0.9),
+            )),
+            10.horizontalSpace,
+            Text(
+              "Or",
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+            10.horizontalSpace,
+            Expanded(child: Container(
+              width: double.infinity,
+              height: 1.h,
+              color: Colors.grey.withOpacity(0.9),
+            )),
+          ],
+        ),
+
+        10.verticalSpace,
+        Text(
+          "Select Project",
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+            fontSize: 23.sp,
           ),
         ),
       ],
