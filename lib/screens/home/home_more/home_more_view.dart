@@ -1,4 +1,6 @@
 import 'package:bandu/ext/sizes_ext.dart';
+import 'package:bandu/main.dart';
+import 'package:bandu/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -43,7 +45,7 @@ class Home_morePage extends StatelessWidget {
 
               IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  appRouter.push(SelectProjectRoute());
                 },
                 icon: Icon(
                   Icons.keyboard_arrow_down_rounded,

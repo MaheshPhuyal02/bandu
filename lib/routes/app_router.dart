@@ -13,6 +13,5 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: HomeMainRoute.page),
         AutoRoute(page: GuideRoute.page),
         AutoRoute(page: SelectProjectRoute.page),
-
       ];
 }
