@@ -103,6 +103,20 @@ class SelectProjectPage extends StatelessWidget {
             fontSize: 23.sp,
           ),
         ),
+
+        10.verticalSpace,
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text("Project $index"),
+              subtitle: Text("Project description"),
+
+            );
+          },
+        ),
+
       ],
     ));
   }
