@@ -12,7 +12,11 @@ class SelectProjectProvider extends ChangeNotifier {
   TextEditingController titleController = TextEditingController();
 
   void init() {
+    projects.clear();
+    notifyListeners();
+    print("SelectProjectProvider ::: Initializing SelectProjectProvider");
     DbManager.instance.getProjects().then((value) {
+      projects.addAll(value);
       notifyListeners();
     });
   }
@@ -28,6 +32,8 @@ class SelectProjectProvider extends ChangeNotifier {
           "Project added successfully");
       projects.add(project);
       notifyListeners();
+    } else {
+      UiMessages.showError(context, "Failed to add project");
     }
     init();
   }
@@ -36,6 +42,43 @@ class SelectProjectProvider extends ChangeNotifier {
     if(titleController.text.isEmpty) return;
     print("Adding project");
     _addProject(titleController.text, context);
+  }
+
+  void deleteProject(BuildContext context, int index) {
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Delete Project"),
+        content: Text("Are you sure you want to delete this project?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _deleteProject(index, context);
+            },
+            child: Text("Delete"),
+          ),
+        ],
+      );
+    });
+  }
+
+  void _deleteProject(int index, BuildContext context) {
+    Project project = projects[index];
+    DbManager.instance.deleteProject(project.id, AuthManager.instance.getUser()!.uid).then((value) {
+      init();
+      if(value) {
+        UiMessages.showMessage(context, "Project deleted successfully");
+
+      } else {
+        UiMessages.showError(context, "Failed to delete project");
+      }
+    });
   }
 
 

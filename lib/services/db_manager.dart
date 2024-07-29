@@ -107,4 +107,15 @@ class DbManager {
   String generateId() {
     return _firestore.collection('projects').doc().id;
   }
+
+  deleteProject(String id, String uid) {
+    return _firestore
+        .collection('projects')
+        .doc(uid)
+        .collection('user_projects')
+        .doc(id)
+        .delete()
+        .then((value) => true)
+        .catchError((error) => false);
+  }
 }
