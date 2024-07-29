@@ -44,4 +44,14 @@ class UiMessages {
   static void hideLoading(BuildContext context) {
     Navigator.of(context).pop();
   }
+
+  static void showMessage(
+      BuildContext context,
+      String message ) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
 }

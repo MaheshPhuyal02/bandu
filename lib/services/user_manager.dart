@@ -165,6 +165,11 @@ class AuthManager {
     _user = null;
     appRouter.pushAndPopUntil(LoginRoute(), predicate: (route) => false);
   }
+
+  DBUser? getUser () {
+    return _user;
+
+  }
 }
 
 enum AuthStatus { loading, authenticated, unauthenticated, error }

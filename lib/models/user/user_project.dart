@@ -9,7 +9,7 @@ part 'user_project.g.dart';
 class Project with _$Project {
   const factory Project({
     required String title,
-    required DateTime createdTime,
+    required DateTime lastUpdated,
     required String id,
 
   }) = _Project;

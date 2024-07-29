@@ -90,4 +90,21 @@ class DbManager {
   void setUid(String uid) {
     _uid = uid;
   }
+
+  Future<List<Project>> getProjects() {
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .get()
+        .then((value) {
+      return value.docs
+          .map((e) => Project.fromJson(e.data()))
+          .toList();
+    });
+  }
+
+  String generateId() {
+    return _firestore.collection('projects').doc().id;
+  }
 }

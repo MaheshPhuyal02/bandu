@@ -21,14 +21,13 @@ class Home_morePage extends StatelessWidget {
     final provider = context.read<Home_moreProvider>();
 
     return Container(
-      height: 57.pH,
+      height: 47.pH,
       padding: EdgeInsets.symmetric(vertical: 10.h),
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          10.verticalSpace,
           Row(
             children: [
               10.horizontalSpace,
@@ -36,7 +35,7 @@ class Home_morePage extends StatelessWidget {
                 child: Text(
                   "Example Generator",
                   style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 23.sp,
+                    fontSize: 19.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -56,14 +55,14 @@ class Home_morePage extends StatelessWidget {
 
             ],
           ),
-          20.verticalSpace,
+          10.verticalSpace,
           Container(
             width: double.infinity,
             height: 1.h,
             color: Colors.grey.withOpacity(0.5),
           ),
 
-          20.verticalSpace,
+          10.verticalSpace,
 
           Row(
             children: [
@@ -98,14 +97,14 @@ class Home_morePage extends StatelessWidget {
           children: [
             SvgPicture.asset(
               iconPath,
-              width: 30.sp,
-              height: 30.sp,
+              width: 25.sp,
+              height: 25.sp,
             ),
             10.horizontalSpace,
             Text(
               title,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                fontSize: 22.sp,
+                fontSize: 17.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),

@@ -21,7 +21,7 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Project {
   String get title => throw _privateConstructorUsedError;
-  DateTime get createdTime => throw _privateConstructorUsedError;
+  DateTime get lastUpdated => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +34,7 @@ abstract class $ProjectCopyWith<$Res> {
   factory $ProjectCopyWith(Project value, $Res Function(Project) then) =
       _$ProjectCopyWithImpl<$Res, Project>;
   @useResult
-  $Res call({String title, DateTime createdTime, String id});
+  $Res call({String title, DateTime lastUpdated, String id});
 }
 
 /// @nodoc
@@ -51,7 +51,7 @@ class _$ProjectCopyWithImpl<$Res, $Val extends Project>
   @override
   $Res call({
     Object? title = null,
-    Object? createdTime = null,
+    Object? lastUpdated = null,
     Object? id = null,
   }) {
     return _then(_value.copyWith(
@@ -59,9 +59,9 @@ class _$ProjectCopyWithImpl<$Res, $Val extends Project>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      createdTime: null == createdTime
-          ? _value.createdTime
-          : createdTime // ignore: cast_nullable_to_non_nullable
+      lastUpdated: null == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
               as DateTime,
       id: null == id
           ? _value.id
@@ -78,7 +78,7 @@ abstract class _$$ProjectImplCopyWith<$Res> implements $ProjectCopyWith<$Res> {
       __$$ProjectImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, DateTime createdTime, String id});
+  $Res call({String title, DateTime lastUpdated, String id});
 }
 
 /// @nodoc
@@ -93,7 +93,7 @@ class __$$ProjectImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? title = null,
-    Object? createdTime = null,
+    Object? lastUpdated = null,
     Object? id = null,
   }) {
     return _then(_$ProjectImpl(
@@ -101,9 +101,9 @@ class __$$ProjectImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      createdTime: null == createdTime
-          ? _value.createdTime
-          : createdTime // ignore: cast_nullable_to_non_nullable
+      lastUpdated: null == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
               as DateTime,
       id: null == id
           ? _value.id
@@ -117,7 +117,7 @@ class __$$ProjectImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ProjectImpl implements _Project {
   const _$ProjectImpl(
-      {required this.title, required this.createdTime, required this.id});
+      {required this.title, required this.lastUpdated, required this.id});
 
   factory _$ProjectImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProjectImplFromJson(json);
@@ -125,13 +125,13 @@ class _$ProjectImpl implements _Project {
   @override
   final String title;
   @override
-  final DateTime createdTime;
+  final DateTime lastUpdated;
   @override
   final String id;
 
   @override
   String toString() {
-    return 'Project(title: $title, createdTime: $createdTime, id: $id)';
+    return 'Project(title: $title, lastUpdated: $lastUpdated, id: $id)';
   }
 
   @override
@@ -140,14 +140,14 @@ class _$ProjectImpl implements _Project {
         (other.runtimeType == runtimeType &&
             other is _$ProjectImpl &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.createdTime, createdTime) ||
-                other.createdTime == createdTime) &&
+            (identical(other.lastUpdated, lastUpdated) ||
+                other.lastUpdated == lastUpdated) &&
             (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, title, createdTime, id);
+  int get hashCode => Object.hash(runtimeType, title, lastUpdated, id);
 
   @JsonKey(ignore: true)
   @override
@@ -166,7 +166,7 @@ class _$ProjectImpl implements _Project {
 abstract class _Project implements Project {
   const factory _Project(
       {required final String title,
-      required final DateTime createdTime,
+      required final DateTime lastUpdated,
       required final String id}) = _$ProjectImpl;
 
   factory _Project.fromJson(Map<String, dynamic> json) = _$ProjectImpl.fromJson;
@@ -174,7 +174,7 @@ abstract class _Project implements Project {
   @override
   String get title;
   @override
-  DateTime get createdTime;
+  DateTime get lastUpdated;
   @override
   String get id;
   @override
