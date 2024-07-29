@@ -76,7 +76,9 @@ class Home_morePage extends StatelessWidget {
           Row(
             children: [
               Expanded(child: _buildMenuItem("Setting", "assets/icons/setting.svg", (){}, context)),
-              Expanded(child: _buildMenuItem("Logout", "assets/icons/logout.svg", (){}, context)),
+              Expanded(child: _buildMenuItem("Logout", "assets/icons/logout.svg", (){
+                provider.logout(context);
+              }, context)),
             Expanded(child: Container()),
             ],
           ),
