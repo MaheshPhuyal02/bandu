@@ -27,6 +27,7 @@ class AuthManager {
     print("AuthManager ::: Initializing AuthManager");
 
     dbManager = DbManager.instance;
+    dbManager?.setUid(_auth.currentUser!.uid);
 
     if (_auth.currentUser != null) {
       print("AuthManager ::: User is already logged in");

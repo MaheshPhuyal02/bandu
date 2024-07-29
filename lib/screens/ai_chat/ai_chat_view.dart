@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:response_parser/gpt_markdown.dart';
 
 import '../../constants/ColorsConst.dart';
 import '../../constants/Options.dart';
@@ -79,20 +80,25 @@ class Ai_chatPage extends StatelessWidget {
                             },
                           ),
                         ),
-                        TextFormField(
-                          controller: provider.messageController,
-                          maxLines: null,
-                          style: TextStyle(
-                            color: Colors.black,
+                        Container(
+                          constraints: BoxConstraints(
+                            maxHeight: 50.pH,
                           ),
+                          child: TextFormField(
+                            controller: provider.messageController,
+                            maxLines: null,
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
 
-                          keyboardType: TextInputType.multiline,
-                          decoration: InputDecoration(
-                            fillColor: Colors.transparent,
-                            hintText: 'Enter prompt',
-                            focusedBorder: InputBorder.none,
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
+                            keyboardType: TextInputType.multiline,
+                            decoration: InputDecoration(
+                              fillColor: Colors.transparent,
+                              hintText: 'Enter prompt',
+                              focusedBorder: InputBorder.none,
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
                         ),
@@ -162,7 +168,12 @@ class Ai_chatPage extends StatelessWidget {
                         color: ColorsConst.WHITE_SHADOW,
                         borderRadius: BorderRadius.circular(10.sp),
                       ),
-                      child: Text(message.response!),
+                      child: TexMarkdown(
+                        message.response!,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
           ],

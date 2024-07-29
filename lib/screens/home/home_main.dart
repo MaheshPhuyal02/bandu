@@ -1,8 +1,10 @@
 import 'package:auto_route/annotations.dart';
+import 'package:bandu/ext/sizes_ext.dart';
 import 'package:bandu/screens/ai_chat/ai_chat_icon.dart';
 import 'package:bandu/screens/ai_chat/ai_chat_view.dart';
 import 'package:bandu/screens/home/home/home_view.dart';
 import 'package:bandu/screens/home/home_gantt/home_gantt_view.dart';
+import 'package:bandu/screens/home/home_more/home_more_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -33,6 +35,19 @@ class HomeMainPage extends StatelessWidget {
             selectedIconTheme: IconThemeData(
                 size: 20.sp, color: Theme.of(context).primaryColor),
             onTap: (index) {
+              if (index == 3) {
+                showModalBottomSheet(
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(10.0)),
+                    ),
+                    backgroundColor: Colors.white,
+                    context: context,
+                    builder: (context) {
+                      return Home_morePage();
+                    });
+                return;
+              }
               provider.setSelectedIndex(index);
             },
             selectedItemColor: Theme.of(context).primaryColor,
@@ -89,20 +104,22 @@ class HomeMainPage extends StatelessWidget {
               builder: (context, provider, child) {
                 return Stack(
                   children: [
-                    getBody(provider.selectedIndex),
+                    SizedBox(
+                      height: double.infinity,
+                      child: getBody(provider.selectedIndex),
+                    ),
                     Positioned(
                       left: provider.x1,
                       top: provider.y1,
                       child: GestureDetector(
-                        onTap: () {
-                          provider.toggleChatView();
-                        },
+                          onTap: () {
+                            provider.toggleChatView();
+                          },
                           onPanDown: (d) {
                             provider.x1Prev = provider.x1;
                             provider.y1Prev = provider.y1;
                           },
                           onPanUpdate: (details) {
-
                             provider.setIconCoordinates(
                                 provider.x1Prev + details.localPosition.dx,
                                 provider.y1Prev + details.localPosition.dy,
@@ -110,15 +127,13 @@ class HomeMainPage extends StatelessWidget {
                                 provider.y2);
                           },
                           child: AiChatIcon(
-                            animate:provider.animateChatIc,
+                            animate: provider.animateChatIc,
                             onEnd: () {
                               provider.cancelChatIconAnimation();
                             },
                           )),
                     ),
-
                     getChatView(provider.showChat, provider),
-
                   ],
                 );
               },
@@ -130,33 +145,31 @@ class HomeMainPage extends StatelessWidget {
   }
 
   getChatView(bool show, HomeProvider provider) {
-
-      return AnimatedScale(
-        duration: Duration(milliseconds: 200),
-        onEnd: () {
-          provider.animateChatIcon();
-        },
-        scale: show ? 1 : 0,
-        alignment: Alignment.topRight,
-        child: Container(
-
-          margin: EdgeInsets.only(top: 50.h, left: 10.w, right: 10.w, bottom: 10.h),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child:_chatView(0),
+    return AnimatedScale(
+      duration: Duration(milliseconds: 200),
+      onEnd: () {
+        provider.animateChatIcon();
+      },
+      scale: show ? 1 : 0,
+      alignment: Alignment.topRight,
+      child: Container(
+        margin:
+            EdgeInsets.only(top: 50.h, left: 10.w, right: 10.w, bottom: 10.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3),
+            ),
+          ],
         ),
-      );
-
+        child: _chatView(0),
+      ),
+    );
   }
 
   getBody(int selectedIndex) {

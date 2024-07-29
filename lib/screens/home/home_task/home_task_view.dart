@@ -1,3 +1,4 @@
+import 'package:bandu/ext/sizes_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -17,37 +18,45 @@ class HomeTaskPage extends StatelessWidget {
   Widget _buildPage(BuildContext context) {
     final provider = context.read<Home_todoProvider>();
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.sp),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            30.verticalSpace,
-            Text(
-              'Your Tasks',
-              style: TextStyle(
-                fontSize: 26.sp,
-                fontWeight: FontWeight.bold,
-              ),
+    return Stack(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.sp),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                30.verticalSpace,
+                Text(
+                  'Your Tasks',
+                  style: TextStyle(
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                10.verticalSpace,
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: 19,
+                  itemBuilder: (context, index) {
+                    return TaskListItem();
+                  },
+                ),
+              ],
             ),
-
-            10.verticalSpace,
-
-
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount:10,
-              itemBuilder: (context, index) {
-                return TaskListItem();
-              },
-            ),
-
-          ],
+          ),
         ),
-      ),
+        Positioned(
+          bottom: 20.sp,
+          right: 20.sp,
+          child: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {},
+          ),
+        )
+      ],
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:bandu/constants/prompts.dart';
 import 'package:bandu/models/chat/message.dart';
 import 'package:bandu/services/gemini_manager.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ class Ai_chatProvider extends ChangeNotifier {
   int selectedIndex = 0;
 
   bool loading = false;
-
 
   TextEditingController messageController = TextEditingController();
 
@@ -33,7 +33,6 @@ class Ai_chatProvider extends ChangeNotifier {
     if (loading) return;
     loading = true;
 
-
     Message msg = Message(
         id: "12",
         request: message,
@@ -41,14 +40,26 @@ class Ai_chatProvider extends ChangeNotifier {
         loading: true,
         actionType: ActionType.chat);
 
-
     messageController.clear();
     messageList.add(msg);
 
     notifyListeners();
 
+    String response;
 
-    String response = await GeminiManager.instance.sendMessage(message);
+    if (selectedPrompt.isNotEmpty || selectedPrompt != "/Chat") {
+      if (selectedPrompt == "/Summarize") {
+        String cmd = Prompts.createTask;
+        response =
+            await GeminiManager.instance.sendMessageWithCommand(message, cmd);
+      } else {
+        response = await GeminiManager.instance.sendMessage(
+          message,
+        );
+      }
+    } else {
+      response = await GeminiManager.instance.sendMessage(message);
+    }
 
     msg = msg.copyWith(response: response, loading: false);
 
