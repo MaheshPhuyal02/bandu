@@ -22,58 +22,60 @@ class HomePage extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.sp),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          20.verticalSpace,
-          Text(
-            'Hello',
-            style: TextStyle(
-              fontSize: 26.sp,
-              fontWeight: FontWeight.bold,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            20.verticalSpace,
+            Text(
+              'Hello',
+              style: TextStyle(
+                fontSize: 26.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          10.verticalSpace,
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10.sp),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.search,
-                  color: Colors.grey,
-                ),
-                10.horizontalSpace,
-                Text(
-                  'Search anything.. ',
-                  style: TextStyle(
-                    fontSize: 16.sp,
+            10.verticalSpace,
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10.sp),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search,
                     color: Colors.grey,
                   ),
-                ),
-              ],
+                  10.horizontalSpace,
+                  Text(
+                    'Search anything.. ',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              decoration: BoxDecoration(
+                color: ColorsConst.WHITE_SHADOW,
+                borderRadius: BorderRadius.circular(11.sp),
+                border: Border.all(color: Colors.grey),
+              ),
             ),
-            decoration: BoxDecoration(
-              color: ColorsConst.WHITE_SHADOW,
-              borderRadius: BorderRadius.circular(11.sp),
-              border: Border.all(color: Colors.grey),
+
+            10.verticalSpace,
+            Text(
+              'Recent Tasks',
+              style: TextStyle(
+                fontSize: 16.sp,
+                color: ColorsConst.TEXT_SECONDARY,
+              ),
             ),
-          ),
 
-          10.verticalSpace,
-          Text(
-            'Recent Tasks',
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: ColorsConst.TEXT_SECONDARY,
-            ),
-          ),
+            10.verticalSpace,
+            TaskListItem(),
+            10.verticalSpace,
 
-          10.verticalSpace,
-          TaskListItem(),
-          10.verticalSpace,
-
-        ],
+          ],
+        ),
       ),
     );
   }
