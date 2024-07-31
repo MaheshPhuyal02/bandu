@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:response_parser/gpt_markdown.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../constants/ColorsConst.dart';
 import '../../constants/Options.dart';
@@ -90,7 +91,6 @@ class Ai_chatPage extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.black,
                             ),
-
                             keyboardType: TextInputType.multiline,
                             decoration: InputDecoration(
                               fillColor: Colors.transparent,
@@ -108,7 +108,7 @@ class Ai_chatPage extends StatelessWidget {
                   5.horizontalSpace,
                   IconButton(
                     onPressed: () {
-                      provider.sendMessage();
+                      provider.sendMessage(context);
                     },
                     icon: SvgPicture.asset(
                       "assets/icons/send.svg",
@@ -135,7 +135,6 @@ class Ai_chatPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            10.verticalSpace,
             Container(
               width: double.infinity,
               alignment: Alignment.bottomRight,
@@ -148,13 +147,88 @@ class Ai_chatPage extends StatelessWidget {
                   color: ColorsConst.PRIMARY,
                   borderRadius: BorderRadius.circular(10.sp),
                 ),
-                child: Text(message.request, style: TextStyle(color: Colors.white)),
+                child: Text(message.request,
+                    style: TextStyle(color: Colors.white)),
               ),
             ),
             10.verticalSpace,
             message.loading!
-                ? Container(
-                    child: CircularProgressIndicator(),
+                ? Shimmer(
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            alignment: Alignment.bottomLeft,
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(10.sp),
+                              constraints: BoxConstraints(
+                                maxWidth: 80.pW,
+                                minHeight: 10.pW,
+                              ),
+                              decoration: BoxDecoration(
+                                color: ColorsConst.WHITE_SHADOW,
+                                borderRadius: BorderRadius.circular(10.sp),
+                              ),
+                              child: TexMarkdown(
+                                message.request!,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          10.verticalSpace,
+                          Container(
+                            width: double.infinity,
+                            alignment: Alignment.bottomLeft,
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(10.sp),
+                              constraints: BoxConstraints(
+                                maxWidth: 60.pW,
+                                maxHeight: 10.pW,
+                              ),
+                              decoration: BoxDecoration(
+                                color: ColorsConst.WHITE_SHADOW,
+                                borderRadius: BorderRadius.circular(8.sp),
+                              ),
+                              child: TexMarkdown(
+                                message.request!,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          10.verticalSpace,
+                          Container(
+                            width: double.infinity,
+                            alignment: Alignment.bottomLeft,
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(10.sp),
+                              constraints: BoxConstraints(
+                                maxWidth: 40.pW,
+                                maxHeight: 7.pW,
+                              ),
+                              decoration: BoxDecoration(
+                                color: ColorsConst.WHITE_SHADOW,
+                                borderRadius: BorderRadius.circular(6.sp),
+                              ),
+                              child: TexMarkdown(
+                                message.request!,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    gradient: ColorsConst.shimmerGradient,
                   )
                 : Container(
                     width: double.infinity,
@@ -176,6 +250,7 @@ class Ai_chatPage extends StatelessWidget {
                       ),
                     ),
                   ),
+            10.verticalSpace
           ],
         );
       },

@@ -26,7 +26,7 @@ class Ai_chatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> sendMessage() async {
+  Future<void> sendMessage(BuildContext context) async {
     String message = messageController.text;
     if (message.isEmpty) return;
 
@@ -42,31 +42,50 @@ class Ai_chatProvider extends ChangeNotifier {
 
     messageController.clear();
     messageList.add(msg);
+    hideKeyboard(context);
 
     notifyListeners();
 
     String response;
 
     if (selectedPrompt.isNotEmpty || selectedPrompt != "/Chat") {
-      if (selectedPrompt == "/Summarize") {
-        String cmd = Prompts.createTask;
-        response =
-            await GeminiManager.instance.sendMessageWithCommand(message, cmd);
-      } else {
-        response = await GeminiManager.instance.sendMessage(
-          message,
-        );
-      }
+      String cmd = getSystemMessage(selectedPrompt);
+      print("CMDDD  ::: " + cmd);
+      response =
+          await GeminiManager.instance.sendMessageWithCommand(message, cmd);
     } else {
       response = await GeminiManager.instance.sendMessage(message);
     }
-
     msg = msg.copyWith(response: response, loading: false);
-
     messageList[messageList.length - 1] = msg;
 
     loading = false;
 
     notifyListeners();
+  }
+
+  void hideKeyboard(BuildContext context) {
+    FocusScope.of(context).unfocus();
+  }
+
+
+  String getSystemMessage(String cmd) {
+
+    switch (cmd) {
+      case "/Chat":
+        return Prompts.defaultSystem;
+      case "/Summarize":
+        return Prompts.summarizeSystem;
+      case "/Create Task":
+        return Prompts.createTask;
+      case "/Analyze Requirements":
+        return Prompts.analyzeRequirements;
+      case "/Analyze Budget":
+        return Prompts.analyzeBudget;
+      case "/Analyze Time":
+        return Prompts.analyzeTime;
+      default:
+        return Prompts.defaultSystem;
+    }
   }
 }

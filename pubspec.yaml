@@ -57,6 +57,7 @@ dependencies:
   flutter_gemini: ^2.0.4
   response_parser:
     path: libraries/response_parser/
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
