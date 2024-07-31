@@ -16,7 +16,7 @@ class DBUser with _$DBUser {
     DateTime? createdAt,
     bool? completed,
     String? provider,
-    Project? project,
+    List<Project>? projects,
   }) = _DBUser;
 
   factory DBUser.fromJson(Map<String, dynamic> json) => _$DBUserFromJson(json);

@@ -5,5 +5,12 @@ class Prompts{
 
   static const String summarizeSystem = "Summarize the long message sent by user, send with format, and summarize in points.";
 
-  static const String createTask = "Create a task as needed, call addTask function, with title, description, created date, deadline and subTask(list of subtasks) with title, description, deadline.";
+  static const String createTask = "Create task list as needed, call addTask function, with title, description, created date, deadline and subTask(list of subtasks) with title, description, deadline.";
+
+  static const String analyzeRequirements = "Only analyze the requirements, study feasibility, make summary, budget, and so on. Only create task when user asks.";
+
+  static const String analyzeBudget = "Analyze the budget, give overall budget, and breakdown in different task.";
+
+  static const String analyzeTime = "Analyze the time, give overall time, and breakdown in different task.";
+
 }

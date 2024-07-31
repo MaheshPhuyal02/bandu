@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:bandu/constants/Options.dart';
 import 'package:bandu/ext/sizes_ext.dart';
+import 'package:bandu/models/task/sub_task.dart';
+import 'package:bandu/models/task/task.dart';
 import 'package:bandu/screens/task/task_list_item.dart';
 import 'package:confetti/confetti.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -13,9 +15,9 @@ import 'package:flutter_svg/svg.dart';
 import '../../constants/ColorsConst.dart';
 
 class TaskSublistItem extends StatefulWidget {
-  TaskStatus status;
+  SubTask task;
 
-  TaskSublistItem({super.key, required this.status});
+  TaskSublistItem({super.key, required this.task});
 
   @override
   State<TaskSublistItem> createState() => _TaskSublistItemState();
@@ -43,9 +45,9 @@ class _TaskSublistItemState extends State<TaskSublistItem> {
           bottom: 10.sp,
         ),
         decoration: BoxDecoration(
-          color: widget.status == TaskStatus.DONE
+          color: parseStatus(widget.task.status) == TaskStatus.DONE
               ? ColorsConst.GREEN_ACCENT
-              : widget.status == TaskStatus.IN_PROGRESS
+              : parseStatus(widget.task.status) == TaskStatus.IN_PROGRESS
                   ? ColorsConst.YELLOW_ACCENT
                   : ColorsConst.WHITE_ACCENT,
           borderRadius: BorderRadius.circular(9.sp),
@@ -86,23 +88,25 @@ class _TaskSublistItemState extends State<TaskSublistItem> {
                   alignment: Alignment.center,
                   child: ConfettiWidget(
                     confettiController: _controllerCenter,
-                    blastDirectionality: BlastDirectionality
-                        .explosive, // don't specify a direction, blast randomly
-                    shouldLoop:
-                    false, // st// art again as soon as the animation is finished
+                    blastDirectionality: BlastDirectionality.explosive,
+                    // don't specify a direction, blast randomly
+                    shouldLoop: false,
+                    // st// art again as soon as the animation is finished
                     colors: const [
                       ColorsConst.PRIMARY,
                       Colors.blue,
                       Colors.pink,
                       Colors.orange,
                       Colors.purple
-                    ], // manually specify the colors to be used
+                    ],
+                    // manually specify the colors to be used
                     createParticlePath: drawStar, // define a custom shape/path.
                   ),
                 ),
                 PopupMenuButton<String>(
                   icon: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 7.sp, vertical: 4.sp),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 7.sp, vertical: 4.sp),
                     decoration: BoxDecoration(
                       color: ColorsConst.WHITE_SHADOW,
                       borderRadius: BorderRadius.circular(5.sp),
@@ -127,17 +131,17 @@ class _TaskSublistItemState extends State<TaskSublistItem> {
                     switch (item) {
                       case 'To Do':
                         setState(() {
-                          widget.status = TaskStatus.TO_DO;
+                          // widget.status = TaskStatus.TO_DO;
                         });
                         break;
                       case 'In Progress':
                         setState(() {
-                          widget.status = TaskStatus.IN_PROGRESS;
+                          // widget.status = TaskStatus.IN_PROGRESS;
                         });
                         break;
                       case 'Done':
                         setState(() {
-                          widget.status = TaskStatus.DONE;
+                          // widget.status = TaskStatus.DONE;
                         });
                         print('Done');
                         _controllerCenter.play();
@@ -194,4 +198,16 @@ class _TaskSublistItemState extends State<TaskSublistItem> {
     return path;
   }
 
+  TaskStatus parseStatus(String status) {
+    switch (status) {
+      case 'todo':
+        return TaskStatus.TO_DO;
+      case 'progress':
+        return TaskStatus.IN_PROGRESS;
+      case 'done':
+        return TaskStatus.DONE;
+      default:
+        return TaskStatus.TO_DO;
+    }
+  }
 }

@@ -17,9 +17,9 @@ _$DBUserImpl _$$DBUserImplFromJson(Map<String, dynamic> json) => _$DBUserImpl(
           : DateTime.parse(json['createdAt'] as String),
       completed: json['completed'] as bool?,
       provider: json['provider'] as String?,
-      project: json['project'] == null
-          ? null
-          : Project.fromJson(json['project'] as Map<String, dynamic>),
+      projects: (json['projects'] as List<dynamic>?)
+          ?.map((e) => Project.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$DBUserImplToJson(_$DBUserImpl instance) =>
@@ -32,5 +32,5 @@ Map<String, dynamic> _$$DBUserImplToJson(_$DBUserImpl instance) =>
       'createdAt': instance.createdAt?.toIso8601String(),
       'completed': instance.completed,
       'provider': instance.provider,
-      'project': instance.project,
+      'projects': instance.projects,
     };

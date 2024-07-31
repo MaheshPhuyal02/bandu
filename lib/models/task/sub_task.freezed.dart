@@ -26,6 +26,7 @@ mixin _$SubTask {
   DateTime get deadline => throw _privateConstructorUsedError;
   bool get completed => throw _privateConstructorUsedError;
   String get taskId => throw _privateConstructorUsedError;
+  String get status => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $SubTaskCopyWith<$Res> {
       DateTime createdDate,
       DateTime deadline,
       bool completed,
-      String taskId});
+      String taskId,
+      String status});
 }
 
 /// @nodoc
@@ -65,6 +67,7 @@ class _$SubTaskCopyWithImpl<$Res, $Val extends SubTask>
     Object? deadline = null,
     Object? completed = null,
     Object? taskId = null,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -91,6 +94,10 @@ class _$SubTaskCopyWithImpl<$Res, $Val extends SubTask>
           ? _value.taskId
           : taskId // ignore: cast_nullable_to_non_nullable
               as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -108,7 +115,8 @@ abstract class _$$SubTaskImplCopyWith<$Res> implements $SubTaskCopyWith<$Res> {
       DateTime createdDate,
       DateTime deadline,
       bool completed,
-      String taskId});
+      String taskId,
+      String status});
 }
 
 /// @nodoc
@@ -128,6 +136,7 @@ class __$$SubTaskImplCopyWithImpl<$Res>
     Object? deadline = null,
     Object? completed = null,
     Object? taskId = null,
+    Object? status = null,
   }) {
     return _then(_$SubTaskImpl(
       title: null == title
@@ -154,6 +163,10 @@ class __$$SubTaskImplCopyWithImpl<$Res>
           ? _value.taskId
           : taskId // ignore: cast_nullable_to_non_nullable
               as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -167,7 +180,8 @@ class _$SubTaskImpl implements _SubTask {
       required this.createdDate,
       required this.deadline,
       required this.completed,
-      required this.taskId});
+      required this.taskId,
+      required this.status});
 
   factory _$SubTaskImpl.fromJson(Map<String, dynamic> json) =>
       _$$SubTaskImplFromJson(json);
@@ -184,10 +198,12 @@ class _$SubTaskImpl implements _SubTask {
   final bool completed;
   @override
   final String taskId;
+  @override
+  final String status;
 
   @override
   String toString() {
-    return 'SubTask(title: $title, description: $description, createdDate: $createdDate, deadline: $deadline, completed: $completed, taskId: $taskId)';
+    return 'SubTask(title: $title, description: $description, createdDate: $createdDate, deadline: $deadline, completed: $completed, taskId: $taskId, status: $status)';
   }
 
   @override
@@ -204,13 +220,14 @@ class _$SubTaskImpl implements _SubTask {
                 other.deadline == deadline) &&
             (identical(other.completed, completed) ||
                 other.completed == completed) &&
-            (identical(other.taskId, taskId) || other.taskId == taskId));
+            (identical(other.taskId, taskId) || other.taskId == taskId) &&
+            (identical(other.status, status) || other.status == status));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, title, description, createdDate,
-      deadline, completed, taskId);
+      deadline, completed, taskId, status);
 
   @JsonKey(ignore: true)
   @override
@@ -233,7 +250,8 @@ abstract class _SubTask implements SubTask {
       required final DateTime createdDate,
       required final DateTime deadline,
       required final bool completed,
-      required final String taskId}) = _$SubTaskImpl;
+      required final String taskId,
+      required final String status}) = _$SubTaskImpl;
 
   factory _SubTask.fromJson(Map<String, dynamic> json) = _$SubTaskImpl.fromJson;
 
@@ -249,6 +267,8 @@ abstract class _SubTask implements SubTask {
   bool get completed;
   @override
   String get taskId;
+  @override
+  String get status;
   @override
   @JsonKey(ignore: true)
   _$$SubTaskImplCopyWith<_$SubTaskImpl> get copyWith =>

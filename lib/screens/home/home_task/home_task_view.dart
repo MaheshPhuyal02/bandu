@@ -39,9 +39,11 @@ class HomeTaskPage extends StatelessWidget {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: 19,
+                  itemCount: provider.taskList.length,
                   itemBuilder: (context, index) {
-                    return TaskListItem();
+                    return TaskListItem(
+                      task: provider.taskList[index],
+                    );
                   },
                 ),
               ],

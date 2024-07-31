@@ -14,6 +14,7 @@ _$SubTaskImpl _$$SubTaskImplFromJson(Map<String, dynamic> json) =>
       deadline: DateTime.parse(json['deadline'] as String),
       completed: json['completed'] as bool,
       taskId: json['taskId'] as String,
+      status: json['status'] as String,
     );
 
 Map<String, dynamic> _$$SubTaskImplToJson(_$SubTaskImpl instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$$SubTaskImplToJson(_$SubTaskImpl instance) =>
       'deadline': instance.deadline.toIso8601String(),
       'completed': instance.completed,
       'taskId': instance.taskId,
+      'status': instance.status,
     };

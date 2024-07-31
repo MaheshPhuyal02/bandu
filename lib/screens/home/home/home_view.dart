@@ -71,8 +71,6 @@ class HomePage extends StatelessWidget {
             ),
 
             10.verticalSpace,
-            TaskListItem(),
-            10.verticalSpace,
 
           ],
         ),

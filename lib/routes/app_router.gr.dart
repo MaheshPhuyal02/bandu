@@ -18,6 +18,7 @@ import 'package:bandu/screens/login/login_view.dart' as _i5;
 import 'package:bandu/screens/register/register_view.dart' as _i6;
 import 'package:bandu/screens/select_project/select_project_view.dart' as _i7;
 import 'package:bandu/screens/splash/splash_view.dart' as _i8;
+import 'package:flutter/material.dart' as _i10;
 
 abstract class $AppRouter extends _i9.RootStackRouter {
   $AppRouter({super.navigatorKey});
@@ -61,9 +62,14 @@ abstract class $AppRouter extends _i9.RootStackRouter {
       );
     },
     SelectProjectRoute.name: (routeData) {
+      final args = routeData.argsAs<SelectProjectRouteArgs>(
+          orElse: () => const SelectProjectRouteArgs());
       return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i7.SelectProjectPage(),
+        child: _i7.SelectProjectPage(
+          key: args.key,
+          canGoBack: args.canGoBack,
+        ),
       );
     },
     SplashRoute.name: (routeData) {
@@ -161,16 +167,40 @@ class RegisterRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.SelectProjectPage]
-class SelectProjectRoute extends _i9.PageRouteInfo<void> {
-  const SelectProjectRoute({List<_i9.PageRouteInfo>? children})
-      : super(
+class SelectProjectRoute extends _i9.PageRouteInfo<SelectProjectRouteArgs> {
+  SelectProjectRoute({
+    _i10.Key? key,
+    bool canGoBack = true,
+    List<_i9.PageRouteInfo>? children,
+  }) : super(
           SelectProjectRoute.name,
+          args: SelectProjectRouteArgs(
+            key: key,
+            canGoBack: canGoBack,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'SelectProjectRoute';
 
-  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
+  static const _i9.PageInfo<SelectProjectRouteArgs> page =
+      _i9.PageInfo<SelectProjectRouteArgs>(name);
+}
+
+class SelectProjectRouteArgs {
+  const SelectProjectRouteArgs({
+    this.key,
+    this.canGoBack = true,
+  });
+
+  final _i10.Key? key;
+
+  final bool canGoBack;
+
+  @override
+  String toString() {
+    return 'SelectProjectRouteArgs{key: $key, canGoBack: $canGoBack}';
+  }
 }
 
 /// generated route for

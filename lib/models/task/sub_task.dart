@@ -12,7 +12,8 @@ class SubTask with _$SubTask {
     required DateTime createdDate,
     required DateTime deadline,
     required bool completed,
-    required String taskId
+    required String taskId,
+    required String status,
 
   }) = _SubTask;
   factory SubTask.fromJson(Map<String, dynamic> json) => _$SubTaskFromJson(json);

@@ -28,7 +28,7 @@ mixin _$DBUser {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   bool? get completed => throw _privateConstructorUsedError;
   String? get provider => throw _privateConstructorUsedError;
-  Project? get project => throw _privateConstructorUsedError;
+  List<Project>? get projects => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,9 +49,7 @@ abstract class $DBUserCopyWith<$Res> {
       DateTime? createdAt,
       bool? completed,
       String? provider,
-      Project? project});
-
-  $ProjectCopyWith<$Res>? get project;
+      List<Project>? projects});
 }
 
 /// @nodoc
@@ -75,7 +73,7 @@ class _$DBUserCopyWithImpl<$Res, $Val extends DBUser>
     Object? createdAt = freezed,
     Object? completed = freezed,
     Object? provider = freezed,
-    Object? project = freezed,
+    Object? projects = freezed,
   }) {
     return _then(_value.copyWith(
       uid: null == uid
@@ -110,23 +108,11 @@ class _$DBUserCopyWithImpl<$Res, $Val extends DBUser>
           ? _value.provider
           : provider // ignore: cast_nullable_to_non_nullable
               as String?,
-      project: freezed == project
-          ? _value.project
-          : project // ignore: cast_nullable_to_non_nullable
-              as Project?,
+      projects: freezed == projects
+          ? _value.projects
+          : projects // ignore: cast_nullable_to_non_nullable
+              as List<Project>?,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $ProjectCopyWith<$Res>? get project {
-    if (_value.project == null) {
-      return null;
-    }
-
-    return $ProjectCopyWith<$Res>(_value.project!, (value) {
-      return _then(_value.copyWith(project: value) as $Val);
-    });
   }
 }
 
@@ -146,10 +132,7 @@ abstract class _$$DBUserImplCopyWith<$Res> implements $DBUserCopyWith<$Res> {
       DateTime? createdAt,
       bool? completed,
       String? provider,
-      Project? project});
-
-  @override
-  $ProjectCopyWith<$Res>? get project;
+      List<Project>? projects});
 }
 
 /// @nodoc
@@ -171,7 +154,7 @@ class __$$DBUserImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? completed = freezed,
     Object? provider = freezed,
-    Object? project = freezed,
+    Object? projects = freezed,
   }) {
     return _then(_$DBUserImpl(
       uid: null == uid
@@ -206,10 +189,10 @@ class __$$DBUserImplCopyWithImpl<$Res>
           ? _value.provider
           : provider // ignore: cast_nullable_to_non_nullable
               as String?,
-      project: freezed == project
-          ? _value.project
-          : project // ignore: cast_nullable_to_non_nullable
-              as Project?,
+      projects: freezed == projects
+          ? _value._projects
+          : projects // ignore: cast_nullable_to_non_nullable
+              as List<Project>?,
     ));
   }
 }
@@ -226,8 +209,9 @@ class _$DBUserImpl implements _DBUser {
       this.createdAt,
       this.completed,
       this.provider,
-      this.project})
-      : _role = role;
+      final List<Project>? projects})
+      : _role = role,
+        _projects = projects;
 
   factory _$DBUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$DBUserImplFromJson(json);
@@ -256,12 +240,19 @@ class _$DBUserImpl implements _DBUser {
   final bool? completed;
   @override
   final String? provider;
+  final List<Project>? _projects;
   @override
-  final Project? project;
+  List<Project>? get projects {
+    final value = _projects;
+    if (value == null) return null;
+    if (_projects is EqualUnmodifiableListView) return _projects;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'DBUser(uid: $uid, name: $name, email: $email, role: $role, workAs: $workAs, createdAt: $createdAt, completed: $completed, provider: $provider, project: $project)';
+    return 'DBUser(uid: $uid, name: $name, email: $email, role: $role, workAs: $workAs, createdAt: $createdAt, completed: $completed, provider: $provider, projects: $projects)';
   }
 
   @override
@@ -280,7 +271,7 @@ class _$DBUserImpl implements _DBUser {
                 other.completed == completed) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
-            (identical(other.project, project) || other.project == project));
+            const DeepCollectionEquality().equals(other._projects, _projects));
   }
 
   @JsonKey(ignore: true)
@@ -295,7 +286,7 @@ class _$DBUserImpl implements _DBUser {
       createdAt,
       completed,
       provider,
-      project);
+      const DeepCollectionEquality().hash(_projects));
 
   @JsonKey(ignore: true)
   @override
@@ -321,7 +312,7 @@ abstract class _DBUser implements DBUser {
       final DateTime? createdAt,
       final bool? completed,
       final String? provider,
-      final Project? project}) = _$DBUserImpl;
+      final List<Project>? projects}) = _$DBUserImpl;
 
   factory _DBUser.fromJson(Map<String, dynamic> json) = _$DBUserImpl.fromJson;
 
@@ -342,7 +333,7 @@ abstract class _DBUser implements DBUser {
   @override
   String? get provider;
   @override
-  Project? get project;
+  List<Project>? get projects;
   @override
   @JsonKey(ignore: true)
   _$$DBUserImplCopyWith<_$DBUserImpl> get copyWith =>

@@ -54,4 +54,8 @@ class UiMessages {
       ),
     );
   }
+
+  static void dismissLoading(BuildContext context) {
+    Navigator.of(context).pop();
+  }
 }

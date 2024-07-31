@@ -193,6 +193,7 @@ class GeminiManager {
         completed: false,
         subTask: (data['subTask'] as List).map((subTask) {
           return SubTask(
+            status: "pending",
             title: subTask['title'],
             description: subTask['description'],
             createdDate: DateTime.now(),

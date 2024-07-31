@@ -1,5 +1,6 @@
 import 'package:bandu/main.dart';
 import 'package:bandu/routes/app_router.gr.dart';
+import 'package:bandu/services/SharedPref.dart';
 import 'package:bandu/services/db_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,7 +28,9 @@ class AuthManager {
     print("AuthManager ::: Initializing AuthManager");
 
     dbManager = DbManager.instance;
-    dbManager?.setUid(_auth.currentUser!.uid);
+    if(hasLoggedIn()) {
+      dbManager?.setUid(_auth.currentUser!.uid);
+    }
 
     if (_auth.currentUser != null) {
       print("AuthManager ::: User is already logged in");
@@ -103,7 +106,12 @@ class AuthManager {
     } else if (_user!.completed == false) {
       appRouter.pushAndPopUntil(Complete_profileRoute(),
           predicate: (route) => false);
+    } else if(_user!.projects == null || _user!.projects!.isEmpty || SharedPref.instance.getValue("currentProjectId") == null) {
+      appRouter.pushAndPopUntil(SelectProjectRoute(
+        canGoBack: false
+      ), predicate: (route) => false);
     } else {
+      dbManager?.setCurrentProjectId(SharedPref.instance.getValue("currentProjectId"));
       appRouter.pushAndPopUntil(HomeMainRoute(), predicate: (route) => false);
     }
   }
@@ -143,7 +151,7 @@ class AuthManager {
 
   bool hasLoggedIn() {
     print("AuthManager ::: Checking if user is logged in");
-    return status == AuthStatus.authenticated;
+    return _auth.currentUser != null;
   }
 
   String getError() {

@@ -1,3 +1,4 @@
+import 'package:bandu/models/task/task.dart';
 import 'package:bandu/screens/task/task_sublist_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,9 @@ import '../../constants/ColorsConst.dart';
 import '../../constants/Options.dart';
 
 class TaskListItem extends StatefulWidget {
-  const TaskListItem({super.key});
+
+  final Task task;
+  const TaskListItem({super.key, required this.task});
 
   @override
   State<TaskListItem> createState() => _TaskListItemState();
@@ -42,7 +45,7 @@ class _TaskListItemState extends State<TaskListItem> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'Work on design system',
+                      widget.task.title,
                       style: TextStyle(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
@@ -73,9 +76,9 @@ class _TaskListItemState extends State<TaskListItem> {
             child: ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: 3,
+              itemCount: widget.task.subTask.length,
               itemBuilder: (context, index) => TaskSublistItem(
-                status: TaskStatus.TO_DO,
+                task: widget.task.subTask[index],
               ),
             ),
           ):Container(),

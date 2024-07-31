@@ -91,13 +91,15 @@ class DbManager {
     _uid = uid;
   }
 
-  Future<List<Project>> getProjects() {
+  Future<List<Project>?> getProjects() {
     return _firestore
         .collection('projects')
         .doc(_uid)
         .collection('user_projects')
         .get()
         .then((value) {
+
+          if(value.docs.isEmpty) return null;
       return value.docs
           .map((e) => Project.fromJson(e.data()))
           .toList();

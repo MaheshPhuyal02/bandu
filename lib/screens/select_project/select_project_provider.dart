@@ -1,6 +1,10 @@
+import 'package:bandu/main.dart';
+import 'package:bandu/routes/app_router.gr.dart';
+import 'package:bandu/services/SharedPref.dart';
 import 'package:bandu/services/db_manager.dart';
 import 'package:bandu/services/ui_messages.dart';
 import 'package:bandu/services/user_manager.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/user/user_project.dart';
@@ -9,6 +13,7 @@ class SelectProjectProvider extends ChangeNotifier {
   List<Project> projects = [];
   String? title;
 
+
   TextEditingController titleController = TextEditingController();
 
   void init() {
@@ -16,17 +21,20 @@ class SelectProjectProvider extends ChangeNotifier {
     notifyListeners();
     print("SelectProjectProvider ::: Initializing SelectProjectProvider");
     DbManager.instance.getProjects().then((value) {
-      projects.addAll(value);
+      if(value == null) return;
+      projects.addAll(value!);
       notifyListeners();
     });
   }
 
   Future<void> _addProject(String title, BuildContext context) async {
+    showLoading(context);
     String id = DbManager.instance.generateId();
     Project project =
         Project(title: title, lastUpdated: DateTime.now(), id: id);
     bool success = await DbManager.instance.addProject(project, AuthManager.instance.getUser()!.uid);
     if(success) {
+      titleController.clear();
       UiMessages.showMessage(
           context,
           "Project added successfully");
@@ -35,8 +43,23 @@ class SelectProjectProvider extends ChangeNotifier {
     } else {
       UiMessages.showError(context, "Failed to add project");
     }
-    init();
+    dismissLoading(context);
   }
+
+  void dismissLoading(BuildContext context) {
+    UiMessages.dismissLoading(context);
+  }
+
+  void showLoading(BuildContext context) {
+    UiMessages.showLoading(context);
+  }
+
+  void selectProject(String id){
+    DbManager.instance.setCurrentProjectId(id);
+    SharedPref.instance.setValue("currentProjectId", id);
+    appRouter.replace(HomeMainRoute());
+  }
+
 
   void addNewProject(BuildContext context) {
     if(titleController.text.isEmpty) return;
@@ -71,7 +94,8 @@ class SelectProjectProvider extends ChangeNotifier {
   void _deleteProject(int index, BuildContext context) {
     Project project = projects[index];
     DbManager.instance.deleteProject(project.id, AuthManager.instance.getUser()!.uid).then((value) {
-      init();
+      projects.removeAt(index);
+      notifyListeners();
       if(value) {
         UiMessages.showMessage(context, "Project deleted successfully");
 

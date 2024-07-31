@@ -11,6 +11,11 @@ import 'select_project_provider.dart';
 
 @RoutePage()
 class SelectProjectPage extends StatelessWidget {
+
+  final bool canGoBack;
+
+  const SelectProjectPage({super.key, this.canGoBack = true});
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -30,6 +35,8 @@ class SelectProjectPage extends StatelessWidget {
 
     return PaddingScaffold(child: Consumer<SelectProjectProvider>(
       builder: (context, provider, child) {
+
+
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +137,7 @@ class SelectProjectPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return ListTile(
                     onTap: () {
-                      // appRouter.push(SelectProjectRoute());
+                      provider.selectProject(provider.projects[index].id);
                     },
                     title: Text(provider.projects[index].title),
                     subtitle: Text("Last updated on " +
