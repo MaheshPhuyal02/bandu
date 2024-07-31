@@ -17,10 +17,9 @@ class Options{
     'In Progress',
     'Done',
   ];
-
-  static const List<String> promptOptions= <String>[
+  static const List<String> promptOptions = <String>[
     '/Chat',
-   '/Analyze Requirements',
+    '/Analyze Requirements',
     '/Create task',
     '/Analyze Budget',
     '/Analyze Time',

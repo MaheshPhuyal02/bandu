@@ -1,5 +1,6 @@
 import 'package:bandu/ext/sizes_ext.dart';
 import 'package:bandu/models/chat/message.dart';
+import 'package:bandu/models/prompt/prompt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -43,9 +44,9 @@ class Ai_chatPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          child: PopupMenuButton<String>(
+                          child: PopupMenuButton<Prompt>(
                             padding: EdgeInsets.all(0),
-                            icon: provider.selectedPrompt.isEmpty
+                            icon: provider.selectedPrompt == null
                                 ? SvgPicture.asset(
                                     "assets/icons/side_line.svg",
                                     width: 20.sp,
@@ -61,21 +62,22 @@ class Ai_chatPage extends StatelessWidget {
                                       color: Color(0xFF7E9CDF),
                                     ),
                                     child: Text(
-                                      provider.selectedPrompt.substring(1),
+                                      provider.selectedPrompt == null?"":provider.selectedPrompt!.name,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 13.sp,
                                       ),
                                     ),
                                   ),
-                            onSelected: (String item) {
+                            onSelected: (Prompt item) {
                               provider.setSelectedPrompt(item);
+
                             },
                             itemBuilder: (BuildContext context) {
-                              return Options.promptOptions.map((String choice) {
-                                return PopupMenuItem<String>(
+                              return provider.prompts.map((Prompt choice) {
+                                return PopupMenuItem<Prompt>(
                                   value: choice,
-                                  child: Text(choice),
+                                  child: Text(choice.name),
                                 );
                               }).toList();
                             },

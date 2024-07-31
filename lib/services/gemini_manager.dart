@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bandu/constants/prompts.dart';
@@ -37,7 +38,7 @@ class GeminiManager {
         Prompts.defaultSystem,
       ),
       tools: [
-        Tool(functionDeclarations: [taskSchema])
+        Tool(functionDeclarations: [taskSchema, taskListSchema])
       ],
     );
     status = GeminiStatus.ready;
@@ -49,10 +50,11 @@ class GeminiManager {
     }
 
     message = message.trim();
-    GenerateContentResponse? sendMessage =
-        await _gemModel?.startChat(
+    GenerateContentResponse? sendMessage = await _gemModel
+        ?.startChat(
           history: history,
-        ).sendMessage(Content.text(message));
+        )
+        .sendMessage(Content.text(message));
 
     _addToHistory(Content.text(message));
     _addToHistory(Content.model([
@@ -68,7 +70,7 @@ class GeminiManager {
       throw Exception('Gemini is not ready');
     }
 
-    message  = message.trim();
+    message = message.trim();
 
     _gemModel = GenerativeModel(
       model: _model,
@@ -77,9 +79,11 @@ class GeminiManager {
         Prompts.defaultSystem + command,
       ),
       tools: [
-        Tool(functionDeclarations: [taskSchema, listTaskSchema])
+        Tool(functionDeclarations: [taskSchema, taskListSchema]),
       ],
     );
+    // log("listTaskSchema " + listTaskSchema.toJson().toString());
+
     var chat = _gemModel?.startChat(
       history: history,
     );
@@ -91,7 +95,7 @@ class GeminiManager {
       final functionCall = functionCalls.first;
       final result = switch (functionCall.name) {
         'addTask' => await addTask(functionCall.args),
-        'addListTask' => await addListTask(functionCall.args),
+        'addTaskList' => await addListTask(functionCall.args),
         _ => throw UnimplementedError(
             'Function not implemented: ${functionCall.name}')
       };
@@ -106,11 +110,9 @@ class GeminiManager {
     return r;
   }
 
-
-  _addToHistory(Content content){
-
-  //   max 10
-    if(history.length > 10){
+  _addToHistory(Content content) {
+    //   max 10
+    if (history.length > 10) {
       history.removeAt(0);
     }
     history.add(content);
@@ -151,13 +153,11 @@ class GeminiManager {
     }
   }
 
-
- Future<Map<String, String>> addListTask(Map<String, dynamic> data) async {
+  Future<Map<String, String>> addListTask(Map<String, dynamic> data) async {
     try {
       print(
           "============================= Adding task List ============================ : " +
               data.toString());
-
 
       // final Task task = Task(
       //   title: data['title'],
@@ -189,87 +189,35 @@ class GeminiManager {
   }
 
 
+  final taskListSchema = FunctionDeclaration("addTaskList", "Add list of task with subtask list for each",
+      Schema(SchemaType.array, items: Schema(SchemaType.object, properties: {
+        'title': Schema(SchemaType.string, description: 'The title of the task.'),
+        'description': Schema(SchemaType.string, description: 'A detailed description of the task.'),
+        'createdDate': Schema(SchemaType.string, description: 'The date and time when the task was created.'),
+        'deadline': Schema(SchemaType.string, description: 'The deadline for the task.'),
+        'completed': Schema(SchemaType.boolean, description: 'Indicates if the task is completed.'),
+        'subTask': Schema(SchemaType.array, items: Schema(SchemaType.object, properties: {
+          'title': Schema(SchemaType.string, description: 'The title of the subtask.'),
+          'description': Schema(SchemaType.string, description: 'A detailed description of the subtask.'),
+          'createdDate': Schema(SchemaType.string, description: 'The date and time when the subtask was created.'),
+          'deadline': Schema(SchemaType.string, description: 'The deadline for the subtask.'),
+          'completed': Schema(SchemaType.boolean, description: 'Indicates if the subtask is completed.'),
+          'taskId': Schema(SchemaType.string, description: 'The ID of the task to which this subtask belongs.'),
+        }, requiredProperties: ['title', 'description', 'createdDate', 'deadline', 'completed', 'taskId']), description: 'A list of subtasks associated with the task.(List of objects)'),
+      }, requiredProperties: ['title', 'description', 'createdDate', 'deadline', 'completed', 'subTask'])
 
-  final listTaskSchema = FunctionDeclaration(
-    'addTaskList',
-    'Add a list of tasks with a list of subtasks.',
-    Schema(SchemaType.array,
-      items: Schema(SchemaType.object, properties: {
-        'title': Schema(
-          SchemaType.string,
-          description: 'The title of the task.',
-        ),
-        'description': Schema(
-          SchemaType.string,
-          description: 'A detailed description of the task.',
-        ),
-        'deadline': Schema(
-          SchemaType.string,
-          description: 'The deadline for the task.',
-        ),
-        'completed': Schema(
-          SchemaType.boolean,
-          description: 'Indicates if the task is completed.',
-        ),
-        'subTasks': Schema(
-          SchemaType.array,
-          items: Schema(
-            SchemaType.object,
-            properties: {
-              'title': Schema(
-                SchemaType.string,
-                description: 'The title of the subtask.',
-              ),
-              'description': Schema(
-                SchemaType.string,
-                description: 'A detailed description of the subtask.',
-              ),
-              'createdDate': Schema(
-                SchemaType.string,
-                description: 'The date and time when the subtask was created.',
-              ),
-              'deadline': Schema(
-                SchemaType.string,
-                description: 'The deadline for the subtask.',
-              ),
-              'completed': Schema(
-                SchemaType.boolean,
-                description: 'Indicates if the subtask is completed.',
-              ),
-              'taskId': Schema(
-                SchemaType.string,
-                description: 'The ID of the task to which this subtask belongs.',
-              ),
-            },
-            requiredProperties: [
-              'title',
-              'description',
-              'createdDate',
-              'deadline',
-              'completed',
-              'taskId'
-            ],
-          ),
-          description: 'A list of subtasks associated with the task.',
-        ),
-      },
-          requiredProperties: [
-            'title',
-            'description',
-            'createdDate',
-            'deadline',
-            'completed',
-            'subTasks'
-          ]),
-    ),
-  );
+  ));
+
+
+
+
 
   final taskSchema = FunctionDeclaration(
       'addTask',
       'Represents a task with a list of subtasks.',
       Schema(SchemaType.object, properties: {
         'title':
-            Schema(SchemaType.string, description: 'The title of the task.'),
+        Schema(SchemaType.string, description: 'The title of the task.'),
         'description': Schema(SchemaType.string,
             description: 'A detailed description of the task.'),
         'createdDate': Schema(SchemaType.string,
@@ -286,14 +234,14 @@ class GeminiManager {
                   description: 'A detailed description of the subtask.'),
               'createdDate': Schema(SchemaType.string,
                   description:
-                      'The date and time when the subtask was created.'),
+                  'The date and time when the subtask was created.'),
               'deadline': Schema(SchemaType.string,
                   description: 'The deadline for the subtask.'),
               'completed': Schema(SchemaType.boolean,
                   description: 'Indicates if the subtask is completed.'),
               'taskId': Schema(SchemaType.string,
                   description:
-                      'The ID of the task to which this subtask belongs.'),
+                  'The ID of the task to which this subtask belongs.'),
             }, requiredProperties: [
               'title',
               'description',
@@ -303,7 +251,7 @@ class GeminiManager {
               'taskId'
             ]),
             description:
-                'A list of subtasks associated with the task.(List of objects)'),
+            'A list of subtasks associated with the task.(List of objects)'),
       }, requiredProperties: [
         'title',
         'description',
@@ -312,7 +260,6 @@ class GeminiManager {
         'completed',
         'subTask'
       ]));
-
 }
 
 enum GeminiStatus {

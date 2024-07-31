@@ -8,7 +8,7 @@ class Prompts{
   static const String summarizeSystem = "Summarize the long message sent by user, send with format, and summarize in points."
   "Remember date format : " + dateFormat;
 
-  static const String createTask = "Create task list as needed, call addTask function for single task and addListTask for multiple task, with title, description, created date, deadline and subTask(list of subtasks) with title, description, deadline."
+  static const String createTask = "Add task list as needed, call addTask function for single task and addTaskList for multiple task, with title, description, created date, deadline and subTask(list of subtasks) with title, description, deadline."
   "Remember date format : " + dateFormat;
 
   static const String analyzeRequirements = "Only analyze the requirements, study feasibility, make summary, budget, and so on. Only create task when user asks."

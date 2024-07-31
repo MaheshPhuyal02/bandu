@@ -28,7 +28,7 @@ class AuthManager {
     print("AuthManager ::: Initializing AuthManager");
 
     dbManager = DbManager.instance;
-    if(hasLoggedIn()) {
+    if (hasLoggedIn()) {
       dbManager?.setUid(_auth.currentUser!.uid);
     }
 
@@ -106,17 +106,22 @@ class AuthManager {
     } else if (_user!.completed == false) {
       appRouter.pushAndPopUntil(Complete_profileRoute(),
           predicate: (route) => false);
-    } else if(_user!.projects == null || _user!.projects!.isEmpty || SharedPref.instance.getValue("currentProjectId") == null) {
-      appRouter.pushAndPopUntil(SelectProjectRoute(
-        canGoBack: false
-      ), predicate: (route) => false);
+    } else if (_user!.projects == null ||
+        _user!.projects!.isEmpty ||
+        SharedPref.instance.getValue("currentProjectId") == null) {
+      appRouter.pushAndPopUntil(
+        SelectProjectRoute(canGoBack: false),
+        predicate: (route) => false,
+      );
     } else {
-      dbManager?.setCurrentProjectId(SharedPref.instance.getValue("currentProjectId"));
+      dbManager?.setCurrentProjectId(
+          SharedPref.instance.getValue("currentProjectId"));
       appRouter.pushAndPopUntil(HomeMainRoute(), predicate: (route) => false);
     }
   }
 
-  Future<void> _handleRegister(String name, String email, String provider) async {
+  Future<void> _handleRegister(
+      String name, String email, String provider) async {
     print("AuthManager ::: Handling register");
     DBUser user = DBUser(
         uid: _auth.currentUser!.uid,
@@ -174,9 +179,8 @@ class AuthManager {
     appRouter.pushAndPopUntil(LoginRoute(), predicate: (route) => false);
   }
 
-  DBUser? getUser () {
+  DBUser? getUser() {
     return _user;
-
   }
 }
 

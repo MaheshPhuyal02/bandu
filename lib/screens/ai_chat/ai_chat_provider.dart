@@ -4,11 +4,10 @@ import 'package:bandu/services/gemini_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/chat/chat.dart';
+import '../../models/prompt/prompt.dart';
 
 class Ai_chatProvider extends ChangeNotifier {
-  String selectedPrompt = '';
-
-  int selectedIndex = 0;
+  Prompt? selectedPrompt = null;
 
   bool loading = false;
 
@@ -16,13 +15,29 @@ class Ai_chatProvider extends ChangeNotifier {
 
   List<Message> messageList = [];
 
-  void setSelectedPrompt(String prompt) {
-    selectedPrompt = prompt;
-    notifyListeners();
+  List<Prompt> prompts = [
+    Prompt(name: "Chat", prompt: Prompts.defaultSystem, selected: true),
+    Prompt(
+        name: "Analyze Requirements",
+        prompt: Prompts.analyzeRequirements,
+        selected: false),
+    Prompt(name: "Create Task", prompt: Prompts.createTask, selected: false),
+    Prompt(
+        name: "Analyze Budget", prompt: Prompts.analyzeBudget, selected: false),
+    Prompt(name: "Analyze Time", prompt: Prompts.analyzeTime, selected: false),
+    Prompt(
+        name: "Summarize System",
+        prompt: Prompts.summarizeSystem,
+        selected: false),
+  ];
+
+  Ai_chatProvider() {
+    selectedPrompt = prompts[0];
   }
 
-  void setSelectedIndex(int index) {
-    selectedIndex = index;
+  void setSelectedPrompt(Prompt prompt) {
+    print("PROMPT ::: " + prompt.toJson().toString());
+    selectedPrompt = prompt;
     notifyListeners();
   }
 
@@ -34,7 +49,7 @@ class Ai_chatProvider extends ChangeNotifier {
     loading = true;
 
     Message msg = Message(
-        id: "12",
+        id: DateTime.now().toString(),
         request: message,
         response: null,
         loading: true,
@@ -48,8 +63,8 @@ class Ai_chatProvider extends ChangeNotifier {
 
     String response;
 
-    if (selectedPrompt.isNotEmpty || selectedPrompt != "/Chat") {
-      String cmd = getSystemMessage(selectedPrompt);
+    if (selectedPrompt != null || selectedPrompt?.name != "Chat") {
+      String cmd = selectedPrompt!.prompt;
       print("CMDDD  ::: " + cmd);
       response =
           await GeminiManager.instance.sendMessageWithCommand(message, cmd);
@@ -66,26 +81,5 @@ class Ai_chatProvider extends ChangeNotifier {
 
   void hideKeyboard(BuildContext context) {
     FocusScope.of(context).unfocus();
-  }
-
-
-  String getSystemMessage(String cmd) {
-
-    switch (cmd) {
-      case "/Chat":
-        return Prompts.defaultSystem;
-      case "/Summarize":
-        return Prompts.summarizeSystem;
-      case "/Create Task":
-        return Prompts.createTask;
-      case "/Analyze Requirements":
-        return Prompts.analyzeRequirements;
-      case "/Analyze Budget":
-        return Prompts.analyzeBudget;
-      case "/Analyze Time":
-        return Prompts.analyzeTime;
-      default:
-        return Prompts.defaultSystem;
-    }
   }
 }
