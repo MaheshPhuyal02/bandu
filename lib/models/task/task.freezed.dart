@@ -20,12 +20,16 @@ Task _$TaskFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Task {
+  String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
-  DateTime get createdDate => throw _privateConstructorUsedError;
-  DateTime get deadline => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+  DateTime? get createdDate => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+  DateTime? get deadline => throw _privateConstructorUsedError;
   bool get completed => throw _privateConstructorUsedError;
   List<SubTask> get subTask => throw _privateConstructorUsedError;
+  String get status => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,12 +42,16 @@ abstract class $TaskCopyWith<$Res> {
       _$TaskCopyWithImpl<$Res, Task>;
   @useResult
   $Res call(
-      {String title,
+      {String id,
+      String title,
       String description,
-      DateTime createdDate,
-      DateTime deadline,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+      DateTime? createdDate,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+      DateTime? deadline,
       bool completed,
-      List<SubTask> subTask});
+      List<SubTask> subTask,
+      String status});
 }
 
 /// @nodoc
@@ -59,14 +67,20 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? description = null,
-    Object? createdDate = null,
-    Object? deadline = null,
+    Object? createdDate = freezed,
+    Object? deadline = freezed,
     Object? completed = null,
     Object? subTask = null,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -75,14 +89,14 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      createdDate: null == createdDate
+      createdDate: freezed == createdDate
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      deadline: null == deadline
+              as DateTime?,
+      deadline: freezed == deadline
           ? _value.deadline
           : deadline // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       completed: null == completed
           ? _value.completed
           : completed // ignore: cast_nullable_to_non_nullable
@@ -91,6 +105,10 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
           ? _value.subTask
           : subTask // ignore: cast_nullable_to_non_nullable
               as List<SubTask>,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -103,12 +121,16 @@ abstract class _$$TaskImplCopyWith<$Res> implements $TaskCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String title,
+      {String id,
+      String title,
       String description,
-      DateTime createdDate,
-      DateTime deadline,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+      DateTime? createdDate,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+      DateTime? deadline,
       bool completed,
-      List<SubTask> subTask});
+      List<SubTask> subTask,
+      String status});
 }
 
 /// @nodoc
@@ -121,14 +143,20 @@ class __$$TaskImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? description = null,
-    Object? createdDate = null,
-    Object? deadline = null,
+    Object? createdDate = freezed,
+    Object? deadline = freezed,
     Object? completed = null,
     Object? subTask = null,
+    Object? status = null,
   }) {
     return _then(_$TaskImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -137,14 +165,14 @@ class __$$TaskImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      createdDate: null == createdDate
+      createdDate: freezed == createdDate
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      deadline: null == deadline
+              as DateTime?,
+      deadline: freezed == deadline
           ? _value.deadline
           : deadline // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       completed: null == completed
           ? _value.completed
           : completed // ignore: cast_nullable_to_non_nullable
@@ -153,6 +181,10 @@ class __$$TaskImplCopyWithImpl<$Res>
           ? _value._subTask
           : subTask // ignore: cast_nullable_to_non_nullable
               as List<SubTask>,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -161,25 +193,33 @@ class __$$TaskImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TaskImpl implements _Task {
   const _$TaskImpl(
-      {required this.title,
+      {required this.id,
+      required this.title,
       required this.description,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
       required this.createdDate,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
       required this.deadline,
       required this.completed,
-      required final List<SubTask> subTask})
+      required final List<SubTask> subTask,
+      required this.status})
       : _subTask = subTask;
 
   factory _$TaskImpl.fromJson(Map<String, dynamic> json) =>
       _$$TaskImplFromJson(json);
 
   @override
+  final String id;
+  @override
   final String title;
   @override
   final String description;
   @override
-  final DateTime createdDate;
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+  final DateTime? createdDate;
   @override
-  final DateTime deadline;
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+  final DateTime? deadline;
   @override
   final bool completed;
   final List<SubTask> _subTask;
@@ -191,8 +231,11 @@ class _$TaskImpl implements _Task {
   }
 
   @override
+  final String status;
+
+  @override
   String toString() {
-    return 'Task(title: $title, description: $description, createdDate: $createdDate, deadline: $deadline, completed: $completed, subTask: $subTask)';
+    return 'Task(id: $id, title: $title, description: $description, createdDate: $createdDate, deadline: $deadline, completed: $completed, subTask: $subTask, status: $status)';
   }
 
   @override
@@ -200,6 +243,7 @@ class _$TaskImpl implements _Task {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TaskImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -209,13 +253,22 @@ class _$TaskImpl implements _Task {
                 other.deadline == deadline) &&
             (identical(other.completed, completed) ||
                 other.completed == completed) &&
-            const DeepCollectionEquality().equals(other._subTask, _subTask));
+            const DeepCollectionEquality().equals(other._subTask, _subTask) &&
+            (identical(other.status, status) || other.status == status));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, title, description, createdDate,
-      deadline, completed, const DeepCollectionEquality().hash(_subTask));
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      description,
+      createdDate,
+      deadline,
+      completed,
+      const DeepCollectionEquality().hash(_subTask),
+      status);
 
   @JsonKey(ignore: true)
   @override
@@ -233,27 +286,37 @@ class _$TaskImpl implements _Task {
 
 abstract class _Task implements Task {
   const factory _Task(
-      {required final String title,
+      {required final String id,
+      required final String title,
       required final String description,
-      required final DateTime createdDate,
-      required final DateTime deadline,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+      required final DateTime? createdDate,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+      required final DateTime? deadline,
       required final bool completed,
-      required final List<SubTask> subTask}) = _$TaskImpl;
+      required final List<SubTask> subTask,
+      required final String status}) = _$TaskImpl;
 
   factory _Task.fromJson(Map<String, dynamic> json) = _$TaskImpl.fromJson;
 
+  @override
+  String get id;
   @override
   String get title;
   @override
   String get description;
   @override
-  DateTime get createdDate;
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+  DateTime? get createdDate;
   @override
-  DateTime get deadline;
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+  DateTime? get deadline;
   @override
   bool get completed;
   @override
   List<SubTask> get subTask;
+  @override
+  String get status;
   @override
   @JsonKey(ignore: true)
   _$$TaskImplCopyWith<_$TaskImpl> get copyWith =>

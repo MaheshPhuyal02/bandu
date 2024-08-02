@@ -21,7 +21,8 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Project {
   String get title => throw _privateConstructorUsedError;
-  DateTime get lastUpdated => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+  DateTime? get lastUpdated => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
   String? get projectPlatform => throw _privateConstructorUsedError;
 
@@ -36,7 +37,11 @@ abstract class $ProjectCopyWith<$Res> {
       _$ProjectCopyWithImpl<$Res, Project>;
   @useResult
   $Res call(
-      {String title, DateTime lastUpdated, String id, String? projectPlatform});
+      {String title,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+      DateTime? lastUpdated,
+      String id,
+      String? projectPlatform});
 }
 
 /// @nodoc
@@ -53,7 +58,7 @@ class _$ProjectCopyWithImpl<$Res, $Val extends Project>
   @override
   $Res call({
     Object? title = null,
-    Object? lastUpdated = null,
+    Object? lastUpdated = freezed,
     Object? id = null,
     Object? projectPlatform = freezed,
   }) {
@@ -62,10 +67,10 @@ class _$ProjectCopyWithImpl<$Res, $Val extends Project>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      lastUpdated: null == lastUpdated
+      lastUpdated: freezed == lastUpdated
           ? _value.lastUpdated
           : lastUpdated // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -86,7 +91,11 @@ abstract class _$$ProjectImplCopyWith<$Res> implements $ProjectCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String title, DateTime lastUpdated, String id, String? projectPlatform});
+      {String title,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+      DateTime? lastUpdated,
+      String id,
+      String? projectPlatform});
 }
 
 /// @nodoc
@@ -101,7 +110,7 @@ class __$$ProjectImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? title = null,
-    Object? lastUpdated = null,
+    Object? lastUpdated = freezed,
     Object? id = null,
     Object? projectPlatform = freezed,
   }) {
@@ -110,10 +119,10 @@ class __$$ProjectImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      lastUpdated: null == lastUpdated
+      lastUpdated: freezed == lastUpdated
           ? _value.lastUpdated
           : lastUpdated // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -131,6 +140,7 @@ class __$$ProjectImplCopyWithImpl<$Res>
 class _$ProjectImpl implements _Project {
   const _$ProjectImpl(
       {required this.title,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
       required this.lastUpdated,
       required this.id,
       required this.projectPlatform});
@@ -141,7 +151,8 @@ class _$ProjectImpl implements _Project {
   @override
   final String title;
   @override
-  final DateTime lastUpdated;
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+  final DateTime? lastUpdated;
   @override
   final String id;
   @override
@@ -187,7 +198,8 @@ class _$ProjectImpl implements _Project {
 abstract class _Project implements Project {
   const factory _Project(
       {required final String title,
-      required final DateTime lastUpdated,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+      required final DateTime? lastUpdated,
       required final String id,
       required final String? projectPlatform}) = _$ProjectImpl;
 
@@ -196,7 +208,8 @@ abstract class _Project implements Project {
   @override
   String get title;
   @override
-  DateTime get lastUpdated;
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
+  DateTime? get lastUpdated;
   @override
   String get id;
   @override

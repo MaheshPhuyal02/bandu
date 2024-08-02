@@ -40,24 +40,38 @@ class GeminiManager {
         Prompts.defaultSystem + user,
       ),
       tools: [
-        Tool(functionDeclarations: [taskSchema, taskListSchema])
+        Tool(functionDeclarations: [taskSchema, taskListSchema, deleteAllTaskSchema]),
       ],
     );
     status = GeminiStatus.ready;
   }
 
   Future<String> userInfo() async {
+    if (!AuthManager.instance.hasLoggedIn()) {
+      return Future.value("");
+    }
+    if (AuthManager.instance.getUser()!.projects == null ||
+        AuthManager.instance.getUser()!.projects!.isEmpty) {
+      return Future.value("");
+    }
+
     Project? project = await DbManager.instance.getCurrentProject();
 
     String platform;
+    String projectTitle;
 
     if (project != null) {
       platform = project.projectPlatform ?? "No platform";
+      projectTitle = project.title;
     } else {
       platform = "No platform";
+      projectTitle = "No project";
     }
 
-    return " and user project platform : " + platform;
+    return "and user project is : " +
+        projectTitle +
+        " and user project platform : " +
+        platform;
   }
 
   Future<String> sendMessage(String message) async {
@@ -97,7 +111,7 @@ class GeminiManager {
         Prompts.defaultSystem + command + user,
       ),
       tools: [
-        Tool(functionDeclarations: [taskSchema, taskListSchema]),
+        Tool(functionDeclarations: [taskSchema, taskListSchema, deleteAllTaskSchema]),
       ],
     );
     // log("listTaskSchema " + listTaskSchema.toJson().toString());
@@ -106,27 +120,35 @@ class GeminiManager {
       history: history,
     );
     status = GeminiStatus.ready;
-    var response = await chat!.sendMessage(Content.text(message));
+    try {
+      var response = await chat!.sendMessage(Content.text(message));
 
-    final functionCalls = response.functionCalls.toList();
-    if (functionCalls.isNotEmpty) {
-      final functionCall = functionCalls.first;
-      final result = switch (functionCall.name) {
-        'addTask' => await addTask(functionCall.args),
-        'addTaskList' => await addListTask(functionCall.args),
-        _ => throw UnimplementedError(
-            'Function not implemented: ${functionCall.name}')
-      };
-      response = await chat!
-          .sendMessage(Content.functionResponse(functionCall.name, result));
+      final functionCalls = response.functionCalls.toList();
+      if (functionCalls.isNotEmpty) {
+        final functionCall = functionCalls.first;
+        final result = switch (functionCall.name) {
+          'addTask' => await addTask(functionCall.args),
+          'deleteAllTask' => await deleteAllTask(functionCall.args),
+          'addTaskList' => await addListTask(functionCall.args),
+          _ =>
+          throw UnimplementedError(
+              'Function not implemented: ${functionCall.name}')
+        };
+        response = await chat!
+            .sendMessage(Content.functionResponse(functionCall.name, result));
+      }
+      String r = response.text!;
+      _addToHistory(Content.text(message));
+      _addToHistory(Content.model([
+        TextPart(r),
+      ]));
+      return r;
+    } catch (e) {
+      print("Error : " + e.toString());
+      return "Error : " + e.toString();
     }
-    String r = response.text!;
-    _addToHistory(Content.text(message));
-    _addToHistory(Content.model([
-      TextPart(r),
-    ]));
-    return r;
   }
+
 
   _addToHistory(Content content) {
     //   max 10
@@ -136,27 +158,45 @@ class GeminiManager {
     history.add(content);
   }
 
+  Future<Map<String, String>> deleteAllTask(Map<String, dynamic> data) async {
+    try {
+      print(
+          "============================= Deleting all task ============================ : ");
+
+      await DbManager.instance.deleteAllTask();
+
+      return {"status": 'All tasks deleted successfully'};
+    } catch (e) {
+      return {"status": 'Error deleting all tasks'};
+    }
+  }
   Future<Map<String, String>> addTask(Map<String, dynamic> data) async {
     try {
       print(
-          "============================= Adding task ============================ : " +
-              data.toString());
+          "============================= Adding task ============================ : ");
+
+      print("Data : " + data["deadline"].runtimeType.toString());
+
+      String id = DbManager.instance.generateId();
 
       final Task task = Task(
+        id: id,
         title: data['title'],
         description: data['description'],
         createdDate: DateTime.now(),
         deadline: DateTime.parse(data['deadline']),
         completed: false,
+        status: "to_do",
         subTask: (data['subTask'] as List).map((subTask) {
           return SubTask(
-            status: "pending",
+            id: DbManager.instance.generateId(),
+            status: "to_do",
             title: subTask['title'],
             description: subTask['description'],
             createdDate: DateTime.now(),
             deadline: DateTime.parse(subTask['deadline']),
             completed: false,
-            taskId: DbManager.instance.generateId(),
+            taskId: id,
           );
         }).toList(),
       );
@@ -167,7 +207,8 @@ class GeminiManager {
 
       return {"status": 'Task added successfully'};
     } catch (e) {
-      return {"status": 'Error adding task'};
+      print("Error adding task : " + e.toString());
+      return {"status": 'Error adding task ' + e.toString()};
     }
   }
 
@@ -205,6 +246,16 @@ class GeminiManager {
       return {"status": 'Error adding task'};
     }
   }
+
+  final deleteAllTaskSchema = FunctionDeclaration(
+      "deleteAllTask",
+      "Delete all tasks",
+      Schema(SchemaType.object, properties: {
+        'status': Schema(SchemaType.string,
+            description: 'The status of delete system.'),
+      }, requiredProperties: [
+        "status"
+      ]));
 
   final taskListSchema = FunctionDeclaration(
       "addTaskList",

@@ -1,3 +1,4 @@
+import 'package:bandu/models/task/sub_task.dart';
 import 'package:bandu/models/task/task.dart';
 import 'package:bandu/models/user/db_user.dart';
 import 'package:bandu/models/user/user_project.dart';
@@ -33,7 +34,7 @@ class DbManager {
         .doc(_currentProjectId)
         .get()
         .then((value) {
-          if(!value.exists) return null;
+      if (!value.exists) return null;
       _currentProject = Project.fromJson(value.data()!);
       return Project.fromJson(value.data()!);
     });
@@ -97,6 +98,7 @@ class DbManager {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> streamTasks() {
+    print('streaming tasks for project $_currentProjectId');
     return _firestore
         .collection('projects')
         .doc(_uid)
@@ -107,6 +109,10 @@ class DbManager {
   }
 
   Future<void> addTask(Task task) async {
+    print('adding task to project $_currentProjectId');
+
+    List<SubTask> subTasks = task.subTask;
+
     if (_currentProjectId.isEmpty) throw Exception('Project ID is empty');
     await _firestore
         .collection('projects')
@@ -114,7 +120,17 @@ class DbManager {
         .collection('user_projects')
         .doc(_currentProjectId)
         .collection('tasks')
-        .add(task.toJson());
+        .doc(task.id)
+        .set({
+      'id': task.id,
+      'title': task.title,
+      'description': task.description,
+      'createdDate': task.createdDate,
+      'deadline': task.deadline,
+      'completed': task.completed,
+      'status': task.status,
+      'subTask': subTasks.map((e) => e.toJson()).toList(),
+    });
   }
 
   void setUid(String uid) {
@@ -146,5 +162,53 @@ class DbManager {
         .delete()
         .then((value) => true)
         .catchError((error) => false);
+  }
+
+  updateSubTask(String taskId, String id, List<SubTask> task) {
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('tasks')
+        .doc(taskId)
+        .update({
+      'subTask': task.map((e) => e.toJson()).toList(),
+    });
+  }
+
+  deleteAllTask() {
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('tasks')
+        .get()
+        .then((value) {
+      for (var doc in value.docs) {
+        doc.reference.delete();
+      }
+    });
+  }
+
+  updateTask(Task task) {
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('tasks')
+        .doc(task.id)
+        .update({
+      'title': task.title,
+      'description': task.description,
+      'createdDate': task.createdDate,
+      'deadline': task.deadline,
+      'completed': task.completed,
+      'status': task.status,
+      'id': task.id,
+      'subTask': task.subTask.map((e) => e.toJson()).toList(),
+    });
   }
 }

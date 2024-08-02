@@ -101,6 +101,8 @@ class AuthManager {
 
   Future<void> validateUser() async {
     print("AuthManager ::: Validating user :: " + _user.toString());
+    dbManager?.setUid(_auth.currentUser!.uid);
+
     if (_user == null) {
       appRouter.pushAndPopUntil(Complete_profileRoute(),
           predicate: (route) => false);

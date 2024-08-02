@@ -9,7 +9,7 @@ part of 'user_project.dart';
 _$ProjectImpl _$$ProjectImplFromJson(Map<String, dynamic> json) =>
     _$ProjectImpl(
       title: json['title'] as String,
-      lastUpdated: DateTime.parse(json['lastUpdated'] as String),
+      lastUpdated: _dateTimeFromTimestamp(json['lastUpdated'] as Timestamp?),
       id: json['id'] as String,
       projectPlatform: json['projectPlatform'] as String?,
     );
@@ -17,7 +17,7 @@ _$ProjectImpl _$$ProjectImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$ProjectImplToJson(_$ProjectImpl instance) =>
     <String, dynamic>{
       'title': instance.title,
-      'lastUpdated': instance.lastUpdated.toIso8601String(),
+      'lastUpdated': _dateTimeToTimestamp(instance.lastUpdated),
       'id': instance.id,
       'projectPlatform': instance.projectPlatform,
     };
