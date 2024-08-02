@@ -1,4 +1,5 @@
 import 'package:bandu/main.dart';
+import 'package:bandu/models/user/user_project.dart';
 import 'package:bandu/routes/app_router.gr.dart';
 import 'package:bandu/services/SharedPref.dart';
 import 'package:bandu/services/db_manager.dart';
@@ -132,6 +133,10 @@ class AuthManager {
         completed: false);
 
     await dbManager?.addUser(user);
+
+    _user = user;
+
+    validateUser();
   }
 
   Future<bool?> hasUserData() async {
@@ -182,6 +187,21 @@ class AuthManager {
   DBUser? getUser() {
     return _user;
   }
+
+  void addProject(Project project){
+    if(_user?.projects == null){
+      _user = _user?.copyWith(projects: []);
+    }
+
+    List<Project> projects = List.from(_user!.projects!);
+    projects.add(project);
+
+    _user = _user?.copyWith(projects: projects);
+
+    print("AuthManager ::: Adding project : " + _user!.toJson().toString());
+    dbManager?.updateUser(_user!, _auth.currentUser!.uid);
+  }
+
 }
 
 enum AuthStatus { loading, authenticated, unauthenticated, error }

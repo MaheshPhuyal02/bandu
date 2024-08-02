@@ -16,9 +16,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await SharedPref.instance.init();
   await AuthManager.instance.init();
   await GeminiManager.instance.init();
-  await SharedPref.instance.init();
   runApp(const MyApp());
 }
 

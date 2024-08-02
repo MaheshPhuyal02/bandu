@@ -15,7 +15,7 @@ class Complete_profileProvider extends ChangeNotifier {
     AuthManager.instance.updateWorkAs(
       workAs: selected == 0 ? "Freelancer" : "Employee",
     );
-    appRouter.replace(HomeMainRoute());
+    appRouter.replace(SelectProjectRoute());
   }
 
   void exit(BuildContext context) {

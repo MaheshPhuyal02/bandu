@@ -25,6 +25,7 @@ mixin _$DBUser {
   String get email => throw _privateConstructorUsedError;
   List<String>? get role => throw _privateConstructorUsedError;
   String? get workAs => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
   DateTime? get createdAt => throw _privateConstructorUsedError;
   bool? get completed => throw _privateConstructorUsedError;
   String? get provider => throw _privateConstructorUsedError;
@@ -46,6 +47,7 @@ abstract class $DBUserCopyWith<$Res> {
       String email,
       List<String>? role,
       String? workAs,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
       DateTime? createdAt,
       bool? completed,
       String? provider,
@@ -129,6 +131,7 @@ abstract class _$$DBUserImplCopyWith<$Res> implements $DBUserCopyWith<$Res> {
       String email,
       List<String>? role,
       String? workAs,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
       DateTime? createdAt,
       bool? completed,
       String? provider,
@@ -200,12 +203,13 @@ class __$$DBUserImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$DBUserImpl implements _DBUser {
-  const _$DBUserImpl(
+  _$DBUserImpl(
       {required this.uid,
       required this.name,
       required this.email,
       final List<String>? role,
       this.workAs,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
       this.createdAt,
       this.completed,
       this.provider,
@@ -235,6 +239,7 @@ class _$DBUserImpl implements _DBUser {
   @override
   final String? workAs;
   @override
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
   final DateTime? createdAt;
   @override
   final bool? completed;
@@ -303,12 +308,13 @@ class _$DBUserImpl implements _DBUser {
 }
 
 abstract class _DBUser implements DBUser {
-  const factory _DBUser(
+  factory _DBUser(
       {required final String uid,
       required final String name,
       required final String email,
       final List<String>? role,
       final String? workAs,
+      @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
       final DateTime? createdAt,
       final bool? completed,
       final String? provider,
@@ -327,6 +333,7 @@ abstract class _DBUser implements DBUser {
   @override
   String? get workAs;
   @override
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
   DateTime? get createdAt;
   @override
   bool? get completed;

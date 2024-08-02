@@ -14,10 +14,29 @@ class DbManager {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   String _currentProjectId = '';
+  Project? _currentProject = null;
   String _uid = '';
 
   set uid(String uid) {
     _uid = uid;
+  }
+
+  Future<Project?> getCurrentProject() {
+    if (_currentProject != null) {
+      return Future.value(_currentProject);
+    }
+
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .get()
+        .then((value) {
+          if(!value.exists) return null;
+      _currentProject = Project.fromJson(value.data()!);
+      return Project.fromJson(value.data()!);
+    });
   }
 
   void setCurrentProjectId(String projectId) {
@@ -63,7 +82,18 @@ class DbManager {
   }
 
   void updateUser(DBUser dbUser, String uid) {
-    _firestore.collection('users').doc(uid).update(dbUser.toJson());
+    _firestore.collection('users').doc(uid).update({
+      'workAs': dbUser.workAs,
+      'completed': dbUser.completed,
+      'email': dbUser.email,
+      'name': dbUser.name,
+      'role': dbUser.role,
+      'createdAt': dbUser.createdAt,
+      'provider': dbUser.provider,
+      'projects': dbUser.projects == null
+          ? []
+          : [for (var project in dbUser.projects!) project.toJson()],
+    });
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> streamTasks() {
@@ -98,11 +128,8 @@ class DbManager {
         .collection('user_projects')
         .get()
         .then((value) {
-
-          if(value.docs.isEmpty) return null;
-      return value.docs
-          .map((e) => Project.fromJson(e.data()))
-          .toList();
+      if (value.docs.isEmpty) return null;
+      return value.docs.map((e) => Project.fromJson(e.data())).toList();
     });
   }
 

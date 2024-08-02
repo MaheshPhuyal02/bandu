@@ -23,6 +23,7 @@ mixin _$Project {
   String get title => throw _privateConstructorUsedError;
   DateTime get lastUpdated => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
+  String? get projectPlatform => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,8 @@ abstract class $ProjectCopyWith<$Res> {
   factory $ProjectCopyWith(Project value, $Res Function(Project) then) =
       _$ProjectCopyWithImpl<$Res, Project>;
   @useResult
-  $Res call({String title, DateTime lastUpdated, String id});
+  $Res call(
+      {String title, DateTime lastUpdated, String id, String? projectPlatform});
 }
 
 /// @nodoc
@@ -53,6 +55,7 @@ class _$ProjectCopyWithImpl<$Res, $Val extends Project>
     Object? title = null,
     Object? lastUpdated = null,
     Object? id = null,
+    Object? projectPlatform = freezed,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -67,6 +70,10 @@ class _$ProjectCopyWithImpl<$Res, $Val extends Project>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      projectPlatform: freezed == projectPlatform
+          ? _value.projectPlatform
+          : projectPlatform // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -78,7 +85,8 @@ abstract class _$$ProjectImplCopyWith<$Res> implements $ProjectCopyWith<$Res> {
       __$$ProjectImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, DateTime lastUpdated, String id});
+  $Res call(
+      {String title, DateTime lastUpdated, String id, String? projectPlatform});
 }
 
 /// @nodoc
@@ -95,6 +103,7 @@ class __$$ProjectImplCopyWithImpl<$Res>
     Object? title = null,
     Object? lastUpdated = null,
     Object? id = null,
+    Object? projectPlatform = freezed,
   }) {
     return _then(_$ProjectImpl(
       title: null == title
@@ -109,6 +118,10 @@ class __$$ProjectImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      projectPlatform: freezed == projectPlatform
+          ? _value.projectPlatform
+          : projectPlatform // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -117,7 +130,10 @@ class __$$ProjectImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ProjectImpl implements _Project {
   const _$ProjectImpl(
-      {required this.title, required this.lastUpdated, required this.id});
+      {required this.title,
+      required this.lastUpdated,
+      required this.id,
+      required this.projectPlatform});
 
   factory _$ProjectImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProjectImplFromJson(json);
@@ -128,10 +144,12 @@ class _$ProjectImpl implements _Project {
   final DateTime lastUpdated;
   @override
   final String id;
+  @override
+  final String? projectPlatform;
 
   @override
   String toString() {
-    return 'Project(title: $title, lastUpdated: $lastUpdated, id: $id)';
+    return 'Project(title: $title, lastUpdated: $lastUpdated, id: $id, projectPlatform: $projectPlatform)';
   }
 
   @override
@@ -142,12 +160,15 @@ class _$ProjectImpl implements _Project {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.lastUpdated, lastUpdated) ||
                 other.lastUpdated == lastUpdated) &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.projectPlatform, projectPlatform) ||
+                other.projectPlatform == projectPlatform));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, title, lastUpdated, id);
+  int get hashCode =>
+      Object.hash(runtimeType, title, lastUpdated, id, projectPlatform);
 
   @JsonKey(ignore: true)
   @override
@@ -167,7 +188,8 @@ abstract class _Project implements Project {
   const factory _Project(
       {required final String title,
       required final DateTime lastUpdated,
-      required final String id}) = _$ProjectImpl;
+      required final String id,
+      required final String? projectPlatform}) = _$ProjectImpl;
 
   factory _Project.fromJson(Map<String, dynamic> json) = _$ProjectImpl.fromJson;
 
@@ -177,6 +199,8 @@ abstract class _Project implements Project {
   DateTime get lastUpdated;
   @override
   String get id;
+  @override
+  String? get projectPlatform;
   @override
   @JsonKey(ignore: true)
   _$$ProjectImplCopyWith<_$ProjectImpl> get copyWith =>

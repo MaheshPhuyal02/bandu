@@ -11,6 +11,7 @@ class Project with _$Project {
     required String title,
     required DateTime lastUpdated,
     required String id,
+    required String? projectPlatform,
 
   }) = _Project;
   factory Project.fromJson(Map<String, dynamic> json) => _$ProjectFromJson(json);

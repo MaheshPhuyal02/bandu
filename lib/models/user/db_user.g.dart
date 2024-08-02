@@ -12,9 +12,7 @@ _$DBUserImpl _$$DBUserImplFromJson(Map<String, dynamic> json) => _$DBUserImpl(
       email: json['email'] as String,
       role: (json['role'] as List<dynamic>?)?.map((e) => e as String).toList(),
       workAs: json['workAs'] as String?,
-      createdAt: json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
+      createdAt: _dateTimeFromTimestamp(json['createdAt'] as Timestamp?),
       completed: json['completed'] as bool?,
       provider: json['provider'] as String?,
       projects: (json['projects'] as List<dynamic>?)
@@ -29,7 +27,7 @@ Map<String, dynamic> _$$DBUserImplToJson(_$DBUserImpl instance) =>
       'email': instance.email,
       'role': instance.role,
       'workAs': instance.workAs,
-      'createdAt': instance.createdAt?.toIso8601String(),
+      'createdAt': _dateTimeToTimestamp(instance.createdAt),
       'completed': instance.completed,
       'provider': instance.provider,
       'projects': instance.projects,

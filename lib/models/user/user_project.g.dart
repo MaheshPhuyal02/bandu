@@ -11,6 +11,7 @@ _$ProjectImpl _$$ProjectImplFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       lastUpdated: DateTime.parse(json['lastUpdated'] as String),
       id: json['id'] as String,
+      projectPlatform: json['projectPlatform'] as String?,
     );
 
 Map<String, dynamic> _$$ProjectImplToJson(_$ProjectImpl instance) =>
@@ -18,4 +19,5 @@ Map<String, dynamic> _$$ProjectImplToJson(_$ProjectImpl instance) =>
       'title': instance.title,
       'lastUpdated': instance.lastUpdated.toIso8601String(),
       'id': instance.id,
+      'projectPlatform': instance.projectPlatform,
     };
