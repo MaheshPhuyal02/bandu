@@ -1,4 +1,6 @@
 import 'package:bandu/ext/sizes_ext.dart';
+import 'package:bandu/main.dart';
+import 'package:bandu/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +63,9 @@ class HomeTaskPage extends StatelessWidget {
               right: 20.sp,
               child: FloatingActionButton(
                 child: Icon(Icons.add),
-                onPressed: () {},
+                onPressed: () {
+                  appRouter.push(AddTaskRoute());
+                },
               ),
             )
           ],

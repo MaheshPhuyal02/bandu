@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:bandu/models/task/task.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -96,6 +95,7 @@ class _TaskListItemState extends State<TaskListItem> {
   }
 
   _buildSubListItem({required SubTask task}) {
+    print('buildSubListItem : ' + task.status);
     return Container(
         margin: EdgeInsets.only(top: 10.sp),
         padding: EdgeInsets.only(
@@ -105,9 +105,9 @@ class _TaskListItemState extends State<TaskListItem> {
           bottom: 10.sp,
         ),
         decoration: BoxDecoration(
-          color: parseStatus(widget.task.status) == TaskStatus.DONE
+          color: parseStatus(task.status) == TaskStatus.DONE
               ? ColorsConst.GREEN_ACCENT
-              : parseStatus(widget.task.status) == TaskStatus.IN_PROGRESS
+              : parseStatus(task.status) == TaskStatus.IN_PROGRESS
                   ? ColorsConst.YELLOW_ACCENT
                   : ColorsConst.WHITE_ACCENT,
           borderRadius: BorderRadius.circular(9.sp),
@@ -126,13 +126,13 @@ class _TaskListItemState extends State<TaskListItem> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    widget.task.title,
+                    task.title,
                     style: TextStyle(
                       fontSize: 13.sp,
                     ),
                   ),
                   Text(
-                    widget.task.description,
+                    task.description,
                     maxLines: 2,
                     style: TextStyle(
                       fontSize: 9.sp,
@@ -176,7 +176,14 @@ class _TaskListItemState extends State<TaskListItem> {
                     child: Row(
                       children: [
                         Icon(
-                          Icons.access_time,
+                          parseStatus(task.status) == TaskStatus.DONE
+                              ? Icons.check_circle
+                              : parseStatus(task.status) ==
+                                      TaskStatus.IN_PROGRESS
+                                  ? Icons.pending_outlined
+                                  : parseStatus(task.status) == TaskStatus.DONE
+                                      ? Icons.check_circle_outline
+                                      : Icons.access_time,
                           color: Colors.black,
                           size: 16.sp,
                         ),
@@ -192,21 +199,15 @@ class _TaskListItemState extends State<TaskListItem> {
                   onSelected: (String item) {
                     switch (item) {
                       case 'To Do':
-                        updateStatus(
-                            task.id,
-                            'to_do');
+                        updateStatus(task.id, 'to_do');
                         break;
                       case 'In Progress':
-                        updateStatus(
-                            task.id,
-                            'progress');
+                        updateStatus(task.id, 'progress');
                         break;
                       case 'Done':
-                        updateStatus(
-                            task.id,
-                            'done');
+                        updateStatus(task.id, 'done');
                         print('Done');
-                        _controllerCenter.play();
+
                         break;
                     }
                   },
@@ -235,6 +236,7 @@ class _TaskListItemState extends State<TaskListItem> {
           ],
         ));
   }
+
   Path drawStar(Size size) {
     // Method to convert degree to radians
     double degToRad(double deg) => deg * (pi / 180.0);
@@ -274,26 +276,21 @@ class _TaskListItemState extends State<TaskListItem> {
 
   Future<void> updateStatus(String subtaskId, String status) async {
 
-    List<SubTask> list = List.from(widget.task.subTask);
-
-
-    var subTask = list.where((element) {
-      return element.id == subtaskId;
-    }).first;
-    subTask = subTask.copyWith(status: status);
-    list.removeWhere((element) {
-      return element.id == subtaskId;
+    widget.task.subTask.forEach((element) {
+      if (element.id == subtaskId) {
+        if (element.status != status) {
+          if(status == 'done'){
+            _controllerCenter.play();
+          }
+          print('Status: ' + element.status);
+          setState(() {
+            element.status = status;
+          });
+        }
+      }
     });
-
-    list.add(subTask);
-
-    widget.task = widget.task.copyWith(subTask: list);
-
-    await DbManager.instance
-        .updateTask(widget.task);
-    setState(() {});
+    await DbManager.instance.updateTask(widget.task);
   }
-
 }
 
 enum TaskStatus {

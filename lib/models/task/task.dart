@@ -1,38 +1,48 @@
 import 'package:bandu/models/task/sub_task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'task.freezed.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'task.g.dart';
 
-@freezed
-class Task with _$Task {
-  const factory Task({
-    required String id,
-    required String title,
-    required String description,
-    @JsonKey(
-      fromJson: _dateTimeFromTimestamp,
-      toJson: _dateTimeToTimestamp,
-    )
-    required DateTime? createdDate,
-    @JsonKey(
-      fromJson: _dateTimeFromTimestamp,
-      toJson: _dateTimeToTimestamp,
-    )
-    required DateTime? deadline,
-    required bool completed,
-    required List<SubTask> subTask,
-    required String status,
+@JsonSerializable()
+class Task {
+  final String id;
+  final String title;
+  final String description;
 
-  }) = _Task;
+  @JsonKey(
+    fromJson: _dateTimeFromTimestamp,
+    toJson: _dateTimeToTimestamp,
+  )
+  final DateTime? createdDate;
+
+  @JsonKey(
+    fromJson: _dateTimeFromTimestamp,
+    toJson: _dateTimeToTimestamp,
+  )
+  final DateTime? deadline;
+
+  final bool completed;
+  final List<SubTask> subTask;
+  final String status;
+
+  Task({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.createdDate,
+    required this.deadline,
+    required this.completed,
+    required this.subTask,
+    required this.status,
+  });
+
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TaskToJson(this);
+  static DateTime? _dateTimeFromTimestamp(Timestamp? timestamp) =>
+      timestamp?.toDate();
+
+  static Timestamp? _dateTimeToTimestamp(DateTime? dateTime) =>
+      dateTime != null ? Timestamp.fromDate(dateTime) : null;
 }
-
-DateTime? _dateTimeFromTimestamp(Timestamp? timestamp) =>
-    timestamp?.toDate();
-
-// Converts a DateTime to Firestore Timestamp
-Timestamp? _dateTimeToTimestamp(DateTime? dateTime) =>
-    dateTime != null ? Timestamp.fromDate(dateTime) : null;

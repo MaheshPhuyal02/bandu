@@ -6,12 +6,13 @@ part of 'task.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TaskImpl _$$TaskImplFromJson(Map<String, dynamic> json) => _$TaskImpl(
+Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       id: json['id'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
-      createdDate: _dateTimeFromTimestamp(json['createdDate'] as Timestamp?),
-      deadline: _dateTimeFromTimestamp(json['deadline'] as Timestamp?),
+      createdDate:
+          Task._dateTimeFromTimestamp(json['createdDate'] as Timestamp?),
+      deadline: Task._dateTimeFromTimestamp(json['deadline'] as Timestamp?),
       completed: json['completed'] as bool,
       subTask: (json['subTask'] as List<dynamic>)
           .map((e) => SubTask.fromJson(e as Map<String, dynamic>))
@@ -19,13 +20,12 @@ _$TaskImpl _$$TaskImplFromJson(Map<String, dynamic> json) => _$TaskImpl(
       status: json['status'] as String,
     );
 
-Map<String, dynamic> _$$TaskImplToJson(_$TaskImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'description': instance.description,
-      'createdDate': _dateTimeToTimestamp(instance.createdDate),
-      'deadline': _dateTimeToTimestamp(instance.deadline),
+      'createdDate': Task._dateTimeToTimestamp(instance.createdDate),
+      'deadline': Task._dateTimeToTimestamp(instance.deadline),
       'completed': instance.completed,
       'subTask': instance.subTask,
       'status': instance.status,

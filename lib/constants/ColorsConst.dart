@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class ColorsConst {
   static const PRIMARY = Color(0xFF2071ED);
-  static const GREEN_ACCENT = Color(0xFFB0F9A9);
+  static const GREEN_ACCENT = Color(0xFFC8FC9F);
+  static const BLUE_ACCENT = Color(0xFF11FF00);
   static const PRIMARY_DARK = Color(0xFF1D63CE);
   static const PINK = Color(0xFFEF466F);
   static const YELLOW = Color(0xFFEFAB46);
