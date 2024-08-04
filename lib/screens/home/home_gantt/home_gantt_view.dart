@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bandu/constants/ColorsConst.dart';
+import 'package:bandu/screens/task/task_list_item.dart';
 import 'package:dynamic_timeline_tile_flutter/dynamic_timeline_tile_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +15,11 @@ class Home_ganttPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (BuildContext context) => Home_ganttProvider(),
+      create: (BuildContext context) {
+        Home_ganttProvider provider = Home_ganttProvider();
+        provider.init();
+        return provider;
+      },
       builder: (context, child) => _buildPage(context),
     );
   }
@@ -22,213 +27,145 @@ class Home_ganttPage extends StatelessWidget {
   Widget _buildPage(BuildContext context) {
     final provider = context.read<Home_ganttProvider>();
 
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 20.sp),
-      child: dynamicTile(),
+    return Consumer<Home_ganttProvider>(
+      builder: (context, provider, child) {
+        return Container(
+          margin: EdgeInsets.symmetric(horizontal: 0, vertical: 20.sp),
+          child: dynamicTile(),
+        );
+      },
     );
   }
 
   dynamicTile() {
-    return SingleChildScrollView(
-        child: Column(
-      children: [
-        SizedBox(
-          height: 12.h,
-        ),
-        DynamicTimelineTileBuilder(
-          // itemCount: myEvents.keys.toList().length,
+    return SingleChildScrollView(child: Consumer<Home_ganttProvider>(
+      builder: (context, provider, child) {
+        return Column(
+          children: [
+            SizedBox(
+              height: 12.h,
+            ),
+            MultiDynamicTimelineTileBuilder(
+              itemCount: provider.dateList.length,
+              itemBuilder: (context, index) {
+                final date = provider.dateList;
+                final eventsList = provider.getListFor(index);
 
-          itemBuilder: (context, index) {
-            return DynamicTimelineTile(
-              indicatorRadius: 8.sp,
-
-              indicatorWidth: 5.w,
-              // break dates helps to break the date into day and month format
-
-              // Split complete date into two parts
-
-              breakDate: true,
-              // By default it is true
-
-              // make breakDate: false, if you doesnt wants to break the line
-
-              // indicator colors
-
-              indicatorColor: ColorsConst.PRIMARY,
-              // Define the color of line middle of dates and events tile
-
-              // cross spacing
-              crossSpacing: 12.w,
-              // Cross spacing create the space between the dates, indicator and content tile
-
-              // Main spacing
-              mainSpacing: 16.h,
-              // Main spacing create the vertical spacing between two content and dates tile
-
-              // Textstyle for starer dates
-
-              dateStyle: GoogleFonts.mulish(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -0.4,
-                  fontSize: 22.sp),
-
-              // make the dates
-
-              starerChild: [
-                Padding(
-                  padding: EdgeInsets.only(left: 10.w),
-                  child: Column(
-                    children: [
-                      Text(
-                        "15",
-                        style: GoogleFonts.mulish(
-                            color: Colors.black,
-                            fontSize: 19.sp),
-                      ),
-                      Text(
-                        "Jan",
-                        style: GoogleFonts.mulish(
-                            color: Colors.black,
-                            fontSize: 19.sp),
-                      ),
-                    ],
+                return MultiDynamicTimelineTile(
+                  breakDate: true,
+                  indicatorColor: ColorsConst.PRIMARY,
+                  crossSpacing: 12.w,
+                  mainSpacing: 16.h,
+                  dateStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -0.4,
+                      fontSize: 16.sp,
                   ),
-                )
-              ],
-
-              // starerDates: [
-              //   eventData[index]["date"]!,
-              // ],
-              events: [
-                EventCard(
-                  child: customEventTile(
-                      context: context,
-                      title: eventData[index]["title"]!,
-                      description: eventData[index]["description"]!),
-                )
-              ],
-            );
-          },
-          itemCount: eventData.length,
-        ),
-        SizedBox(
-          height: 20.h,
-        ),
-      ],
+                  starerDates: [
+                    date[index],
+                  ],
+                  eventsList: [
+                    eventsList.map((e) {
+                      return EventCard(
+                        cardColor: TaskListItem.parseStatus(e.status) ==
+                                TaskStatus.DONE
+                            ? ColorsConst.GREEN_ACCENT
+                            : TaskListItem.parseStatus(e.status) ==
+                                    TaskStatus.IN_PROGRESS
+                                ? ColorsConst.YELLOW_ACCENT
+                                : ColorsConst.WHITE_SHADOW,
+                        child: CustomEventTile2(
+                          taskTitle: provider.getTaskTitle(e.taskId),
+                          icon: Icons.event,
+                          title: e.title,
+                          description: e.description,
+                        ),
+                      );
+                    }).toList()
+                  ],
+                );
+              },
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+          ],
+        );
+      },
     ));
   }
+}
 
-  final List<Map<String, String>> eventData = [
-    {
-      "title": "Title",
-      "description": "This is a content description for 12 jan",
-      "date": "2 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 13 jan",
-      "date": "13 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 14 jan",
-      "date": "14 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 15 jan",
-      "date": "15 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 14 jan",
-      "date": "14 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 15 jan",
-      "date": "15 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 14 jan",
-      "date": "14 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 15 jan",
-      "date": "15 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 14 jan",
-      "date": "14 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 15 jan",
-      "date": "15 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 14 jan",
-      "date": "14 Jan",
-    },
-    {
-      "title": "Title",
-      "description": "This is a content description for 15 jan",
-      "date": "15 Jan",
-    },
-  ];
+class CustomEventTile2 extends StatelessWidget {
+  final String taskTitle;
+  final String title;
+  final String description;
+  final Color? textColor;
+  final Color? imageColor;
+  final Color? iconColor;
 
-  customEventTile(
-      {required BuildContext context,
-      required String title,
-      required String description,
-      Color? textColor,
-      Color? imageColor,
-      IconData? icon,
-      Color? iconColor}) {
-    return Padding(
-      padding: EdgeInsets.only(left: 10.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: GoogleFonts.mulish(
-                  color: textColor ?? Colors.black,
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+  final IconData? icon;
+
+  const CustomEventTile2(
+      {super.key,
+      required this.title,
+      required this.description,
+      this.textColor,
+      this.icon,
+      this.imageColor,
+      this.iconColor,
+      required this.taskTitle});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          taskTitle,
+          style: GoogleFonts.mulish(
+            color: textColor ?? Colors.black,
+            fontSize: 15.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        5.verticalSpace,
+        Container(
+          height: 1.h,
+          color: Colors.grey,
+        ),
+        5.verticalSpace,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.mulish(
+                color: textColor ?? Colors.black,
+                fontSize: 15.sp,
+                fontWeight: FontWeight.bold,
               ),
-              Icon(
-                icon ?? Icons.event,
-                size: 17.sp,
-                color: iconColor ?? Colors.black,
-              )
-            ],
-          ),
-          SizedBox(
-            height: 12.h,
-          ),
-          SizedBox(
-            height: 12.h,
-          ),
-          Text(
-            description,
-            style: GoogleFonts.mulish(
-              color: textColor ?? Colors.black,
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w600,
             ),
+            Icon(
+              icon ?? Icons.event,
+              size: 17.sp,
+              color: iconColor ?? Colors.black,
+            )
+          ],
+        ),
+        SizedBox(
+          height: 8.h,
+        ),
+        Text(
+          description,
+          style: GoogleFonts.mulish(
+            color: textColor ?? Colors.black,
+            fontSize: 15.sp,
+            fontWeight: FontWeight.w600,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

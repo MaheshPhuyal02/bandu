@@ -265,7 +265,7 @@ class TaskListItem extends StatelessWidget {
     return path;
   }
 
-  TaskStatus parseStatus(String status) {
+ static TaskStatus parseStatus(String status) {
     switch (status) {
       case 'to_do':
         return TaskStatus.TO_DO;
