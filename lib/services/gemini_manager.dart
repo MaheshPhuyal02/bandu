@@ -33,16 +33,7 @@ class GeminiManager {
       throw Exception('API_KEY is not set');
     }
     String user = await userInfo();
-    _gemModel = GenerativeModel(
-      model: _model,
-      apiKey: _apiKey,
-      systemInstruction: Content.system(
-        Prompts.defaultSystem + user,
-      ),
-      tools: [
-        Tool(functionDeclarations: [taskSchema, taskListSchema, deleteAllTaskSchema]),
-      ],
-    );
+    _gemModel = _getGemModel(Prompts.defaultSystem + user);
     status = GeminiStatus.ready;
   }
 
@@ -104,17 +95,9 @@ class GeminiManager {
 
     String user = await userInfo();
 
-    _gemModel = GenerativeModel(
-      model: _model,
-      apiKey: _apiKey,
-      systemInstruction: Content.system(
-        Prompts.defaultSystem + command + user,
-      ),
-      tools: [
-        Tool(functionDeclarations: [taskSchema, taskListSchema, deleteAllTaskSchema]),
-      ],
-    );
-    // log("listTaskSchema " + listTaskSchema.toJson().toString());
+
+    _gemModel = _getGemModel(Prompts.defaultSystem + command + user);
+
 
     var chat = _gemModel?.startChat(
       history: history,
@@ -147,6 +130,19 @@ class GeminiManager {
       print("Error : " + e.toString());
       return "Error : " + e.toString();
     }
+  }
+
+  _getGemModel(system) {
+    return  GenerativeModel(
+      model: _model,
+      apiKey: _apiKey,
+      systemInstruction: Content.system(
+        system,
+      ),
+      tools: [
+        Tool(functionDeclarations: [Prompts.taskSchema, Prompts.taskListSchema, Prompts.deleteAllTaskSchema]),
+      ],
+    );;
   }
 
 
@@ -215,10 +211,42 @@ class GeminiManager {
   Future<Map<String, String>> addListTask(Map<String, dynamic> data) async {
     try {
       print(
-          "============================= Adding task List ============================ : " +
-              data.toString());
+          "============================= Adding task List ============================ : ");
+
+      log("Data : " + data.toString());
+
+      for (Map<String, dynamic> task in data['tasks']) {
+        String id = DbManager.instance.generateId();
+
+        final Task t = Task(
+          id: id,
+          title: task['title'],
+          description: task['description'],
+          createdDate: DateTime.now(),
+          deadline: DateTime.parse(task['deadline']),
+          completed: false,
+          status: "to_do",
+          subTask: (task['subTask'] as List).map((subTask) {
+            return SubTask(
+              id: DbManager.instance.generateId(),
+              status: "to_do",
+              title: subTask['title'],
+              description: subTask['description'],
+              createdDate: DateTime.now(),
+              deadline: DateTime.parse(subTask['deadline']),
+              completed: false,
+              taskId: id,
+            );
+          }).toList(),
+        );
+
+        print("Task : " + task.toString());
+
+        await DbManager.instance.addTask(t);
+      }
 
       // final Task task = Task(
+      //
       //   title: data['title'],
       //   description: data['description'],
       //   createdDate: DateTime.now(),
@@ -232,7 +260,7 @@ class GeminiManager {
       //       createdDate: DateTime.now(),
       //       deadline: DateTime.parse(subTask['deadline']),
       //       completed: false,
-      //       taskId: DbManager.instance.generateId(),
+      //       taskId: DbManager.instance.generateId(), id: DbManager.instance.generateId(),
       //     );
       //   }).toList(),
       // );
@@ -247,114 +275,7 @@ class GeminiManager {
     }
   }
 
-  final deleteAllTaskSchema = FunctionDeclaration(
-      "deleteAllTask",
-      "Delete all tasks",
-      Schema(SchemaType.object, properties: {
-        'status': Schema(SchemaType.string,
-            description: 'The status of delete system.'),
-      }, requiredProperties: [
-        "status"
-      ]));
 
-  final taskListSchema = FunctionDeclaration(
-      "addTaskList",
-      "Add list of task with subtask list for each",
-      Schema(SchemaType.array,
-          items: Schema(SchemaType.object, properties: {
-            'title': Schema(SchemaType.string,
-                description: 'The title of the task.'),
-            'description': Schema(SchemaType.string,
-                description: 'A detailed description of the task.'),
-            'createdDate': Schema(SchemaType.string,
-                description: 'The date and time when the task was created.'),
-            'deadline': Schema(SchemaType.string,
-                description: 'The deadline for the task.'),
-            'completed': Schema(SchemaType.boolean,
-                description: 'Indicates if the task is completed.'),
-            'subTask': Schema(SchemaType.array,
-                items: Schema(SchemaType.object, properties: {
-                  'title': Schema(SchemaType.string,
-                      description: 'The title of the subtask.'),
-                  'description': Schema(SchemaType.string,
-                      description: 'A detailed description of the subtask.'),
-                  'createdDate': Schema(SchemaType.string,
-                      description:
-                          'The date and time when the subtask was created.'),
-                  'deadline': Schema(SchemaType.string,
-                      description: 'The deadline for the subtask.'),
-                  'completed': Schema(SchemaType.boolean,
-                      description: 'Indicates if the subtask is completed.'),
-                  'taskId': Schema(SchemaType.string,
-                      description:
-                          'The ID of the task to which this subtask belongs.'),
-                }, requiredProperties: [
-                  'title',
-                  'description',
-                  'createdDate',
-                  'deadline',
-                  'completed',
-                  'taskId'
-                ]),
-                description:
-                    'A list of subtasks associated with the task.(List of objects)'),
-          }, requiredProperties: [
-            'title',
-            'description',
-            'createdDate',
-            'deadline',
-            'completed',
-            'subTask'
-          ])));
-
-  final taskSchema = FunctionDeclaration(
-      'addTask',
-      'Represents a task with a list of subtasks.',
-      Schema(SchemaType.object, properties: {
-        'title':
-            Schema(SchemaType.string, description: 'The title of the task.'),
-        'description': Schema(SchemaType.string,
-            description: 'A detailed description of the task.'),
-        'createdDate': Schema(SchemaType.string,
-            description: 'The date and time when the task was created.'),
-        'deadline': Schema(SchemaType.string,
-            description: 'The deadline for the task.'),
-        'completed': Schema(SchemaType.boolean,
-            description: 'Indicates if the task is completed.'),
-        'subTask': Schema(SchemaType.array,
-            items: Schema(SchemaType.object, properties: {
-              'title': Schema(SchemaType.string,
-                  description: 'The title of the subtask.'),
-              'description': Schema(SchemaType.string,
-                  description: 'A detailed description of the subtask.'),
-              'createdDate': Schema(SchemaType.string,
-                  description:
-                      'The date and time when the subtask was created.'),
-              'deadline': Schema(SchemaType.string,
-                  description: 'The deadline for the subtask.'),
-              'completed': Schema(SchemaType.boolean,
-                  description: 'Indicates if the subtask is completed.'),
-              'taskId': Schema(SchemaType.string,
-                  description:
-                      'The ID of the task to which this subtask belongs.'),
-            }, requiredProperties: [
-              'title',
-              'description',
-              'createdDate',
-              'deadline',
-              'completed',
-              'taskId'
-            ]),
-            description:
-                'A list of subtasks associated with the task.(List of objects)'),
-      }, requiredProperties: [
-        'title',
-        'description',
-        'createdDate',
-        'deadline',
-        'completed',
-        'subTask'
-      ]));
 }
 
 enum GeminiStatus {

@@ -39,7 +39,7 @@ class AddTaskPage extends StatelessWidget {
             ),
             30.verticalSpace,
             Text(
-              "Create Project",
+              "Add Task",
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     fontSize: 23.sp,
                   ),
@@ -59,7 +59,7 @@ class AddTaskPage extends StatelessWidget {
                         return null;
                       },
                       decoration: InputDecoration(
-                        hintText: "Enter project title.",
+                        hintText: "Enter task title.",
                       ),
                     ),
                     10.verticalSpace,

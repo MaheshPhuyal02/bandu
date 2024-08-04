@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -63,7 +60,19 @@ class DefaultFirebaseOptions {
     messagingSenderId: '272383080122',
     projectId: 'taskgen-ai',
     storageBucket: 'taskgen-ai.appspot.com',
+    androidClientId: '272383080122-ab2gegs0dreocvga9dig7638mea3u03v.apps.googleusercontent.com',
     iosClientId: '272383080122-9a5ecd3niopkuep0ba1tbbqb253066bp.apps.googleusercontent.com',
     iosBundleId: 'com.mk.bandu',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBI6z17l8_EkxYY6eIqSMs-a1bo0OANpw8',
+    appId: '1:272383080122:web:b44b01ab2927861671b483',
+    messagingSenderId: '272383080122',
+    projectId: 'taskgen-ai',
+    authDomain: 'taskgen-ai.firebaseapp.com',
+    storageBucket: 'taskgen-ai.appspot.com',
+    measurementId: 'G-E33WP43702',
+  );
+
 }

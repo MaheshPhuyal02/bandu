@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "272383080122-ab2gegs0dreocvga9dig7638mea3u03v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mk.bandu",
+            "certificate_hash": "2ce39766b4d71062cc11b025dc100477d456efea"
+          }
+        },
+        {
           "client_id": "272383080122-6momp58dubje4sar7fujkoql10cu1790.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "272383080122-6momp58dubje4sar7fujkoql10cu1790.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "272383080122-9a5ecd3niopkuep0ba1tbbqb253066bp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mk.bandu"
+              }
             }
           ]
         }

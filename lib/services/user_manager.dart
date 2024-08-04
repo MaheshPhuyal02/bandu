@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bandu/main.dart';
 import 'package:bandu/models/user/user_project.dart';
 import 'package:bandu/routes/app_router.gr.dart';
@@ -6,6 +8,7 @@ import 'package:bandu/services/db_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 
 import '../models/user/db_user.dart';
 
@@ -68,7 +71,9 @@ class AuthManager {
     status = AuthStatus.loading;
     print("AuthManager ::: Logging in with Google");
     AuthProvider provider = GoogleAuthProvider();
-    UserCredential val = await _auth.signInWithProvider(provider);
+    UserCredential val = kIsWeb
+        ? await _auth.signInWithPopup(provider)
+        : await _auth.signInWithProvider(provider);
     if (val.user != null) {
       status = AuthStatus.authenticated;
       String name = val.user!.displayName ?? "";
@@ -190,8 +195,8 @@ class AuthManager {
     return _user;
   }
 
-  void addProject(Project project){
-    if(_user?.projects == null){
+  void addProject(Project project) {
+    if (_user?.projects == null) {
       _user = _user?.copyWith(projects: []);
     }
 
@@ -203,7 +208,6 @@ class AuthManager {
     print("AuthManager ::: Adding project : " + _user!.toJson().toString());
     dbManager?.updateUser(_user!, _auth.currentUser!.uid);
   }
-
 }
 
 enum AuthStatus { loading, authenticated, unauthenticated, error }

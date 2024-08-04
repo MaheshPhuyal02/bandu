@@ -42,18 +42,31 @@ class HomeTaskPage extends StatelessWidget {
                       ),
                     ),
                     10.verticalSpace,
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: provider.taskList.length,
-                      itemBuilder: (context, index) {
-                        print("HomeTaskPage ::: TaskList length: " +
-                            provider.taskList.length.toString());
-                        return TaskListItem(
-                          task: provider.taskList[index],
-                        );
-                      },
-                    ),
+                    provider.taskList.isEmpty
+                        ? SizedBox(
+                            height: 100.pW,
+                            child: Center(
+                              child: Text(
+                                'No tasks available, Click on + or ask TaskGen AI to add task.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: provider.taskList.length,
+                            itemBuilder: (context, index) {
+                              print("HomeTaskPage ::: TaskList length: " +
+                                  provider.taskList.length.toString());
+                              return TaskListItem(
+                                task: provider.taskList[index],
+                              );
+                            },
+                          ),
                   ],
                 ),
               ),
