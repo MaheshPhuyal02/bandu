@@ -59,6 +59,7 @@ dependencies:
     path: libraries/response_parser/
   shimmer: ^3.0.0
   json_serializable: ^6.8.0
+  dynamic_timeline_tile_flutter: ^0.0.4
 
 dev_dependencies:
   flutter_test:

@@ -5,96 +5,100 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/ColorsConst.dart';
 import '../../constants/Options.dart';
 import '../../models/task/sub_task.dart';
 import '../../services/db_manager.dart';
+import '../home/home_task/home_task_provider.dart';
 
-class TaskListItem extends StatefulWidget {
+class TaskListItem extends StatelessWidget {
   late Task task;
 
   TaskListItem({super.key, required this.task});
 
   @override
-  State<TaskListItem> createState() => _TaskListItemState();
-}
-
-class _TaskListItemState extends State<TaskListItem> {
-  bool showingSublist = false;
-
-  final ConfettiController _controllerCenter =
-      ConfettiController(duration: const Duration(seconds: 1));
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.sp),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    showingSublist = !showingSublist;
-                  });
-                },
-                icon: Icon(
-                  showingSublist
-                      ? Icons.keyboard_arrow_down_outlined
-                      : Icons.keyboard_arrow_right_outlined,
-                  color: ColorsConst.PRIMARY,
-                ),
-              ),
-              10.horizontalSpace,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.task.title,
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              PopupMenuButton<String>(
-                onSelected: (String item) {},
-                itemBuilder: (BuildContext context) {
-                  return Options.taskOptions.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
-                },
-              ),
-            ],
-          ),
-          showingSublist
-              ? Container(
-                  margin: EdgeInsets.only(left: 30.sp),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: widget.task.subTask.length,
-                    itemBuilder: (context, index) => _buildSubListItem(
-                      task: widget.task.subTask[index],
-                    ),
-                  ),
-                )
-              : Container(),
-        ],
-      ),
+    return ChangeNotifierProvider(
+      create: (BuildContext context) {
+        TaskListProvider provider = TaskListProvider();
+        provider.init(task);
+        return provider;
+      },
+      builder: (context, child) => _buildPage(context),
     );
   }
 
-  _buildSubListItem({required SubTask task}) {
+  Widget _buildPage(BuildContext context) {
+    return Consumer<TaskListProvider>(
+      builder: (context, provider, child) {
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 4.sp),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      provider.toggleSublist();
+                    },
+                    icon: Icon(
+                      provider.showingSublist
+                          ? Icons.keyboard_arrow_down_outlined
+                          : Icons.keyboard_arrow_right_outlined,
+                      color: ColorsConst.PRIMARY,
+                    ),
+                  ),
+                  10.horizontalSpace,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          provider.task.title,
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuButton<String>(
+                    onSelected: (String item) {},
+                    itemBuilder: (BuildContext context) {
+                      return Options.taskOptions.map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                  ),
+                ],
+              ),
+              provider.showingSublist
+                  ? Container(
+                      margin: EdgeInsets.only(left: 30.sp),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: provider.task.subTask.length,
+                        itemBuilder: (context, index) => _buildSubListItem(
+                            task: provider.task.subTask[index], provider: provider),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  _buildSubListItem({required SubTask task, required provider}) {
     print('buildSubListItem : ' + task.status);
     return Container(
         margin: EdgeInsets.only(top: 10.sp),
@@ -149,7 +153,7 @@ class _TaskListItemState extends State<TaskListItem> {
                 Align(
                   alignment: Alignment.center,
                   child: ConfettiWidget(
-                    confettiController: _controllerCenter,
+                    confettiController: provider.controllerCenter,
                     blastDirectionality: BlastDirectionality.explosive,
                     // don't specify a direction, blast randomly
                     shouldLoop: false,
@@ -199,13 +203,13 @@ class _TaskListItemState extends State<TaskListItem> {
                   onSelected: (String item) {
                     switch (item) {
                       case 'To Do':
-                        updateStatus(task.id, 'to_do');
+                        provider.updateStatus(task.id, 'to_do');
                         break;
                       case 'In Progress':
-                        updateStatus(task.id, 'progress');
+                        provider.updateStatus(task.id, 'progress');
                         break;
                       case 'Done':
-                        updateStatus(task.id, 'done');
+                        provider.updateStatus(task.id, 'done');
                         print('Done');
 
                         break;
@@ -273,23 +277,37 @@ class _TaskListItemState extends State<TaskListItem> {
         return TaskStatus.TO_DO;
     }
   }
+}
+
+class TaskListProvider extends ChangeNotifier {
+  bool showingSublist = false;
+  late Task task;
+  final ConfettiController controllerCenter =
+      ConfettiController(duration: const Duration(seconds: 1));
+
+  void init(task) {
+    this.task = task;
+  }
+
+  void toggleSublist() {
+    showingSublist = !showingSublist;
+    notifyListeners();
+  }
 
   Future<void> updateStatus(String subtaskId, String status) async {
-
-    widget.task.subTask.forEach((element) {
+    task.subTask.forEach((element) {
       if (element.id == subtaskId) {
         if (element.status != status) {
-          if(status == 'done'){
-            _controllerCenter.play();
+          if (status == 'done') {
+            controllerCenter.play();
           }
           print('Status: ' + element.status);
-          setState(() {
-            element.status = status;
-          });
+          element.status = status;
+          notifyListeners();
         }
       }
     });
-    await DbManager.instance.updateTask(widget.task);
+    await DbManager.instance.updateTask(task);
   }
 }
 

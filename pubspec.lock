@@ -281,6 +281,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.9"
+  dynamic_timeline_tile_flutter:
+    dependency: "direct main"
+    description:
+      name: dynamic_timeline_tile_flutter
+      sha256: "35d5a1d391aaa7fdfe6528f94b4b698583f588c4f955322b55f570b9532340c4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   fake_async:
     dependency: transitive
     description:

@@ -21,6 +21,8 @@ class Ai_chatPage extends StatelessWidget {
     );
   }
 
+  static final _formKey = GlobalKey<FormState>();
+
   Widget _buildPage(BuildContext context) {
     return Consumer<Ai_chatProvider>(
       builder: (context, provider, child) {
@@ -87,19 +89,24 @@ class Ai_chatPage extends StatelessWidget {
                           constraints: BoxConstraints(
                             maxHeight: 50.pH,
                           ),
-                          child: TextFormField(
-                            controller: provider.messageController,
-                            maxLines: null,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                            keyboardType: TextInputType.multiline,
-                            decoration: InputDecoration(
-                              fillColor: Colors.transparent,
-                              hintText: 'Enter prompt',
-                              focusedBorder: InputBorder.none,
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
+                          child: Form(
+                            key: _formKey,
+                            child: TextFormField(
+                              controller: provider.messageController,
+                              maxLines: null,
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                              keyboardAppearance: Brightness.light,
+                              autofocus: false,
+                              keyboardType: TextInputType.multiline,
+                              decoration: InputDecoration(
+                                fillColor: Colors.transparent,
+                                hintText: 'Enter prompt',
+                                focusedBorder: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
                           ),

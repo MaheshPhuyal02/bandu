@@ -15,23 +15,24 @@ class HomeProvider extends ChangeNotifier {
       y1Prev = 100.0,
       y2Prev = 100.0;
 
-  void setIconCoordinates(double x1, double y1, double x2, double y2) {
+  void setIconCoordinates(double x1, double y1, double x2, double y2, context) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
-    hideChat();
+    hideChat(context);
     notifyListeners();
   }
 
-  void setSelectedIndex(int index) {
+  void setSelectedIndex(int index, context) {
     selectedIndex = index;
-    hideChat();
+    hideChat(context);
     notifyListeners();
   }
 
-  void hideChat() {
+  void hideChat(context) {
     showChat = false;
+    FocusScope.of(context).unfocus();
     notifyListeners();
   }
 
