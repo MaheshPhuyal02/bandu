@@ -139,12 +139,14 @@ class CustomEventTile2 extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: GoogleFonts.mulish(
-                color: textColor ?? Colors.black,
-                fontSize: 15.sp,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                title,
+                style: GoogleFonts.mulish(
+                  color: textColor ?? Colors.black,
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             Icon(

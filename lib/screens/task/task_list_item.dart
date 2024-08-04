@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bandu/ext/text_ext.dart';
 import 'package:bandu/models/task/task.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
@@ -34,20 +35,20 @@ class TaskListItem extends StatelessWidget {
     return Consumer<TaskListProvider>(
       builder: (context, provider, child) {
         return Container(
-          padding: EdgeInsets.symmetric(vertical: 4.sp),
           child: Column(
             children: [
               Row(
                 children: [
-                  IconButton(
-                    onPressed: () {
+                  InkWell(
+                    onTap: () {
                       provider.toggleSublist();
                     },
-                    icon: Icon(
+                    child: Icon(
                       provider.showingSublist
                           ? Icons.keyboard_arrow_down_outlined
                           : Icons.keyboard_arrow_right_outlined,
                       color: ColorsConst.PRIMARY,
+                      size: 25.sp,
                     ),
                   ),
                   10.horizontalSpace,
@@ -84,10 +85,11 @@ class TaskListItem extends StatelessWidget {
                       margin: EdgeInsets.only(left: 30.sp),
                       child: ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: provider.task.subTask.length,
                         itemBuilder: (context, index) => _buildSubListItem(
-                            task: provider.task.subTask[index], provider: provider),
+                            task: provider.task.subTask[index],
+                            provider: provider),
                       ),
                     )
                   : Container(),
@@ -136,12 +138,12 @@ class TaskListItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    task.description,
+                    task.deadline.toString().formatDate(),
                     maxLines: 2,
                     style: TextStyle(
-                      fontSize: 9.sp,
+                      fontSize: 11.sp,
                       overflow: TextOverflow.ellipsis,
-                      color: Colors.grey,
+                      color: Colors.black38,
                     ),
                   ),
                 ],
@@ -265,7 +267,7 @@ class TaskListItem extends StatelessWidget {
     return path;
   }
 
- static TaskStatus parseStatus(String status) {
+  static TaskStatus parseStatus(String status) {
     switch (status) {
       case 'to_do':
         return TaskStatus.TO_DO;
