@@ -113,45 +113,46 @@ class HomeMainPage extends StatelessWidget {
                   onTap: () {
                     provider.hideChat(context);
                   },
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        height: double.infinity,
-                        child: IndexedStack(
-                          index: provider.selectedIndex,
-                          children: [
-                            for (var i = 0; i < pages.length; i++) getBody(i)
-                          ],
+                  child:  Stack(
+
+                      children: [
+                        SizedBox(
+                          height: double.infinity,
+                          child: IndexedStack(
+                            index: provider.selectedIndex,
+                            children: [
+                              for (var i = 0; i < pages.length; i++) getBody(i)
+                            ],
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        left: provider.x1,
-                        top: provider.y1,
-                        child: GestureDetector(
-                            onTap: () {
-                              provider.toggleChatView();
-                            },
-                            onPanDown: (d) {
-                              provider.x1Prev = provider.x1;
-                              provider.y1Prev = provider.y1;
-                            },
-                            onPanUpdate: (details) {
-                              provider.setIconCoordinates(
-                                  provider.x1Prev + details.localPosition.dx,
-                                  provider.y1Prev + details.localPosition.dy,
-                                  provider.x2,
-                                  provider.y2,
-                                  context);
-                            },
-                            child: AiChatIcon(
-                              animate: provider.animateChatIc,
-                              onEnd: () {
-                                provider.cancelChatIconAnimation();
+                        Positioned(
+                          left: provider.x1,
+                          top: provider.y1,
+                          child: GestureDetector(
+                              onTap: () {
+                                provider.toggleChatView();
                               },
-                            )),
-                      ),
-                      getChatView(provider.showChat, provider),
-                    ],
+                              onPanDown: (d) {
+                                provider.x1Prev = provider.x1;
+                                provider.y1Prev = provider.y1;
+                              },
+                              onPanUpdate: (details) {
+                                provider.setIconCoordinates(
+                                    provider.x1Prev + details.localPosition.dx,
+                                    provider.y1Prev + details.localPosition.dy,
+                                    provider.x2,
+                                    provider.y2,
+                                    context);
+                              },
+                              child: AiChatIcon(
+                                animate: provider.animateChatIc,
+                                onEnd: () {
+                                  provider.cancelChatIconAnimation();
+                                },
+                              )),
+                        ),
+                        getChatView(provider.showChat, provider),
+                      ],
                   ),
                 );
               },
