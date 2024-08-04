@@ -12,7 +12,11 @@ class Home_morePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (BuildContext context) => Home_moreProvider(),
+      create: (BuildContext context) {
+        Home_moreProvider provider = Home_moreProvider();
+        provider.init();
+        return provider;
+      },
       builder: (context, child) => _buildPage(context),
     );
   }
@@ -33,7 +37,7 @@ class Home_morePage extends StatelessWidget {
               10.horizontalSpace,
               Expanded(
                 child: Text(
-                  "Example Generator",
+                  provider.currentProjectName,
                   style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     fontSize: 19.sp,
                     fontWeight: FontWeight.bold,
