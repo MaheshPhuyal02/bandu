@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bandu/constants/ColorsConst.dart';
 import 'package:dynamic_timeline_tile_flutter/dynamic_timeline_tile_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,9 +40,9 @@ class Home_ganttPage extends StatelessWidget {
 
           itemBuilder: (context, index) {
             return DynamicTimelineTile(
-              indicatorRadius: 5.sp,
+              indicatorRadius: 8.sp,
 
-              indicatorWidth: 3.w,
+              indicatorWidth: 5.w,
               // break dates helps to break the date into day and month format
 
               // Split complete date into two parts
@@ -53,7 +54,7 @@ class Home_ganttPage extends StatelessWidget {
 
               // indicator colors
 
-              indicatorColor: Colors.purple.withOpacity(0.3),
+              indicatorColor: ColorsConst.PRIMARY,
               // Define the color of line middle of dates and events tile
 
               // cross spacing
@@ -75,7 +76,25 @@ class Home_ganttPage extends StatelessWidget {
               // make the dates
 
               starerChild: [
-                Icon(Icons.home),
+                Padding(
+                  padding: EdgeInsets.only(left: 10.w),
+                  child: Column(
+                    children: [
+                      Text(
+                        "15",
+                        style: GoogleFonts.mulish(
+                            color: Colors.black,
+                            fontSize: 19.sp),
+                      ),
+                      Text(
+                        "Jan",
+                        style: GoogleFonts.mulish(
+                            color: Colors.black,
+                            fontSize: 19.sp),
+                      ),
+                    ],
+                  ),
+                )
               ],
 
               // starerDates: [
@@ -121,6 +140,46 @@ class Home_ganttPage extends StatelessWidget {
       "description": "This is a content description for 15 jan",
       "date": "15 Jan",
     },
+    {
+      "title": "Title",
+      "description": "This is a content description for 14 jan",
+      "date": "14 Jan",
+    },
+    {
+      "title": "Title",
+      "description": "This is a content description for 15 jan",
+      "date": "15 Jan",
+    },
+    {
+      "title": "Title",
+      "description": "This is a content description for 14 jan",
+      "date": "14 Jan",
+    },
+    {
+      "title": "Title",
+      "description": "This is a content description for 15 jan",
+      "date": "15 Jan",
+    },
+    {
+      "title": "Title",
+      "description": "This is a content description for 14 jan",
+      "date": "14 Jan",
+    },
+    {
+      "title": "Title",
+      "description": "This is a content description for 15 jan",
+      "date": "15 Jan",
+    },
+    {
+      "title": "Title",
+      "description": "This is a content description for 14 jan",
+      "date": "14 Jan",
+    },
+    {
+      "title": "Title",
+      "description": "This is a content description for 15 jan",
+      "date": "15 Jan",
+    },
   ];
 
   customEventTile(
@@ -131,49 +190,45 @@ class Home_ganttPage extends StatelessWidget {
       Color? imageColor,
       IconData? icon,
       Color? iconColor}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: GoogleFonts.mulish(
-                color: textColor ?? Colors.black,
-                fontSize: 15.sp,
-                fontWeight: FontWeight.bold,
+    return Padding(
+      padding: EdgeInsets.only(left: 10.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.mulish(
+                  color: textColor ?? Colors.black,
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Icon(
-              icon ?? Icons.event,
-              size: 17.sp,
-              color: iconColor ?? Colors.black,
-            )
-          ],
-        ),
-        SizedBox(
-          height: 12.h,
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: 80.h,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r),
-              color: imageColor ?? Colors.blue),
-        ),
-        SizedBox(
-          height: 12.h,
-        ),
-        Text(
-          description,
-          style: GoogleFonts.mulish(
-            color: textColor ?? Colors.black,
-            fontSize: 15.sp,
-            fontWeight: FontWeight.w600,
+              Icon(
+                icon ?? Icons.event,
+                size: 17.sp,
+                color: iconColor ?? Colors.black,
+              )
+            ],
           ),
-        ),
-      ],
+          SizedBox(
+            height: 12.h,
+          ),
+          SizedBox(
+            height: 12.h,
+          ),
+          Text(
+            description,
+            style: GoogleFonts.mulish(
+              color: textColor ?? Colors.black,
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

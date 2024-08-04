@@ -23,6 +23,13 @@ class HomeMainPage extends StatelessWidget {
     );
   }
 
+  List<Widget> pages = [
+    HomePage(),
+    HomeTaskPage(),
+    Home_ganttPage(),
+    Home_morePage(),
+  ];
+
   Widget _buildPage(BuildContext context) {
     return Consumer<HomeProvider>(
       builder: (context, provider, child) {
@@ -110,7 +117,12 @@ class HomeMainPage extends StatelessWidget {
                     children: [
                       SizedBox(
                         height: double.infinity,
-                        child: getBody(provider.selectedIndex),
+                        child: IndexedStack(
+                          index: provider.selectedIndex,
+                          children: [
+                            for (var i = 0; i < pages.length; i++) getBody(i)
+                          ],
+                        ),
                       ),
                       Positioned(
                         left: provider.x1,
@@ -179,20 +191,7 @@ class HomeMainPage extends StatelessWidget {
   }
 
   getBody(int selectedIndex) {
-    switch (selectedIndex) {
-      case 0:
-        return HomePage();
-      case 1:
-        return HomeTaskPage();
-      case 2:
-        return Home_ganttPage();
-      case 3:
-        return Container(
-          child: Center(
-            child: Text('More'),
-          ),
-        );
-    }
+    return pages[selectedIndex];
   }
 
   showMore() {
