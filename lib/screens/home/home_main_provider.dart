@@ -33,8 +33,8 @@ class HomeProvider extends ChangeNotifier {
   }
 
   void hideChat(context) {
-    if(!showChat) return;
-    print("HIDE CHAT");
+    // if(!showChat) return;
+    // print("HIDE CHAT");
     showChat = false;
     FocusScope.of(context).unfocus();
     Provider.of<Ai_chatProvider>(context, listen: false).setEditing(false);
