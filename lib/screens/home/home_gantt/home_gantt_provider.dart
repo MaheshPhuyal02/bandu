@@ -18,7 +18,7 @@ class Home_ganttProvider extends ChangeNotifier {
       taskList.clear();
       taskList.addAll(event.docs.map((e) => Task.fromJson(e.data())).toList());
       addAllToSubTaskList();
-      print("Home_todoProvider ::: Tasks loaded :" + taskList.length.toString());
+      print("Home gantt  ::: Tasks loaded :" + taskList.length.toString());
       notifyListeners();
     });
   }

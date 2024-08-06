@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:bandu/ext/text_ext.dart';
+import 'package:bandu/main.dart';
 import 'package:bandu/models/task/task.dart';
+import 'package:bandu/routes/app_router.gr.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,7 +36,12 @@ class TaskListItem extends StatelessWidget {
   Widget _buildPage(BuildContext context) {
     return Consumer<TaskListProvider>(
       builder: (context, provider, child) {
-        return Container(
+        return InkWell(
+          onTap: () {
+            appRouter.push(
+              TaskDetailsRoute(taskId: provider.task.id),
+            );
+          },
           child: Column(
             children: [
               Row(

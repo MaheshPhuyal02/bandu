@@ -14,5 +14,6 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: GuideRoute.page),
         AutoRoute(page: SelectProjectRoute.page),
         AutoRoute(page: AddTaskRoute.page),
+        AutoRoute(page: TaskDetailsRoute.page),
       ];
 }

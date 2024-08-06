@@ -124,7 +124,7 @@ class CustomEventTile2 extends StatelessWidget {
       children: [
         Text(
           taskTitle,
-          style: GoogleFonts.mulish(
+          style: TextStyle(
             color: textColor ?? Colors.black,
             fontSize: 15.sp,
             fontWeight: FontWeight.bold,
@@ -142,7 +142,7 @@ class CustomEventTile2 extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: GoogleFonts.mulish(
+                style: TextStyle(
                   color: textColor ?? Colors.black,
                   fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
@@ -161,7 +161,9 @@ class CustomEventTile2 extends StatelessWidget {
         ),
         Text(
           description,
-          style: GoogleFonts.mulish(
+          maxLines: 4,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
             color: textColor ?? Colors.black,
             fontSize: 15.sp,
             fontWeight: FontWeight.w600,
