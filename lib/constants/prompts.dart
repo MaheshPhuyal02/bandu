@@ -5,37 +5,27 @@ class Prompts {
   static const String defaultSystem =
       "Your name is TaskGen AI, You've been designed, developed and created by TaskGen Team. "
               "your task is to chat, analyze"
-              " requirements, create task, delete tasks, analyze budget, analyze time, and summarize."
-              " Be respectful, use professional language, and give short and sweet response."
-              " Focus more on task generating, and less on chatting. "
+              " requirements, create task and task list, delete tasks, analyze budget, analyze time, and summarize."
+              " Be respectful, use professional language, and give very short and sweet response."
+              " Focus more on task generating, and less on chatting."
               "Remember date format : " +
           dateFormat;
 
   static const String summarizeSystem =
-      "Summarize the long message sent by user, send with format, and summarize in points."
-              "Remember date format : " +
-          dateFormat;
+      "Summarize the long message sent by user, send with format, and summarize in points.";
 
   static const String createTask =
       "Add task list as needed, call addTask function for single task "
-              "and addTaskList for multiple task, with title, description, created date, deadline and subTask(list of subtasks) with title, description, deadline. Don't ask too many questions just add task as needed."
-              "Remember date format : " +
-          dateFormat;
+      "and addTaskList for multiple task, with title, description, created date, deadline and subTask(list of subtasks) with title, description, deadline. Don't ask too many questions just add task as needed.";
 
   static const String analyzeRequirements =
-      "Only analyze the requirements, study feasibility, make summary, budget, and so on. Only create task when user asks."
-              "Remember date format : " +
-          dateFormat;
+      "Only analyze the requirements, study feasibility, make summary, budget, and so on. Only create task when user asks.";
 
   static const String analyzeBudget =
-      "Analyze the budget, give overall budget, and breakdown in different task."
-              "Remember date format : " +
-          dateFormat;
+      "Analyze the budget, give overall budget, and breakdown in different task.";
 
   static const String analyzeTime =
-      "Analyze the time, give overall time, and breakdown in different task."
-              "Remember date format : " +
-          dateFormat;
+      "Analyze the time, give overall time, and breakdown in different task.";
 
   static final deleteAllTaskSchema = FunctionDeclaration(
       "deleteAllTask",

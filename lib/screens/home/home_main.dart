@@ -130,7 +130,7 @@ class HomeMainPage extends StatelessWidget {
                           top: provider.y1,
                           child: GestureDetector(
                               onTap: () {
-                                provider.toggleChatView();
+                                provider.toggleChatView(context);
                               },
                               onPanDown: (d) {
                                 provider.x1Prev = provider.x1;

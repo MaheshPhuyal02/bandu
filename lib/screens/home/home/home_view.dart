@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../task/task_list_item.dart';
-import 'home_provider.dart';
+import '../home_main_provider.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -17,7 +17,6 @@ class HomePage extends StatelessWidget {
 
   Widget _buildPage(BuildContext context) {
     final provider = context.read<HomeProvider>();
-    final state = provider.state;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.sp),

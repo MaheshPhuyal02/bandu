@@ -142,12 +142,11 @@ class GeminiManager {
       tools: [
         Tool(functionDeclarations: [Prompts.taskSchema, Prompts.taskListSchema, Prompts.deleteAllTaskSchema]),
       ],
-    );;
+    );
   }
 
 
   _addToHistory(Content content) {
-    //   max 10
     if (history.length > 10) {
       history.removeAt(0);
     }
@@ -244,31 +243,6 @@ class GeminiManager {
 
         await DbManager.instance.addTask(t);
       }
-
-      // final Task task = Task(
-      //
-      //   title: data['title'],
-      //   description: data['description'],
-      //   createdDate: DateTime.now(),
-      //   deadline: DateTime.parse(data['deadline']),
-      //   completed: false,
-      //   subTask: (data['subTask'] as List).map((subTask) {
-      //     return SubTask(
-      //       status: "pending",
-      //       title: subTask['title'],
-      //       description: subTask['description'],
-      //       createdDate: DateTime.now(),
-      //       deadline: DateTime.parse(subTask['deadline']),
-      //       completed: false,
-      //       taskId: DbManager.instance.generateId(), id: DbManager.instance.generateId(),
-      //     );
-      //   }).toList(),
-      // );
-      //
-      // print("Task : " + task.toString());
-      //
-      // await DbManager.instance.addTask(task);
-
       return {"status": 'Task added successfully'};
     } catch (e) {
       return {"status": 'Error adding task'};

@@ -2,18 +2,23 @@ import 'package:bandu/constants/prompts.dart';
 import 'package:bandu/models/chat/message.dart';
 import 'package:bandu/services/gemini_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/chat/chat.dart';
 import '../../models/prompt/prompt.dart';
+import '../home/home_main_provider.dart';
 
 class Ai_chatProvider extends ChangeNotifier {
   Prompt? selectedPrompt = null;
 
   bool loading = false;
+  bool enableEditing = true;
 
   TextEditingController messageController = TextEditingController();
 
+
   List<Message> messageList = [];
+  ScrollController scrollController = ScrollController();
 
   List<Prompt> prompts = [
     Prompt(name: "Chat", prompt: Prompts.defaultSystem, selected: true),
@@ -47,7 +52,8 @@ class Ai_chatProvider extends ChangeNotifier {
 
     if (loading) return;
     loading = true;
-
+    setEditing(false);
+   _scrollToLast();
     Message msg = Message(
         id: DateTime.now().toString(),
         request: message,
@@ -73,13 +79,33 @@ class Ai_chatProvider extends ChangeNotifier {
     }
     msg = msg.copyWith(response: response, loading: false);
     messageList[messageList.length - 1] = msg;
-
+    _scrollToLast();
     loading = false;
+    setEditing(true);
 
     notifyListeners();
+  }
+
+  _scrollToLast() {
+    if(scrollController.hasClients){
+      Future.delayed(Duration(milliseconds: 100), () {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      });
+    }
+
   }
 
   void hideKeyboard(BuildContext context) {
     FocusScope.of(context).unfocus();
   }
+
+  void setEditing(bool value) {
+    enableEditing = value;
+    notifyListeners();
+  }
+
 }

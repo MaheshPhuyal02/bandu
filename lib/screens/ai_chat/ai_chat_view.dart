@@ -15,10 +15,7 @@ import 'ai_chat_provider.dart';
 class Ai_chatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) => Ai_chatProvider(),
-      builder: (context, child) => _buildPage(context),
-    );
+    return _buildPage(context);
   }
 
   static final _formKey = GlobalKey<FormState>();
@@ -31,7 +28,7 @@ class Ai_chatPage extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: _buildList(context, provider.messageList),
+                child: _buildList(context, provider.messageList, provider),
               ),
               Row(
                 children: [
@@ -94,6 +91,7 @@ class Ai_chatPage extends StatelessWidget {
                             child: TextFormField(
                               controller: provider.messageController,
                               maxLines: null,
+                              enabled: provider.enableEditing,
                               style: TextStyle(
                                 color: Colors.black,
                               ),
@@ -135,9 +133,10 @@ class Ai_chatPage extends StatelessWidget {
     );
   }
 
-  _buildList(BuildContext context, List<Message> messageList) {
+  _buildList(BuildContext context, List<Message> messageList, Ai_chatProvider prov) {
     return ListView.builder(
       itemCount: messageList.length,
+      controller: prov.scrollController,
       itemBuilder: (context, index) {
         final message = messageList[index];
         return Column(
@@ -175,6 +174,7 @@ class Ai_chatPage extends StatelessWidget {
                               constraints: BoxConstraints(
                                 maxWidth: 80.pW,
                                 minHeight: 10.pW,
+                                maxHeight: 10.pW
                               ),
                               decoration: BoxDecoration(
                                 color: ColorsConst.WHITE_SHADOW,

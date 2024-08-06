@@ -1,6 +1,8 @@
 import 'package:bandu/ext/sizes_ext.dart';
+import 'package:bandu/screens/ai_chat/ai_chat_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class HomeProvider extends ChangeNotifier {
   int selectedIndex = 0;
@@ -31,17 +33,25 @@ class HomeProvider extends ChangeNotifier {
   }
 
   void hideChat(context) {
+    if(!showChat) return;
+    print("HIDE CHAT");
     showChat = false;
     FocusScope.of(context).unfocus();
+    Provider.of<Ai_chatProvider>(context, listen: false).setEditing(false);
     notifyListeners();
   }
 
-  void toggleChatView() {
+  void toggleChatView(BuildContext context) {
     x1 = 100.pW - 20.sp;
     x2 = 0;
     y1 = 0;
     y2 = 0;
     showChat = !showChat;
+    if(!showChat) {
+      hideChat(context);
+    } else {
+      Provider.of<Ai_chatProvider>(context, listen: false).setEditing(true);
+    }
     notifyListeners();
   }
 

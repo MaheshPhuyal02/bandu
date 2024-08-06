@@ -1,4 +1,5 @@
 import 'package:bandu/routes/app_router.dart';
+import 'package:bandu/screens/ai_chat/ai_chat_provider.dart';
 import 'package:bandu/services/SharedPref.dart';
 import 'package:bandu/services/db_manager.dart';
 import 'package:bandu/services/gemini_manager.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 import 'constants/BUTheme.dart';
 import 'firebase_options.dart';
@@ -19,7 +21,11 @@ Future<void> main() async {
   await SharedPref.instance.init();
   await AuthManager.instance.init();
   await GeminiManager.instance.init();
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (_) => Ai_chatProvider(),
+    )
+  ], child: const MyApp()));
 }
 
 final appRouter = AppRouter();
