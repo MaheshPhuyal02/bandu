@@ -10,6 +10,8 @@ class TaskDetailsProvider extends ChangeNotifier {
   final ConfettiController controllerCenter =
   ConfettiController(duration: const Duration(seconds: 1));
 
+  bool showSublist = false;
+
   void init(Task task) {
     this.task = task;
   }
@@ -20,20 +22,45 @@ class TaskDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateSubTask(String id, String status) async {
-    task?.subTask.forEach((element) {
-      if (element.id == id) {
-        if (element.status != status) {
-          if (status == 'done') {
-            controllerCenter.play();
-          }
-          print('Status: ' + element.status);
-          element.status = status;
-          notifyListeners();
-        }
-      }
-    });
-    await DbManager.instance.updateTask(task!);
+  Future<void> updateSubStatus(String id, String status)async {
+    task?.subTask.firstWhere((element) => element.id == id).status = status;
+    DbManager.instance.updateTask(task!);
+    notifyListeners();
   }
+
+  Future<void> deleteSubTask(
+      BuildContext context,
+      String id) async {
+
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Delete Sub Task"),
+        content: Text("Are you sure you want to delete this sub task?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              task?.subTask.removeWhere((element) => element.id == id);
+              await DbManager.instance.updateTask(task!);
+              Navigator.pop(context);
+              notifyListeners();
+            },
+            child: Text("Delete"),
+          ),
+        ],
+      );
+    });
+  }
+
+  void toggleSublist() {
+    showSublist = !showSublist;
+    notifyListeners();
+  }
+
 
 }

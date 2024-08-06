@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:bandu/components/padding_scaffold.dart';
+import 'package:bandu/ext/sizes_ext.dart';
 import 'package:bandu/models/task/task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,6 +59,9 @@ class TaskDetailsPage extends StatelessWidget {
               ),
               10.verticalSpace,
               PopupMenuButton<String>(
+                position: PopupMenuPosition.under,
+                padding: EdgeInsets.zero,
+                offset: Offset(90.pW, 0),
                 icon: Container(
                   padding:
                       EdgeInsets.symmetric(horizontal: 7.sp, vertical: 8.sp),
@@ -123,6 +127,7 @@ class TaskDetailsPage extends StatelessWidget {
                   }).toList();
                 },
               ),
+              10.verticalSpace,
               Text("Description",
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey,
@@ -133,22 +138,25 @@ class TaskDetailsPage extends StatelessWidget {
                       fontSize: 13.sp,
                     ),
               ),
+              20.verticalSpace,
               Text(
                 "Sub tasks",
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      fontSize: 18.sp,
+                      fontSize: 11.sp,
+                      color: Colors.grey,
                     ),
               ),
               10.verticalSpace,
               Container(
-                margin: EdgeInsets.only(left: 30.sp),
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: provider.task?.subTask.length,
-                  itemBuilder: (context, index) => TaskListItem.buildSubListItem(
-                      task: provider.task!.subTask[index],
-                      provider: provider),
+                  itemBuilder: (context, index) =>
+                      TaskListItem.buildSubListItem(
+                        context,
+                          task: provider.task!.subTask[index],
+                          provider: provider),
                 ),
               )
             ],

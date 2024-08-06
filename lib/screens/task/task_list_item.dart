@@ -4,6 +4,8 @@ import 'package:bandu/ext/text_ext.dart';
 import 'package:bandu/main.dart';
 import 'package:bandu/models/task/task.dart';
 import 'package:bandu/routes/app_router.gr.dart';
+import 'package:bandu/screens/task/task_details/task_details_provider.dart';
+import 'package:bandu/services/ui_messages.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +27,7 @@ class TaskListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (BuildContext context) {
-        TaskListProvider provider = TaskListProvider();
+        TaskDetailsProvider provider = TaskDetailsProvider();
         provider.init(task);
         return provider;
       },
@@ -34,13 +36,13 @@ class TaskListItem extends StatelessWidget {
   }
 
   Widget _buildPage(BuildContext context) {
-    return Consumer<TaskListProvider>(
+    return Consumer<TaskDetailsProvider>(
       builder: (context, provider, child) {
         return InkWell(
           onTap: () {
             appRouter.push(
               TaskDetailsRoute(
-                task: provider.task,
+                task: provider.task!,
               ),
             );
           },
@@ -53,7 +55,7 @@ class TaskListItem extends StatelessWidget {
                       provider.toggleSublist();
                     },
                     child: Icon(
-                      provider.showingSublist
+                      provider.showSublist
                           ? Icons.keyboard_arrow_down_outlined
                           : Icons.keyboard_arrow_right_outlined,
                       color: ColorsConst.PRIMARY,
@@ -67,7 +69,7 @@ class TaskListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          provider.task.title,
+                          provider.task!.title,
                           style: TextStyle(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.bold,
@@ -89,15 +91,16 @@ class TaskListItem extends StatelessWidget {
                   ),
                 ],
               ),
-              provider.showingSublist
+              provider.showSublist
                   ? Container(
                       margin: EdgeInsets.only(left: 30.sp),
                       child: ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: provider.task.subTask.length,
+                        itemCount: provider.task?.subTask.length,
                         itemBuilder: (context, index) => buildSubListItem(
-                            task: provider.task.subTask[index],
+                          context,
+                            task: provider.task!.subTask[index],
                             provider: provider),
                       ),
                     )
@@ -109,7 +112,9 @@ class TaskListItem extends StatelessWidget {
     );
   }
 
-  static buildSubListItem({required SubTask task, required provider}) {
+  static buildSubListItem(
+      BuildContext context,
+      {required SubTask task, required TaskDetailsProvider provider}) {
     print('buildSubListItem : ' + task.status);
     return Container(
         margin: EdgeInsets.only(top: 10.sp),
@@ -214,20 +219,14 @@ class TaskListItem extends StatelessWidget {
                   onSelected: (String item) {
                     switch (item) {
                       case 'To Do':
-                        provider.runtimeType == TaskListProvider
-                            ? provider.updateStatus(task.id, 'to_do')
-                            :
-                        provider.updateSubTask(task.id, 'to_do');
+                        provider.updateSubStatus(task.id, 'to_do');
                         break;
                       case 'In Progress':
-                        provider.runtimeType == TaskListProvider
-                            ? provider.updateStatus(task.id, 'progress')
-                            : provider.updateSubTask(task.id, 'progress');
+                        provider.updateSubStatus(task.id, 'progress');
                         break;
                       case 'Done':
-                        provider.runtimeType == TaskListProvider
-                            ? provider.updateStatus(task.id, 'done')
-                            : provider.updateSubTask(task.id, 'done');
+
+                            provider.updateSubStatus(task.id, 'done');
                         print('Done');
 
                         break;
@@ -245,7 +244,15 @@ class TaskListItem extends StatelessWidget {
               ],
             ),
             PopupMenuButton<String>(
-              onSelected: (String item) {},
+              onSelected: (String item) {
+                switch (item) {
+                  case 'Delete':
+                    provider.deleteSubTask(
+                        context,
+                        task.id);
+                    break;
+                }
+              },
               itemBuilder: (BuildContext context) {
                 return Options.subTaskOptions.map((String choice) {
                   return PopupMenuItem<String>(
@@ -320,38 +327,6 @@ class TaskListItem extends StatelessWidget {
       default:
         return ColorsConst.YELLOW_ACCENT;
     }
-  }
-}
-
-class TaskListProvider extends ChangeNotifier {
-  bool showingSublist = false;
-  late Task task;
-  final ConfettiController controllerCenter =
-      ConfettiController(duration: const Duration(seconds: 1));
-
-  void init(task) {
-    this.task = task;
-  }
-
-  void toggleSublist() {
-    showingSublist = !showingSublist;
-    notifyListeners();
-  }
-
-  Future<void> updateStatus(String subtaskId, String status) async {
-    task.subTask.forEach((element) {
-      if (element.id == subtaskId) {
-        if (element.status != status) {
-          if (status == 'done') {
-            controllerCenter.play();
-          }
-          print('Status: ' + element.status);
-          element.status = status;
-          notifyListeners();
-        }
-      }
-    });
-    await DbManager.instance.updateTask(task);
   }
 }
 
