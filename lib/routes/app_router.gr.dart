@@ -9,6 +9,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i11;
+import 'package:bandu/models/task/task.dart' as _i13;
 import 'package:bandu/screens/complete_profile/complete_profile_view.dart'
     as _i2;
 import 'package:bandu/screens/get_started/get_started_view.dart' as _i3;
@@ -90,7 +91,7 @@ abstract class $AppRouter extends _i11.RootStackRouter {
       final args = routeData.argsAs<TaskDetailsRouteArgs>();
       return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i10.TaskDetailsPage(taskId: args.taskId),
+        child: _i10.TaskDetailsPage(task: args.task),
       );
     },
   };
@@ -250,11 +251,11 @@ class SplashRoute extends _i11.PageRouteInfo<void> {
 /// [_i10.TaskDetailsPage]
 class TaskDetailsRoute extends _i11.PageRouteInfo<TaskDetailsRouteArgs> {
   TaskDetailsRoute({
-    required String taskId,
+    required _i13.Task task,
     List<_i11.PageRouteInfo>? children,
   }) : super(
           TaskDetailsRoute.name,
-          args: TaskDetailsRouteArgs(taskId: taskId),
+          args: TaskDetailsRouteArgs(task: task),
           initialChildren: children,
         );
 
@@ -265,12 +266,12 @@ class TaskDetailsRoute extends _i11.PageRouteInfo<TaskDetailsRouteArgs> {
 }
 
 class TaskDetailsRouteArgs {
-  const TaskDetailsRouteArgs({required this.taskId});
+  const TaskDetailsRouteArgs({required this.task});
 
-  final String taskId;
+  final _i13.Task task;
 
   @override
   String toString() {
-    return 'TaskDetailsRouteArgs{taskId: $taskId}';
+    return 'TaskDetailsRouteArgs{task: $task}';
   }
 }

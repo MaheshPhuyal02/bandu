@@ -39,7 +39,9 @@ class TaskListItem extends StatelessWidget {
         return InkWell(
           onTap: () {
             appRouter.push(
-              TaskDetailsRoute(taskId: provider.task.id),
+              TaskDetailsRoute(
+                task: provider.task,
+              ),
             );
           },
           child: Column(
@@ -94,7 +96,7 @@ class TaskListItem extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: provider.task.subTask.length,
-                        itemBuilder: (context, index) => _buildSubListItem(
+                        itemBuilder: (context, index) => buildSubListItem(
                             task: provider.task.subTask[index],
                             provider: provider),
                       ),
@@ -107,7 +109,7 @@ class TaskListItem extends StatelessWidget {
     );
   }
 
-  _buildSubListItem({required SubTask task, required provider}) {
+  static buildSubListItem({required SubTask task, required provider}) {
     print('buildSubListItem : ' + task.status);
     return Container(
         margin: EdgeInsets.only(top: 10.sp),
@@ -212,13 +214,20 @@ class TaskListItem extends StatelessWidget {
                   onSelected: (String item) {
                     switch (item) {
                       case 'To Do':
-                        provider.updateStatus(task.id, 'to_do');
+                        provider.runtimeType == TaskListProvider
+                            ? provider.updateStatus(task.id, 'to_do')
+                            :
+                        provider.updateSubTask(task.id, 'to_do');
                         break;
                       case 'In Progress':
-                        provider.updateStatus(task.id, 'progress');
+                        provider.runtimeType == TaskListProvider
+                            ? provider.updateStatus(task.id, 'progress')
+                            : provider.updateSubTask(task.id, 'progress');
                         break;
                       case 'Done':
-                        provider.updateStatus(task.id, 'done');
+                        provider.runtimeType == TaskListProvider
+                            ? provider.updateStatus(task.id, 'done')
+                            : provider.updateSubTask(task.id, 'done');
                         print('Done');
 
                         break;
@@ -250,7 +259,7 @@ class TaskListItem extends StatelessWidget {
         ));
   }
 
-  Path drawStar(Size size) {
+  static Path drawStar(Size size) {
     // Method to convert degree to radians
     double degToRad(double deg) => deg * (pi / 180.0);
 
@@ -284,6 +293,32 @@ class TaskListItem extends StatelessWidget {
         return TaskStatus.DONE;
       default:
         return TaskStatus.TO_DO;
+    }
+  }
+
+  static String parseStatusString(String status) {
+    switch (status) {
+      case 'to_do':
+        return "Todo";
+      case 'progress':
+        return "Pending";
+      case 'done':
+        return "Done";
+      default:
+        return "Todo";
+    }
+  }
+
+  static parseStatusColor(String status) {
+    switch (status) {
+      case 'to_do':
+        return ColorsConst.WHITE_ACCENT;
+      case 'progress':
+        return ColorsConst.YELLOW_ACCENT;
+      case 'done':
+        return ColorsConst.GREEN_ACCENT;
+      default:
+        return ColorsConst.YELLOW_ACCENT;
     }
   }
 }

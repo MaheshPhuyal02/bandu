@@ -24,7 +24,7 @@ class Task {
 
   final bool completed;
   final List<SubTask> subTask;
-  final String status;
+  late String status;
 
   Task({
     required this.id,
