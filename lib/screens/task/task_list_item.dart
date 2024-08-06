@@ -79,7 +79,17 @@ class TaskListItem extends StatelessWidget {
                     ),
                   ),
                   PopupMenuButton<String>(
-                    onSelected: (String item) {},
+                    onSelected: (String item) {
+                      switch (item) {
+                        case 'Delete':
+                          provider.deleteTask(
+                            context,
+                            provider.task!.id,
+                            close: false,
+                          );
+                          break;
+                      }
+                    },
                     itemBuilder: (BuildContext context) {
                       return Options.taskOptions.map((String choice) {
                         return PopupMenuItem<String>(
@@ -99,7 +109,7 @@ class TaskListItem extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: provider.task?.subTask.length,
                         itemBuilder: (context, index) => buildSubListItem(
-                          context,
+                            context,
                             task: provider.task!.subTask[index],
                             provider: provider),
                       ),
@@ -112,8 +122,7 @@ class TaskListItem extends StatelessWidget {
     );
   }
 
-  static buildSubListItem(
-      BuildContext context,
+  static buildSubListItem(BuildContext context,
       {required SubTask task, required TaskDetailsProvider provider}) {
     print('buildSubListItem : ' + task.status);
     return Container(
@@ -225,8 +234,7 @@ class TaskListItem extends StatelessWidget {
                         provider.updateSubStatus(task.id, 'progress');
                         break;
                       case 'Done':
-
-                            provider.updateSubStatus(task.id, 'done');
+                        provider.updateSubStatus(task.id, 'done');
                         print('Done');
 
                         break;
@@ -247,9 +255,7 @@ class TaskListItem extends StatelessWidget {
               onSelected: (String item) {
                 switch (item) {
                   case 'Delete':
-                    provider.deleteSubTask(
-                        context,
-                        task.id);
+                    provider.deleteSubTask(context, task.id);
                     break;
                 }
               },

@@ -40,17 +40,34 @@ class TaskDetailsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               20.verticalSpace,
-              IconButton(
-                onPressed: () {
-                  appRouter.maybePop();
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                  size: 30.sp,
-                ),
+              Row(
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      appRouter.maybePop();
+                    },
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 30.sp,
+                    ),
+                  ),
+                  1.flex,
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      provider.deleteTask(context, task.id);
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                      size: 30.sp,
+                    ),
+                  ),
+                ],
               ),
-              30.verticalSpace,
+              10.verticalSpace,
               Text(
                 task.title,
                 style: Theme.of(context).textTheme.headlineLarge!.copyWith(

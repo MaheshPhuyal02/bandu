@@ -1,3 +1,4 @@
+import 'package:bandu/main.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 
@@ -46,9 +47,44 @@ class TaskDetailsProvider extends ChangeNotifier {
           TextButton(
             onPressed: () async {
               task?.subTask.removeWhere((element) => element.id == id);
-              await DbManager.instance.updateTask(task!);
+              await DbManager.instance.deleteTask(id);
               Navigator.pop(context);
               notifyListeners();
+            },
+            child: Text("Delete"),
+          ),
+        ],
+      );
+    });
+  }
+  Future<void> deleteTask(
+      BuildContext context,
+      String id,
+  {
+    bool close = true
+  }) async {
+
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Delete Task"),
+        content: Text("Are you sure you want to delete this task?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              task?.subTask.removeWhere((element) => element.id == id);
+              await DbManager.instance.deleteTask(
+                  task!.id
+              );
+              notifyListeners();
+              Navigator.pop(context);
+              if(close)
+              appRouter.maybePop();
             },
             child: Text("Delete"),
           ),

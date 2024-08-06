@@ -211,4 +211,15 @@ class DbManager {
       'subTask': task.subTask.map((e) => e.toJson()).toList(),
     });
   }
+
+  deleteTask(String id) {
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('tasks')
+        .doc(id)
+        .delete();
+  }
 }
