@@ -248,8 +248,6 @@ class GeminiManager {
       return {"status": 'Error adding task'};
     }
   }
-
-
 }
 
 enum GeminiStatus {

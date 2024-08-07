@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:bandu/components/padding_scaffold.dart';
 import 'package:bandu/ext/sizes_ext.dart';
+import 'package:bandu/ext/text_ext.dart';
 import 'package:bandu/models/task/task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,6 +55,7 @@ class TaskDetailsPage extends StatelessWidget {
                     ),
                   ),
                   1.flex,
+
                   IconButton(
                     padding: EdgeInsets.zero,
                     onPressed: () {
@@ -62,23 +64,40 @@ class TaskDetailsPage extends StatelessWidget {
                     icon: Icon(
                       Icons.delete,
                       color: Colors.red,
-                      size: 30.sp,
+                      size: 20.sp,
                     ),
                   ),
                 ],
               ),
               10.verticalSpace,
-              Text(
-                task.title,
-                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 23.sp,
-                    ),
+              GestureDetector(
+                onTap: () {
+                  provider.setEditable("text", true);
+                },
+                child: TextField(
+                  controller: provider.textController,
+                  onSubmitted: (value) {
+                    provider.setEditable("text", false);
+                    provider.updateTitle(value);
+                  },
+                  decoration: InputDecoration(
+                    hintText: "Title",
+                    enabled: provider.isTextEditable,
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                  ),
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        fontSize: 20.sp,
+                      ),
+                ),
               ),
               10.verticalSpace,
               PopupMenuButton<String>(
                 position: PopupMenuPosition.under,
                 padding: EdgeInsets.zero,
-                offset: Offset(90.pW, 0),
                 icon: Container(
                   padding:
                       EdgeInsets.symmetric(horizontal: 7.sp, vertical: 8.sp),
@@ -145,15 +164,69 @@ class TaskDetailsPage extends StatelessWidget {
                 },
               ),
               10.verticalSpace,
+
+
+
               Text("Description",
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey,
                       )),
-              Text(
-                task.description,
-                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      fontSize: 13.sp,
+              GestureDetector(
+                onTap: () {
+                  provider.setEditable("description", true);
+                },
+                child: TextField(
+                  maxLines: 5,
+                  minLines: 2,
+                  controller: provider.descriptionController,
+                  onTapOutside: (ev){
+                    provider.setEditable("description", false);
+                    provider.updateDescription();
+                  },
+                  onSubmitted: (value) {
+                    provider.setEditable("description", false);
+                    provider.updateDescription();
+                  },
+                  decoration: InputDecoration(
+                    hintText: "Description",
+                    enabled: provider.isDescriptionEditable,
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                  ),
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    fontSize: 13.sp,
+                  ),
+                ),
+              ),
+              10.verticalSpace,
+              Text("Deadline",
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Colors.grey,
+                      )),
+              Row(
+                children: [
+                  Text(
+                    task.deadline.toString().formatDate(),
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                          fontSize: 13.sp,
+                        ),
+                  ),
+                  4.horizontalSpace,
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      provider.showDeadlinePicker(context);
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      color: Colors.grey,
+                      size: 20.sp,
                     ),
+                  ),
+                ],
               ),
               20.verticalSpace,
               Text(
@@ -182,4 +255,5 @@ class TaskDetailsPage extends StatelessWidget {
       ),
     ));
   }
+
 }
