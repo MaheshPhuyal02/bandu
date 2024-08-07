@@ -95,9 +95,7 @@ class GeminiManager {
 
     String user = await userInfo();
 
-
     _gemModel = _getGemModel(Prompts.defaultSystem + command + user);
-
 
     var chat = _gemModel?.startChat(
       history: history,
@@ -113,11 +111,11 @@ class GeminiManager {
           'addTask' => await addTask(functionCall.args),
           'deleteAllTask' => await deleteAllTask(functionCall.args),
           'addTaskList' => await addListTask(functionCall.args),
-          _ =>
-          throw UnimplementedError(
+          'getTaskList' => await getTaskList(functionCall.args),
+          _ => throw UnimplementedError(
               'Function not implemented: ${functionCall.name}')
         };
-        response = await chat!
+        response = await chat
             .sendMessage(Content.functionResponse(functionCall.name, result));
       }
       String r = response.text!;
@@ -133,14 +131,19 @@ class GeminiManager {
   }
 
   _getGemModel(system) {
-    return  GenerativeModel(
+    return GenerativeModel(
       model: _model,
       apiKey: _apiKey,
       systemInstruction: Content.system(
         system,
       ),
       tools: [
-        Tool(functionDeclarations: [Prompts.taskSchema, Prompts.taskListSchema, Prompts.deleteAllTaskSchema]),
+        Tool(functionDeclarations: [
+          Prompts.taskSchema,
+          Prompts.taskListSchema,
+          Prompts.deleteAllTaskSchema,
+          Prompts.getTaskList,
+        ]),
       ],
     );
   }
@@ -151,6 +154,41 @@ class GeminiManager {
       history.removeAt(0);
     }
     history.add(content);
+  }
+
+  Future<Map<String, dynamic>> getTaskList(Map<String, dynamic> data) async{
+    try {
+      print(
+          "============================= Getting task list ============================ : ");
+
+      List<Task>? tasks = await DbManager.instance.getTasks();
+
+      return {"taskList": [
+        for (var task in tasks!)
+          {
+            'title': task.title,
+            'description': task.description,
+            'createdDate': task.createdDate.toString(),
+            'deadline': task.deadline.toString(),
+            'completed': task.completed,
+            'status': task.status,
+            'subTask': [
+              for (var subTask in task.subTask)
+                {
+                  'title': subTask.title,
+                  'description': subTask.description,
+                  'createdDate': subTask.createdDate.toString(),
+                  'deadline': subTask.deadline.toString(),
+                  'completed': subTask.completed,
+                  'taskId': subTask.taskId,
+                  'status': subTask.status,
+                }
+            ]
+          }
+      ]};
+    } catch (e) {
+      return {"status": 'Error getting task list'};
+    }
   }
 
   Future<Map<String, String>> deleteAllTask(Map<String, dynamic> data) async {
@@ -165,6 +203,7 @@ class GeminiManager {
       return {"status": 'Error deleting all tasks'};
     }
   }
+
   Future<Map<String, String>> addTask(Map<String, dynamic> data) async {
     try {
       print(

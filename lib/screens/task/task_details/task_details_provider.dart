@@ -119,13 +119,14 @@ class TaskDetailsProvider extends ChangeNotifier {
           TextButton(
             onPressed: () async {
               task?.subTask.removeWhere((element) => element.id == id);
+              Navigator.pop(context);
               await DbManager.instance.deleteTask(
                   task!.id
               );
               notifyListeners();
-              Navigator.pop(context);
-              if(close)
-              appRouter.maybePop();
+              if(close) {
+                appRouter.maybePop();
+              }
             },
             child: Text("Delete"),
           ),

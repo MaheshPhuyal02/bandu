@@ -222,4 +222,18 @@ class DbManager {
         .doc(id)
         .delete();
   }
+
+  Future<List<Task>?> getTasks() {
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('tasks')
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) return null;
+       return value.docs.map((e) => Task.fromJson(e.data())).toList();
+    });
+  }
 }

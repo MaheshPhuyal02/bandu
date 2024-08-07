@@ -125,151 +125,163 @@ class TaskListItem extends StatelessWidget {
   static buildSubListItem(BuildContext context,
       {required SubTask task, required TaskDetailsProvider provider}) {
     print('buildSubListItem : ' + task.status);
-    return Container(
-        margin: EdgeInsets.only(top: 10.sp),
-        padding: EdgeInsets.only(
-          left: 10.sp,
-          right: 5.sp,
-          top: 10.sp,
-          bottom: 10.sp,
-        ),
-        decoration: BoxDecoration(
-          color: parseStatus(task.status) == TaskStatus.DONE
-              ? ColorsConst.GREEN_ACCENT
-              : parseStatus(task.status) == TaskStatus.IN_PROGRESS
-                  ? ColorsConst.YELLOW_ACCENT
-                  : ColorsConst.WHITE_ACCENT,
-          borderRadius: BorderRadius.circular(9.sp),
-        ),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              "assets/icons/task_item.svg",
-              width: 20.sp,
-              height: 20.sp,
-            ),
-            10.horizontalSpace,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+    return InkWell(
+      onTap: () {
+        appRouter.push(
+          Subtask_detailsRoute(
+            subTask: task,
+            task: provider.task!,
+          ),
+        );
+      },
+      child: Container(
+          margin: EdgeInsets.only(top: 10.sp),
+          padding: EdgeInsets.only(
+            left: 10.sp,
+            right: 5.sp,
+            top: 10.sp,
+            bottom: 10.sp,
+          ),
+          decoration: BoxDecoration(
+            color: parseStatus(task.status) == TaskStatus.DONE
+                ? ColorsConst.GREEN_ACCENT
+                : parseStatus(task.status) == TaskStatus.IN_PROGRESS
+                    ? ColorsConst.YELLOW_ACCENT
+                    : ColorsConst.WHITE_ACCENT,
+            borderRadius: BorderRadius.circular(9.sp),
+          ),
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                "assets/icons/task_item.svg",
+                width: 20.sp,
+                height: 20.sp,
+              ),
+              10.horizontalSpace,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      task.title,
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                      ),
+                    ),
+                    Text(
+                      task.deadline.toString().formatDate(),
+                      maxLines: 2,
+                      style: TextStyle(
+                        fontSize: 11.sp,
+                        overflow: TextOverflow.ellipsis,
+                        color: Colors.black38,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              5.horizontalSpace,
+              Stack(
                 children: [
-                  Text(
-                    task.title,
-                    style: TextStyle(
-                      fontSize: 13.sp,
+                  Align(
+                    alignment: Alignment.center,
+                    child: ConfettiWidget(
+                      confettiController: provider.controllerCenter,
+                      blastDirectionality: BlastDirectionality.explosive,
+                      // don't specify a direction, blast randomly
+                      shouldLoop: false,
+                      // st// art again as soon as the animation is finished
+                      colors: const [
+                        ColorsConst.PRIMARY,
+                        Colors.blue,
+                        Colors.pink,
+                        Colors.orange,
+                        Colors.purple
+                      ],
+                      // manually specify the colors to be used
+                      createParticlePath:
+                          drawStar, // define a custom shape/path.
                     ),
                   ),
-                  Text(
-                    task.deadline.toString().formatDate(),
-                    maxLines: 2,
-                    style: TextStyle(
-                      fontSize: 11.sp,
-                      overflow: TextOverflow.ellipsis,
-                      color: Colors.black38,
+                  PopupMenuButton<String>(
+                    icon: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 7.sp, vertical: 4.sp),
+                      decoration: BoxDecoration(
+                        color: ColorsConst.WHITE_SHADOW,
+                        borderRadius: BorderRadius.circular(5.sp),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            parseStatus(task.status) == TaskStatus.DONE
+                                ? Icons.check_circle
+                                : parseStatus(task.status) ==
+                                        TaskStatus.IN_PROGRESS
+                                    ? Icons.pending_outlined
+                                    : parseStatus(task.status) ==
+                                            TaskStatus.DONE
+                                        ? Icons.check_circle_outline
+                                        : Icons.access_time,
+                            color: Colors.black,
+                            size: 16.sp,
+                          ),
+                          2.horizontalSpace,
+                          Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: Colors.black,
+                            size: 22.sp,
+                          ),
+                        ],
+                      ),
                     ),
+                    onSelected: (String item) {
+                      switch (item) {
+                        case 'To Do':
+                          provider.updateSubStatus(task.id, 'to_do');
+                          break;
+                        case 'In Progress':
+                          provider.updateSubStatus(task.id, 'progress');
+                          break;
+                        case 'Done':
+                          provider.updateSubStatus(task.id, 'done');
+                          print('Done');
+
+                          break;
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return Options.taskStatusOptions.map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
                   ),
                 ],
               ),
-            ),
-            5.horizontalSpace,
-            Stack(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: ConfettiWidget(
-                    confettiController: provider.controllerCenter,
-                    blastDirectionality: BlastDirectionality.explosive,
-                    // don't specify a direction, blast randomly
-                    shouldLoop: false,
-                    // st// art again as soon as the animation is finished
-                    colors: const [
-                      ColorsConst.PRIMARY,
-                      Colors.blue,
-                      Colors.pink,
-                      Colors.orange,
-                      Colors.purple
-                    ],
-                    // manually specify the colors to be used
-                    createParticlePath: drawStar, // define a custom shape/path.
-                  ),
-                ),
-                PopupMenuButton<String>(
-                  icon: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 7.sp, vertical: 4.sp),
-                    decoration: BoxDecoration(
-                      color: ColorsConst.WHITE_SHADOW,
-                      borderRadius: BorderRadius.circular(5.sp),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          parseStatus(task.status) == TaskStatus.DONE
-                              ? Icons.check_circle
-                              : parseStatus(task.status) ==
-                                      TaskStatus.IN_PROGRESS
-                                  ? Icons.pending_outlined
-                                  : parseStatus(task.status) == TaskStatus.DONE
-                                      ? Icons.check_circle_outline
-                                      : Icons.access_time,
-                          color: Colors.black,
-                          size: 16.sp,
-                        ),
-                        2.horizontalSpace,
-                        Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          color: Colors.black,
-                          size: 22.sp,
-                        ),
-                      ],
-                    ),
-                  ),
-                  onSelected: (String item) {
-                    switch (item) {
-                      case 'To Do':
-                        provider.updateSubStatus(task.id, 'to_do');
-                        break;
-                      case 'In Progress':
-                        provider.updateSubStatus(task.id, 'progress');
-                        break;
-                      case 'Done':
-                        provider.updateSubStatus(task.id, 'done');
-                        print('Done');
-
-                        break;
-                    }
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return Options.taskStatusOptions.map((String choice) {
-                      return PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(choice),
-                      );
-                    }).toList();
-                  },
-                ),
-              ],
-            ),
-            PopupMenuButton<String>(
-              onSelected: (String item) {
-                switch (item) {
-                  case 'Delete':
-                    provider.deleteSubTask(context, task.id);
-                    break;
-                }
-              },
-              itemBuilder: (BuildContext context) {
-                return Options.subTaskOptions.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              },
-            ),
-          ],
-        ));
+              PopupMenuButton<String>(
+                onSelected: (String item) {
+                  switch (item) {
+                    case 'Delete':
+                      provider.deleteSubTask(context, task.id);
+                      break;
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  return Options.subTaskOptions.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
+          )),
+    );
   }
 
   static Path drawStar(Size size) {

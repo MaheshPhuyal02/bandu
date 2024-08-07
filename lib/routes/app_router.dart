@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:bandu/screens/task/subtask_details/subtask_details_view.dart';
 import 'app_router.gr.dart';
 
 @AutoRouterConfig()
@@ -15,5 +16,6 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: SelectProjectRoute.page),
         AutoRoute(page: AddTaskRoute.page),
         AutoRoute(page: TaskDetailsRoute.page),
+        AutoRoute(page: Subtask_detailsRoute.page),
       ];
 }

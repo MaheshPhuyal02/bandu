@@ -6,8 +6,8 @@ part 'sub_task.g.dart';
 @JsonSerializable()
 class SubTask {
   final String id;
-  final String title;
-  final String description;
+  late String title;
+  late String description;
 
   @JsonKey(
     fromJson: _dateTimeFromTimestamp,
@@ -19,7 +19,7 @@ class SubTask {
     fromJson: _dateTimeFromTimestamp,
     toJson: _dateTimeToTimestamp,
   )
-  final DateTime? deadline;
+  late DateTime? deadline;
 
   final bool completed;
   final String taskId;
