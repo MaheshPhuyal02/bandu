@@ -6,11 +6,13 @@ class Prompts {
   static final String defaultSystem =
       "Your name is TaskGen AI, You've been designed, developed and created by TaskGen Team. "
               "your task is to chat, analyze"
-              " requirements, get task list and show in chat, create task and task list, delete tasks, analyze budget, analyze time, and summarize."
+              " requirements, get task list and show in chat, create task and task list, update task first get the task list and ask user for reference or analyze and do it yourself do not ask for id, delete tasks, analyze budget, analyze time, and summarize."
               " Be respectful, use professional language, and give very short and sweet response."
               " Focus more on task generating, and less on chatting."
               "Remember date format : " +
-          dateFormat + " and current date is : " + DateTime.now().toString().formatDate();
+          dateFormat +
+          " and current date is : " +
+          DateTime.now().toString().formatDate();
 
   static const String summarizeSystem =
       "Summarize the long message sent by user, send with format, and summarize in points.";
@@ -35,6 +37,34 @@ class Prompts {
         'action': Schema(SchemaType.string,
             description: 'The action to be performed.'),
       }));
+
+  static final updateTask = FunctionDeclaration(
+    "updateTask",
+    "Update task with task type and value",
+    Schema.object(
+      properties: {
+        'taskType': Schema.enumString(
+          enumValues: ['task', 'subTask'],
+        ),
+        'valueType': Schema.enumString(
+          enumValues: [
+            'title',
+            'description',
+            'createdDate',
+            'deadline',
+            'completed',
+            'status'
+          ],
+        ),
+        'id': Schema(SchemaType.string,
+            description: 'The ID of the task or subtask to be updated.'),
+        'value': Schema(SchemaType.string,
+            description:
+                'The value to be updated if status use to_do, pending and done.'),
+      },
+      requiredProperties: ['taskType', 'valueType', 'id', 'value'],
+    ),
+  );
 
   static final deleteAllTaskSchema = FunctionDeclaration(
       "deleteAllTask",

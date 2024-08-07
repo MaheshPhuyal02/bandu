@@ -112,6 +112,7 @@ class GeminiManager {
           'deleteAllTask' => await deleteAllTask(functionCall.args),
           'addTaskList' => await addListTask(functionCall.args),
           'getTaskList' => await getTaskList(functionCall.args),
+          'updateTask' => await updateTask(functionCall.args),
           _ => throw UnimplementedError(
               'Function not implemented: ${functionCall.name}')
         };
@@ -126,6 +127,7 @@ class GeminiManager {
       return r;
     } catch (e) {
       print("Error : " + e.toString());
+      _gemModel = null;
       return "Error : " + e.toString();
     }
   }
@@ -143,6 +145,7 @@ class GeminiManager {
           Prompts.taskListSchema,
           Prompts.deleteAllTaskSchema,
           Prompts.getTaskList,
+          Prompts.updateTask,
         ]),
       ],
     );
@@ -154,6 +157,30 @@ class GeminiManager {
       history.removeAt(0);
     }
     history.add(content);
+  }
+
+  Future<Map<String, String>> updateTask(Map<String, dynamic> data) async {
+    try {
+      print(
+          "============================= Updating task ============================ : ");
+
+      print("Data : " + data.toString());
+
+      String valueType = data['valueType'];
+      String value = data['value'];
+      String id = data['id'];
+
+
+      // if (type == 'task') {
+      //   await DbManager.instance.updateTask(valueType, value);
+      // } else if (type == 'subTask') {
+      //   await DbManager.instance.updateSubTask(valueType, value);
+      // }
+
+      return {"status": 'Task updated successfully'};
+    } catch (e) {
+      return {"status": 'Error updating task'};
+    }
   }
 
   Future<Map<String, dynamic>> getTaskList(Map<String, dynamic> data) async{
