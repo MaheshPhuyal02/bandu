@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:response_parser/gpt_markdown.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants/ColorsConst.dart';
 import '../../constants/Options.dart';
@@ -253,6 +254,11 @@ class Ai_chatPage extends StatelessWidget {
                       ),
                       child: TexMarkdown(
                         message.response!,
+                        onLinkTab: (url, title) async {
+                          if(await canLaunchUrl(Uri.parse(url))){
+                            launchUrl(Uri.parse(url));
+                          }
+                        },
                         style: const TextStyle(
                           color: Colors.black,
                         ),

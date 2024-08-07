@@ -55,7 +55,6 @@ class TaskDetailsPage extends StatelessWidget {
                     ),
                   ),
                   1.flex,
-
                   IconButton(
                     padding: EdgeInsets.zero,
                     onPressed: () {
@@ -164,9 +163,6 @@ class TaskDetailsPage extends StatelessWidget {
                 },
               ),
               10.verticalSpace,
-
-
-
               Text("Description",
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey,
@@ -179,7 +175,7 @@ class TaskDetailsPage extends StatelessWidget {
                   maxLines: 5,
                   minLines: 2,
                   controller: provider.descriptionController,
-                  onTapOutside: (ev){
+                  onTapOutside: (ev) {
                     provider.setEditable("description", false);
                     provider.updateDescription();
                   },
@@ -197,9 +193,20 @@ class TaskDetailsPage extends StatelessWidget {
                     disabledBorder: InputBorder.none,
                   ),
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    fontSize: 13.sp,
-                  ),
+                        fontSize: 13.sp,
+                      ),
                 ),
+              ),
+              10.verticalSpace,
+              Text("Started Date",
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Colors.grey,
+                      )),
+              Text(
+                task.createdDate.toString().formatDate(),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontSize: 13.sp,
+                    ),
               ),
               10.verticalSpace,
               Text("Deadline",
@@ -243,8 +250,7 @@ class TaskDetailsPage extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: provider.task?.subTask.length,
                   itemBuilder: (context, index) =>
-                      TaskListItem.buildSubListItem(
-                        context,
+                      TaskListItem.buildSubListItem(context,
                           task: provider.task!.subTask[index],
                           provider: provider),
                 ),
@@ -255,5 +261,4 @@ class TaskDetailsPage extends StatelessWidget {
       ),
     ));
   }
-
 }

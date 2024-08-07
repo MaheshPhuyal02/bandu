@@ -262,22 +262,21 @@ class TaskListItem extends StatelessWidget {
                   ),
                 ],
               ),
-              PopupMenuButton<String>(
-                onSelected: (String item) {
-                  switch (item) {
-                    case 'Delete':
-                      provider.deleteSubTask(context, task.id);
-                      break;
-                  }
+              IconButton(
+                padding: EdgeInsets.zero,
+                iconSize: 20.sp,
+                constraints: BoxConstraints(
+                  maxHeight: 20.sp,
+                  maxWidth: 20.sp,
+                ),
+                onPressed: () {
+                  provider.deleteSubTask(context, task.id);
                 },
-                itemBuilder: (BuildContext context) {
-                  return Options.subTaskOptions.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
-                },
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 20.sp,
+                ),
               ),
             ],
           )),
