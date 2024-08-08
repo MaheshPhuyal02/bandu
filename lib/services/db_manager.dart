@@ -233,7 +233,19 @@ class DbManager {
         .get()
         .then((value) {
       if (value.docs.isEmpty) return null;
-       return value.docs.map((e) => Task.fromJson(e.data())).toList();
+      return value.docs.map((e) => Task.fromJson(e.data())).toList();
     });
+  }
+
+  Future<Task?> getTask(String id) {
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('tasks')
+        .doc(id)
+        .get()
+        .then((value) => Task.fromJson(value.data()!));
   }
 }

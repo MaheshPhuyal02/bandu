@@ -8,16 +8,11 @@ class Home_todoProvider extends ChangeNotifier {
 
   void init() {
     print("Home_todoProvider ::: init");
-
-
     DbManager.instance.streamTasks().listen((event) {
       taskList.clear();
       taskList.addAll(event.docs.map((e) => Task.fromJson(e.data())).toList());
       print("Home_todoProvider ::: Tasks loaded :" + taskList.length.toString());
       notifyListeners();
     });
-
-
-
   }
 }

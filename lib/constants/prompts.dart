@@ -50,9 +50,7 @@ class Prompts {
           enumValues: [
             'title',
             'description',
-            'createdDate',
             'deadline',
-            'completed',
             'status'
           ],
         ),

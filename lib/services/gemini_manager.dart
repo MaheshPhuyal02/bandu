@@ -151,7 +151,6 @@ class GeminiManager {
     );
   }
 
-
   _addToHistory(Content content) {
     if (history.length > 10) {
       history.removeAt(0);
@@ -169,50 +168,86 @@ class GeminiManager {
       String valueType = data['valueType'];
       String value = data['value'];
       String id = data['id'];
+      String type = data['taskType'];
 
+      if (type == "task") {
+        Task? task = await DbManager.instance.getTask(id);
+        if (valueType == 'status') {
+          task!.status = value;
+        } else if (valueType == 'title') {
+          task!.title = value;
+        } else if (valueType == 'description') {
+          task!.description = value;
+        } else if (valueType == 'deadline') {
+          task!.deadline = DateTime.parse(value);
+        }
 
-      // if (type == 'task') {
-      //   await DbManager.instance.updateTask(valueType, value);
-      // } else if (type == 'subTask') {
-      //   await DbManager.instance.updateSubTask(valueType, value);
-      // }
+        await DbManager.instance.updateTask(task!);
 
-      return {"status": 'Task updated successfully'};
+        return {"status": 'Task updated successfully'};
+      } else {
+        List<Task>? tasks = await DbManager.instance.getTasks();
+        for (var task in tasks!) {
+          for (var subTask in task.subTask) {
+            if (subTask.id == id) {
+              if (valueType == 'status') {
+                subTask.status = value;
+              } else if (valueType == 'title') {
+                subTask.title = value;
+              } else if (valueType == 'description') {
+                subTask.description = value;
+              } else if (valueType == 'deadline') {
+                subTask.deadline = DateTime.parse(value);
+              }
+            }
+
+            await DbManager.instance.updateTask(task);
+            break;
+          }
+        }
+
+        return {"status": 'SubTask updated successfully'};
+      }
     } catch (e) {
+
+      print("Error updating task : " + e.toString());
+
       return {"status": 'Error updating task'};
     }
   }
 
-  Future<Map<String, dynamic>> getTaskList(Map<String, dynamic> data) async{
+  Future<Map<String, dynamic>> getTaskList(Map<String, dynamic> data) async {
     try {
       print(
           "============================= Getting task list ============================ : ");
 
       List<Task>? tasks = await DbManager.instance.getTasks();
 
-      return {"taskList": [
-        for (var task in tasks!)
-          {
-            'title': task.title,
-            'description': task.description,
-            'createdDate': task.createdDate.toString(),
-            'deadline': task.deadline.toString(),
-            'completed': task.completed,
-            'status': task.status,
-            'subTask': [
-              for (var subTask in task.subTask)
-                {
-                  'title': subTask.title,
-                  'description': subTask.description,
-                  'createdDate': subTask.createdDate.toString(),
-                  'deadline': subTask.deadline.toString(),
-                  'completed': subTask.completed,
-                  'taskId': subTask.taskId,
-                  'status': subTask.status,
-                }
-            ]
-          }
-      ]};
+      return {
+        "taskList": [
+          for (var task in tasks!)
+            {
+              'title': task.title,
+              'description': task.description,
+              'createdDate': task.createdDate.toString(),
+              'deadline': task.deadline.toString(),
+              'completed': task.completed,
+              'status': task.status,
+              'subTask': [
+                for (var subTask in task.subTask)
+                  {
+                    'title': subTask.title,
+                    'description': subTask.description,
+                    'createdDate': subTask.createdDate.toString(),
+                    'deadline': subTask.deadline.toString(),
+                    'completed': subTask.completed,
+                    'taskId': subTask.taskId,
+                    'status': subTask.status,
+                  }
+              ]
+            }
+        ]
+      };
     } catch (e) {
       return {"status": 'Error getting task list'};
     }
