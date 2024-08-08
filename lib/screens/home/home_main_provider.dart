@@ -8,20 +8,20 @@ class HomeProvider extends ChangeNotifier {
   int selectedIndex = 0;
   bool showChat = false;
   bool animateChatIc = false;
-  double x1 = 100.0,
-      x2 = 200.0,
-      y1 = 100.0,
-      y2 = 200.0,
-      x1Prev = 100.0,
-      x2Prev = 200.0,
-      y1Prev = 100.0,
-      y2Prev = 100.0;
+  double x1 = 10.0,
+      x2 = 20.0,
+      y1 = 10.0,
+      y2 = 20.0,
+      x1Prev = 10.0,
+      x2Prev = 20.0,
+      y1Prev = 10.0,
+      y2Prev = 10.0;
 
   void setIconCoordinates(double x1, double y1, double x2, double y2, context) {
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
+    this.x1 = x1 - 20;
+    this.y1 = y1 - 20;
+    this.x2 = x2 - 20;
+    this.y2 = y2 - 20;
     hideChat(context);
     notifyListeners();
   }
