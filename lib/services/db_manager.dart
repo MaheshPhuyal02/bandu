@@ -1,7 +1,9 @@
+import 'package:bandu/models/chat/message.dart';
 import 'package:bandu/models/task/sub_task.dart';
 import 'package:bandu/models/task/task.dart';
 import 'package:bandu/models/user/db_user.dart';
 import 'package:bandu/models/user/user_project.dart';
+import 'package:bandu/services/tools.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DbManager {
@@ -248,4 +250,40 @@ class DbManager {
         .get()
         .then((value) => Task.fromJson(value.data()!));
   }
+
+  void addChatHistory(Message content) {
+    _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('chat')
+        .add(content.toJson());
+  }
+
+  Future<List<Message>> getChatHistory() {
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('chat')
+        .get().then((value) {
+
+
+          if(value.docs.isEmpty) return [];
+
+      return value.docs.map((e) {
+        return Message(
+          id: e.id,
+          request: e.data()['request'],
+          response: e.data()['response'],
+          loading: e.data()['loading'],
+          actionType: Tools.parseActionType(e.data()['actionType']),
+        );
+      }).toList();
+    });
+  }
+
+
 }

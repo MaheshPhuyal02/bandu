@@ -254,6 +254,7 @@ class Ai_chatPage extends StatelessWidget {
                       ),
                       child: TexMarkdown(
                         message.response!,
+
                         onLinkTab: (url, title) async {
                           if(await canLaunchUrl(Uri.parse(url))){
                             launchUrl(Uri.parse(url));

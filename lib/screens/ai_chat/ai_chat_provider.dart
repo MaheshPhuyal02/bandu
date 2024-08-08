@@ -1,7 +1,9 @@
 import 'package:bandu/constants/prompts.dart';
 import 'package:bandu/models/chat/message.dart';
+import 'package:bandu/services/db_manager.dart';
 import 'package:bandu/services/gemini_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/chat/chat.dart';
@@ -40,6 +42,12 @@ class Ai_chatProvider extends ChangeNotifier {
     selectedPrompt = prompts[0];
   }
 
+  Future<void> init() async {
+    messageList = [];
+    messageList.addAll(await DbManager.instance.getChatHistory());
+    notifyListeners();
+  }
+
   void setSelectedPrompt(Prompt prompt) {
     print("PROMPT ::: " + prompt.toJson().toString());
     selectedPrompt = prompt;
@@ -63,6 +71,8 @@ class Ai_chatProvider extends ChangeNotifier {
 
     messageController.clear();
     messageList.add(msg);
+
+
     hideKeyboard(context);
 
     notifyListeners();
@@ -71,14 +81,18 @@ class Ai_chatProvider extends ChangeNotifier {
 
     if (selectedPrompt != null || selectedPrompt?.name != "Chat") {
       String cmd = selectedPrompt!.prompt;
-      print("CMDDD  ::: " + cmd);
       response =
           await GeminiManager.instance.sendMessageWithCommand(message, cmd);
+      GeminiManager.instance.addToHistory(message,  response);
     } else {
       response = await GeminiManager.instance.sendMessage(message);
+      GeminiManager.instance.addToHistory(message,  response);
     }
     msg = msg.copyWith(response: response, loading: false);
     messageList[messageList.length - 1] = msg;
+
+    DbManager.instance.addChatHistory(msg);
+
     _scrollToLast();
     loading = false;
     setEditing(true);

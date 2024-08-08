@@ -77,13 +77,8 @@ class GeminiManager {
         )
         .sendMessage(Content.text(message));
 
-    _addToHistory(Content.text(message));
-    _addToHistory(Content.model([
-      TextPart(sendMessage!.text!),
-    ]));
-    String response = sendMessage.text!;
-
-    return response;
+    String? response = sendMessage?.text!;
+    return response!;
   }
 
   Future<String> sendMessageWithCommand(String message, String command) async {
@@ -119,17 +114,21 @@ class GeminiManager {
         response = await chat
             .sendMessage(Content.functionResponse(functionCall.name, result));
       }
-      String r = response.text!;
-      _addToHistory(Content.text(message));
-      _addToHistory(Content.model([
-        TextPart(r),
-      ]));
-      return r;
+
+      return response.text!;
     } catch (e) {
       print("Error : " + e.toString());
       _gemModel = null;
       return "Error : " + e.toString();
     }
+  }
+
+  addToHistory(String message, String r) {
+
+    _addToHistory(Content.text(message));
+    _addToHistory(Content.model([
+      TextPart(r),
+    ]));
   }
 
   _getGemModel(system) {
@@ -167,11 +166,11 @@ class GeminiManager {
 
       String valueType = data['valueType'];
       String value = data['value'];
-      String id = data['id'];
+      String taskId = data['taskId'];
       String type = data['taskType'];
 
       if (type == "task") {
-        Task? task = await DbManager.instance.getTask(id);
+        Task? task = await DbManager.instance.getTask(taskId);
         if (valueType == 'status') {
           task!.status = value;
         } else if (valueType == 'title') {
@@ -186,25 +185,28 @@ class GeminiManager {
 
         return {"status": 'Task updated successfully'};
       } else {
-        List<Task>? tasks = await DbManager.instance.getTasks();
-        for (var task in tasks!) {
-          for (var subTask in task.subTask) {
-            if (subTask.id == id) {
-              if (valueType == 'status') {
-                subTask.status = value;
-              } else if (valueType == 'title') {
-                subTask.title = value;
-              } else if (valueType == 'description') {
-                subTask.description = value;
-              } else if (valueType == 'deadline') {
-                subTask.deadline = DateTime.parse(value);
-              }
-            }
+        print("Updating subtask");
+        String subTaskId = data['subTaskId'];
 
-            await DbManager.instance.updateTask(task);
-            break;
-          }
+        List<Task>? tasks = await DbManager.instance.getTasks();
+
+        print("Tasks : " + tasks!.map((e) => e.toJson()).toList().toString());
+
+        Task? task = tasks!.firstWhere((element) => element.id == taskId);
+
+        SubTask? subTask = task!.subTask.firstWhere((element) => element.id == subTaskId);
+
+        if (valueType == 'status') {
+          subTask!.status = value;
+        } else if (valueType == 'title') {
+          subTask!.title = value;
+        } else if (valueType == 'description') {
+          subTask!.description = value;
+        } else if (valueType == 'deadline') {
+          subTask!.deadline = DateTime.parse(value);
         }
+
+        await DbManager.instance.updateSubTask(taskId, subTaskId, task.subTask);
 
         return {"status": 'SubTask updated successfully'};
       }
@@ -212,7 +214,7 @@ class GeminiManager {
 
       print("Error updating task : " + e.toString());
 
-      return {"status": 'Error updating task'};
+      return Future.value({"status": 'Error updating task'});
     }
   }
 
@@ -229,6 +231,7 @@ class GeminiManager {
             {
               'title': task.title,
               'description': task.description,
+              'id': task.id,
               'createdDate': task.createdDate.toString(),
               'deadline': task.deadline.toString(),
               'completed': task.completed,
@@ -242,6 +245,7 @@ class GeminiManager {
                     'deadline': subTask.deadline.toString(),
                     'completed': subTask.completed,
                     'taskId': subTask.taskId,
+                    'id': subTask.id,
                     'status': subTask.status,
                   }
               ]

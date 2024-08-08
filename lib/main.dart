@@ -23,7 +23,11 @@ Future<void> main() async {
   await GeminiManager.instance.init();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
-      create: (_) => Ai_chatProvider(),
+      create: (_) {
+        Ai_chatProvider ai_chatProvider = Ai_chatProvider();
+        ai_chatProvider.init();
+        return ai_chatProvider;
+      },
     )
   ], child: const MyApp()));
 }

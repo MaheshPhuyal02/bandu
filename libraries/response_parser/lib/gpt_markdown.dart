@@ -1,6 +1,7 @@
 library tex_markdown;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'md_widget.dart';
 
@@ -20,6 +21,7 @@ class TexMarkdown extends StatelessWidget {
     this.codeBuilder,
     this.maxLines,
   });
+
   final TextDirection textDirection;
   final String data;
   final TextStyle? style;
@@ -59,18 +61,40 @@ class TexMarkdown extends StatelessWidget {
       );
     }
     return ClipRRect(
-        child: MdWidget(
-      tex,
-      textDirection: textDirection,
-      style: style,
-      onLinkTab: onLinkTab,
-      textAlign: textAlign,
-      textScaler: textScaler,
-      followLinkColor: followLinkColor,
-      latexWorkaround: latexWorkaround,
-      latexBuilder: latexBuilder,
-      codeBuilder: codeBuilder,
-      maxLines: maxLines,
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        MdWidget(
+          tex,
+          textDirection: textDirection,
+          style: style,
+          onLinkTab: onLinkTab,
+          textAlign: textAlign,
+          textScaler: textScaler,
+          followLinkColor: followLinkColor,
+          latexWorkaround: latexWorkaround,
+          latexBuilder: latexBuilder,
+          codeBuilder: codeBuilder,
+          maxLines: maxLines,
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        InkWell(
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: tex));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Copied to clipboard'),
+              ),
+            );
+          },
+          child: Icon(
+            Icons.copy,
+            size: 18,
+          ),
+        ),
+      ],
     ));
   }
 }

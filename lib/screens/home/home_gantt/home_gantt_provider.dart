@@ -13,14 +13,11 @@ class Home_ganttProvider extends ChangeNotifier {
 
   List<String> dateList = [];
 
-  void init(){
-    DbManager.instance.streamTasks().listen((event) {
-      taskList.clear();
-      taskList.addAll(event.docs.map((e) => Task.fromJson(e.data())).toList());
-      addAllToSubTaskList();
-      print("Home gantt  ::: Tasks loaded :" + taskList.length.toString());
-      notifyListeners();
-    });
+  Future<void> init() async {
+
+    taskList.addAll((await DbManager.instance.getTasks())!);
+    addAllToSubTaskList();
+    notifyListeners();
   }
 
   addAllToSubTaskList(){

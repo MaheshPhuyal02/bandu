@@ -6,9 +6,11 @@ class Prompts {
   static final String defaultSystem =
       "Your name is TaskGen AI, You've been designed, developed and created by TaskGen Team. "
               "your task is to chat, analyze"
-              " requirements, get task list and show in chat, create task and task list, update task first get the task list and ask user for reference or analyze and do it yourself do not ask for id, delete tasks, analyze budget, analyze time, and summarize."
+              " requirements, get task list and show in chat, create task and task list, "
+          "update task first get the task list and find the task or subtask and update it, "
+          "and do it yourself do not ask for id, delete tasks, analyze budget, analyze time, and summarize."
               " Be respectful, use professional language, and give very short and sweet response."
-              " Focus more on task generating, and less on chatting."
+              " Focus more on task generating, and less on chatting also remember don't send Id directly to user in chat."
               "Remember date format : " +
           dateFormat +
           " and current date is : " +
@@ -54,13 +56,15 @@ class Prompts {
             'status'
           ],
         ),
-        'id': Schema(SchemaType.string,
-            description: 'The ID of the task or subtask to be updated.'),
+        'taskId': Schema(SchemaType.string,
+            description: 'The task id.'),
+        'subTaskId': Schema(SchemaType.string,
+            description: 'The id of subtask it can be empty if task is updating.'),
         'value': Schema(SchemaType.string,
             description:
                 'The value to be updated if status use to_do, pending and done.'),
       },
-      requiredProperties: ['taskType', 'valueType', 'id', 'value'],
+      requiredProperties: ['taskType', 'valueType', 'taskId', 'subTaskId', 'value'],
     ),
   );
 
