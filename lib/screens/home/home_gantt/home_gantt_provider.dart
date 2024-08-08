@@ -1,3 +1,5 @@
+import 'package:bandu/main.dart';
+import 'package:bandu/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -75,6 +77,16 @@ class Home_ganttProvider extends ChangeNotifier {
       }
     }
     return "";
+  }
+
+  void onClick(SubTask subTask) {
+    print("Home_ganttProvider ::: onClick ::: " + subTask.title);
+
+    appRouter.push(
+      Subtask_detailsRoute(subTask: subTask, task:
+      taskList.firstWhere((element) => element.id == subTask.taskId)),
+    );
+
   }
 
 

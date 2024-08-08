@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:bandu/constants/ColorsConst.dart';
+import 'package:bandu/main.dart';
+import 'package:bandu/routes/app_router.gr.dart';
 import 'package:bandu/screens/task/task_list_item.dart';
 import 'package:dynamic_timeline_tile_flutter/dynamic_timeline_tile_flutter.dart';
 import 'package:flutter/material.dart';
@@ -75,11 +77,16 @@ class Home_ganttPage extends StatelessWidget {
                                     TaskStatus.IN_PROGRESS
                                 ? ColorsConst.YELLOW_ACCENT
                                 : ColorsConst.WHITE_SHADOW,
-                        child: CustomEventTile2(
-                          taskTitle: provider.getTaskTitle(e.taskId),
-                          icon: Icons.event,
-                          title: e.title,
-                          description: e.description,
+                        child: GestureDetector(
+                          onTap: () {
+                            provider.onClick(e);
+                          },
+                          child: CustomEventTile2(
+                            taskTitle: provider.getTaskTitle(e.taskId),
+                            icon: Icons.event,
+                            title: e.title,
+                            description: e.description,
+                          ),
                         ),
                       );
                     }).toList()
