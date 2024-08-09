@@ -1,4 +1,5 @@
 import 'package:bandu/constants/ColorsConst.dart';
+import 'package:bandu/ext/sizes_ext.dart';
 import 'package:bandu/ext/text_ext.dart';
 import 'package:bandu/screens/home/home/home_view_provider.dart';
 import 'package:confetti/confetti.dart';
@@ -18,7 +19,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (BuildContext context) => HomeViewProvider(),
+      create: (BuildContext context) {
+        HomeViewProvider provider = HomeViewProvider();
+        provider.init();
+        return provider;
+      },
       builder: (context, child) => _buildPage(context),
     );
   }
@@ -43,8 +48,8 @@ class HomePage extends StatelessWidget {
                 ),
                 10.verticalSpace,
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10
-                      .sp),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10.sp),
                   child: Row(
                     children: [
                       Icon(
@@ -67,7 +72,6 @@ class HomePage extends StatelessWidget {
                     border: Border.all(color: Colors.grey),
                   ),
                 ),
-
                 10.verticalSpace,
                 Text(
                   'Recent Tasks',
@@ -76,19 +80,35 @@ class HomePage extends StatelessWidget {
                     color: ColorsConst.TEXT_SECONDARY,
                   ),
                 ),
-
                 10.verticalSpace,
-
-                // ListView.builder(
-                //   shrinkWrap: true,
-                //   physics: NeverScrollableScrollPhysics(),
-                //   itemCount: provider.taskList.length,
-                //   itemBuilder: (context, index) {
-                //     return _buildSubListItem(context, task: provider.taskList[index]);
-                //   },
-                // ),
-
-
+                SizedBox(
+                  child: Consumer<HomeViewProvider>(
+                    builder: (context, provider, child) {
+                      return provider.taskList.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No recent tasks.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: provider.taskList.length,
+                              itemBuilder: (context, index) {
+                                print(
+                                    "HomeTaskPage ::: TaskList length: ${provider.taskList.length}");
+                                return TaskListItem(
+                                  task: provider.taskList[index],
+                                );
+                              },
+                            );
+                    },
+                  ),
+                )
               ],
             ),
           ),
@@ -96,7 +116,7 @@ class HomePage extends StatelessWidget {
       },
     );
   }
-  /*
+/*
   _buildSubListItem(BuildContext context,
       {required SubTask task, required HomeViewProvider provider}) {
     print('buildSubListItem : ' + task.status);

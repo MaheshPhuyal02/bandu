@@ -159,6 +159,7 @@ class AuthManager {
       return;
     }
     print("AuthManager ::: Initializing user " + _auth.currentUser!.uid);
+    dbManager?.setUid(_auth.currentUser!.uid);
     DocumentSnapshot<Map<String, dynamic>>? data =
         await dbManager?.getUserData(_auth.currentUser!.uid);
     if (data?.data() != null) {

@@ -107,8 +107,10 @@ class DbManager {
         .collection('user_projects')
         .doc(_currentProjectId)
         .collection('tasks')
+        .orderBy('createdDate', descending: true)
         .snapshots();
   }
+
   Stream<QuerySnapshot<Map<String, dynamic>>> streamRecentTasks() {
     print('streaming tasks for project $_currentProjectId');
     return _firestore
@@ -117,11 +119,10 @@ class DbManager {
         .collection('user_projects')
         .doc(_currentProjectId)
         .collection('tasks')
+        .orderBy('updatedDate', descending: true)
+        .limit(3)
         .snapshots();
   }
-
-
-
 
   Future<void> addTask(Task task) async {
     print('adding task to project $_currentProjectId');
@@ -180,7 +181,6 @@ class DbManager {
   }
 
   updateSubTask(String taskId, String id, List<SubTask> task) {
-
     return _firestore
         .collection('projects')
         .doc(_uid)
