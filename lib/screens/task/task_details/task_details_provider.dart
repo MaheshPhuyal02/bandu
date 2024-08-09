@@ -19,6 +19,7 @@ class TaskDetailsProvider extends ChangeNotifier {
 
   bool showSublist = true;
 
+
   void init(Task task) {
     this.task = task;
 
@@ -27,9 +28,8 @@ class TaskDetailsProvider extends ChangeNotifier {
     descriptionController.text = task.description;
 
     notifyListeners();
-
-
   }
+
 
   Future<void> updateStatus(String status) async {
     task?.status = status;
@@ -66,6 +66,7 @@ class TaskDetailsProvider extends ChangeNotifier {
 
   Future<void> updateSubStatus(String id, String status)async {
     task?.subTask.firstWhere((element) => element.id == id).status = status;
+    task?.subTask.firstWhere((element) => element.id == id).updatedDate = DateTime.now();
     DbManager.instance.updateTask(task!);
     notifyListeners();
   }

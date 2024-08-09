@@ -19,9 +19,14 @@ class SubTask {
     fromJson: _dateTimeFromTimestamp,
     toJson: _dateTimeToTimestamp,
   )
+  late DateTime? updatedDate;
+
+  @JsonKey(
+    fromJson: _dateTimeFromTimestamp,
+    toJson: _dateTimeToTimestamp,
+  )
   late DateTime? deadline;
 
-  final bool completed;
   final String taskId;
   String status;
 
@@ -31,9 +36,9 @@ class SubTask {
     required this.description,
     required this.createdDate,
     required this.deadline,
-    required this.completed,
     required this.taskId,
     required this.status,
+    this.updatedDate,
   });
 
   factory SubTask.fromJson(Map<String, dynamic> json) => _$SubTaskFromJson(json);

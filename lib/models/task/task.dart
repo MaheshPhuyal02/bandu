@@ -20,9 +20,14 @@ class Task {
     fromJson: _dateTimeFromTimestamp,
     toJson: _dateTimeToTimestamp,
   )
+  late DateTime? updatedDate;
+
+  @JsonKey(
+    fromJson: _dateTimeFromTimestamp,
+    toJson: _dateTimeToTimestamp,
+  )
   late DateTime? deadline;
 
-  final bool completed;
   final List<SubTask> subTask;
   late String status;
 
@@ -32,9 +37,9 @@ class Task {
     required this.description,
     required this.createdDate,
     required this.deadline,
-    required this.completed,
     required this.subTask,
     required this.status,
+    this.updatedDate,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);

@@ -13,9 +13,10 @@ SubTask _$SubTaskFromJson(Map<String, dynamic> json) => SubTask(
       createdDate:
           SubTask._dateTimeFromTimestamp(json['createdDate'] as Timestamp?),
       deadline: SubTask._dateTimeFromTimestamp(json['deadline'] as Timestamp?),
-      completed: json['completed'] as bool,
       taskId: json['taskId'] as String,
       status: json['status'] as String,
+      updatedDate:
+          SubTask._dateTimeFromTimestamp(json['updatedDate'] as Timestamp?),
     );
 
 Map<String, dynamic> _$SubTaskToJson(SubTask instance) => <String, dynamic>{
@@ -23,8 +24,8 @@ Map<String, dynamic> _$SubTaskToJson(SubTask instance) => <String, dynamic>{
       'title': instance.title,
       'description': instance.description,
       'createdDate': SubTask._dateTimeToTimestamp(instance.createdDate),
+      'updatedDate': SubTask._dateTimeToTimestamp(instance.updatedDate),
       'deadline': SubTask._dateTimeToTimestamp(instance.deadline),
-      'completed': instance.completed,
       'taskId': instance.taskId,
       'status': instance.status,
     };

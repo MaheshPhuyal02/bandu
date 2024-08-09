@@ -54,6 +54,7 @@ class Subtask_detailsProvider extends ChangeNotifier {
 
   Future<void> updateSubStatus(String status) async {
     subTask?.status = status;
+    subTask?.updatedDate = DateTime.now();
     task?.subTask.forEach((element) {
       if(element.id == subTask!.id){
         element.status = status;
@@ -98,6 +99,7 @@ class Subtask_detailsProvider extends ChangeNotifier {
     task?.subTask.forEach((element) {
       if(element.id == subTask!.id){
         element.title = value;
+        element.updatedDate = DateTime.now();
         return;
       }
     });
@@ -113,6 +115,7 @@ class Subtask_detailsProvider extends ChangeNotifier {
     task?.subTask.forEach((element) {
       if(element.id == subTask!.id){
         element.description = descriptionController.text;
+        element.updatedDate = DateTime.now();
         return;
       }
     });
@@ -140,6 +143,7 @@ class Subtask_detailsProvider extends ChangeNotifier {
         task?.subTask.forEach((element) {
           if(element.id == subTask!.id){
             element.deadline = value;
+            element.updatedDate = DateTime.now();
             return;
           }
         });

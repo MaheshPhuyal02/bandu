@@ -9,7 +9,7 @@ import '../../../models/task/task.dart';
 class AddTaskProvider extends ChangeNotifier {
   String? taskTitle, taskDescription, subTitle, subDescription;
 
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now().add(Duration(days: 2));
   DateTime selectedSubDate = DateTime.now().add(Duration(days: 1));
 
   Future<void> selectDate(
@@ -50,7 +50,7 @@ class AddTaskProvider extends ChangeNotifier {
         id: id,
         createdDate: DateTime.now(),
         deadline: selectedDate,
-        completed: false,
+        updatedDate: DateTime.now(),
         status: "to_do",
         subTask: [
           SubTask(
@@ -59,8 +59,8 @@ class AddTaskProvider extends ChangeNotifier {
             id: DbManager.instance.generateId(),
             createdDate: DateTime.now(),
             deadline: selectedSubDate,
-            completed: false,
             status: "to_do",
+            updatedDate: DateTime.now(),
             taskId: id,
           )
         ]);

@@ -234,7 +234,7 @@ class GeminiManager {
               'id': task.id,
               'createdDate': task.createdDate.toString(),
               'deadline': task.deadline.toString(),
-              'completed': task.completed,
+              'updatedDate': task.updatedDate.toString(),
               'status': task.status,
               'subTask': [
                 for (var subTask in task.subTask)
@@ -243,7 +243,7 @@ class GeminiManager {
                     'description': subTask.description,
                     'createdDate': subTask.createdDate.toString(),
                     'deadline': subTask.deadline.toString(),
-                    'completed': subTask.completed,
+                    'updatedDate': subTask.updatedDate.toString(),
                     'taskId': subTask.taskId,
                     'id': subTask.id,
                     'status': subTask.status,
@@ -286,7 +286,7 @@ class GeminiManager {
         description: data['description'],
         createdDate: DateTime.now(),
         deadline: DateTime.parse(data['deadline']),
-        completed: false,
+        updatedDate: DateTime.now(),
         status: "to_do",
         subTask: (data['subTask'] as List).map((subTask) {
           return SubTask(
@@ -296,7 +296,7 @@ class GeminiManager {
             description: subTask['description'],
             createdDate: DateTime.now(),
             deadline: DateTime.parse(subTask['deadline']),
-            completed: false,
+            updatedDate: DateTime.now(),
             taskId: id,
           );
         }).toList(),
@@ -329,7 +329,7 @@ class GeminiManager {
           description: task['description'],
           createdDate: DateTime.now(),
           deadline: DateTime.parse(task['deadline']),
-          completed: false,
+          updatedDate: DateTime.now(),
           status: "to_do",
           subTask: (task['subTask'] as List).map((subTask) {
             return SubTask(
@@ -339,7 +339,7 @@ class GeminiManager {
               description: subTask['description'],
               createdDate: DateTime.now(),
               deadline: DateTime.parse(subTask['deadline']),
-              completed: false,
+              updatedDate: DateTime.now(),
               taskId: id,
             );
           }).toList(),

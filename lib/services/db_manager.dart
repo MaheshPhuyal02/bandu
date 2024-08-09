@@ -121,29 +121,6 @@ class DbManager {
   }
 
 
-  Future<void> addRecentSubTask(SubTask task) async {
-    print('adding task to project $_currentProjectId');
-
-    await _firestore
-        .collection('projects')
-        .doc(_uid)
-        .collection('user_projects')
-        .doc(_currentProjectId)
-        .collection('recentTasks')
-        .doc(task.id)
-        .set({
-      'id': task.id,
-      'title': task.title,
-      'description': task.description,
-      'createdDate': task.createdDate,
-      'deadline': task.deadline,
-      'completed': task.completed,
-      'status': task.status,
-    });
-  }
-
-
-
 
 
   Future<void> addTask(Task task) async {
@@ -164,8 +141,8 @@ class DbManager {
       'title': task.title,
       'description': task.description,
       'createdDate': task.createdDate,
+      'updatedDate': task.updatedDate,
       'deadline': task.deadline,
-      'completed': task.completed,
       'status': task.status,
       'subTask': subTasks.map((e) => e.toJson()).toList(),
     });
@@ -203,6 +180,7 @@ class DbManager {
   }
 
   updateSubTask(String taskId, String id, List<SubTask> task) {
+
     return _firestore
         .collection('projects')
         .doc(_uid)
@@ -231,6 +209,7 @@ class DbManager {
   }
 
   updateTask(Task task) {
+    task.updatedDate = DateTime.now();
     return _firestore
         .collection('projects')
         .doc(_uid)
@@ -242,8 +221,8 @@ class DbManager {
       'title': task.title,
       'description': task.description,
       'createdDate': task.createdDate,
+      'updatedDate': task.updatedDate,
       'deadline': task.deadline,
-      'completed': task.completed,
       'status': task.status,
       'id': task.id,
       'subTask': task.subTask.map((e) => e.toJson()).toList(),

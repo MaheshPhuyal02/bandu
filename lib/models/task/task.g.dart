@@ -13,11 +13,12 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       createdDate:
           Task._dateTimeFromTimestamp(json['createdDate'] as Timestamp?),
       deadline: Task._dateTimeFromTimestamp(json['deadline'] as Timestamp?),
-      completed: json['completed'] as bool,
       subTask: (json['subTask'] as List<dynamic>)
           .map((e) => SubTask.fromJson(e as Map<String, dynamic>))
           .toList(),
       status: json['status'] as String,
+      updatedDate:
+          Task._dateTimeFromTimestamp(json['updatedDate'] as Timestamp?),
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
@@ -25,8 +26,8 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'title': instance.title,
       'description': instance.description,
       'createdDate': Task._dateTimeToTimestamp(instance.createdDate),
+      'updatedDate': Task._dateTimeToTimestamp(instance.updatedDate),
       'deadline': Task._dateTimeToTimestamp(instance.deadline),
-      'completed': instance.completed,
       'subTask': instance.subTask,
       'status': instance.status,
     };
