@@ -109,6 +109,42 @@ class DbManager {
         .collection('tasks')
         .snapshots();
   }
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamRecentTasks() {
+    print('streaming tasks for project $_currentProjectId');
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('tasks')
+        .snapshots();
+  }
+
+
+  Future<void> addRecentSubTask(SubTask task) async {
+    print('adding task to project $_currentProjectId');
+
+    await _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('recentTasks')
+        .doc(task.id)
+        .set({
+      'id': task.id,
+      'title': task.title,
+      'description': task.description,
+      'createdDate': task.createdDate,
+      'deadline': task.deadline,
+      'completed': task.completed,
+      'status': task.status,
+    });
+  }
+
+
+
+
 
   Future<void> addTask(Task task) async {
     print('adding task to project $_currentProjectId');
@@ -225,7 +261,7 @@ class DbManager {
         .delete();
   }
 
-  Future<List<Task>?> getTasks() {
+  Future<List<Task>> getTasks() {
     return _firestore
         .collection('projects')
         .doc(_uid)
@@ -234,7 +270,7 @@ class DbManager {
         .collection('tasks')
         .get()
         .then((value) {
-      if (value.docs.isEmpty) return null;
+      if (value.docs.isEmpty) return [];
       return value.docs.map((e) => Task.fromJson(e.data())).toList();
     });
   }
@@ -268,15 +304,16 @@ class DbManager {
         .collection('user_projects')
         .doc(_currentProjectId)
         .collection('chat')
-        .get().then((value) {
-
-
-          if(value.docs.isEmpty) return [];
+        .orderBy('createdAt', descending: true)
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) return [];
 
       return value.docs.map((e) {
         return Message(
           id: e.id,
           request: e.data()['request'],
+          createdAt: e.data()['createdAt'],
           response: e.data()['response'],
           loading: e.data()['loading'],
           actionType: Tools.parseActionType(e.data()['actionType']),
@@ -284,6 +321,4 @@ class DbManager {
       }).toList();
     });
   }
-
-
 }

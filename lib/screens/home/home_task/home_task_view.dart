@@ -1,6 +1,7 @@
 import 'package:bandu/ext/sizes_ext.dart';
 import 'package:bandu/main.dart';
 import 'package:bandu/routes/app_router.gr.dart';
+import 'package:bandu/screens/home/home_gantt/home_gantt_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -11,20 +12,13 @@ import 'home_task_provider.dart';
 class HomeTaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) {
-        Home_todoProvider provider = Home_todoProvider();
-        provider.init();
-        return provider;
-      },
-      builder: (context, child) => _buildPage(context),
-    );
+    return _buildPage(context);
   }
 
   Widget _buildPage(BuildContext context) {
     return SizedBox(
       height: double.infinity,
-      child: Consumer<Home_todoProvider>(
+      child: Consumer<Home_ganttProvider>(
         builder: (context, provider, child) {
           return Stack(
             children: [

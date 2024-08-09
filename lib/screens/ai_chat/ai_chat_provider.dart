@@ -1,4 +1,5 @@
 import 'package:bandu/constants/prompts.dart';
+import 'package:bandu/ext/text_ext.dart';
 import 'package:bandu/models/chat/message.dart';
 import 'package:bandu/services/db_manager.dart';
 import 'package:bandu/services/gemini_manager.dart';
@@ -45,6 +46,7 @@ class Ai_chatProvider extends ChangeNotifier {
   Future<void> init() async {
     messageList = [];
     messageList.addAll(await DbManager.instance.getChatHistory());
+    GeminiManager.instance.initHistory(messageList);
     notifyListeners();
   }
 
@@ -66,6 +68,7 @@ class Ai_chatProvider extends ChangeNotifier {
         id: DateTime.now().toString(),
         request: message,
         response: null,
+        createdAt: DateTime.now().toString().formatDate(),
         loading: true,
         actionType: ActionType.chat);
 

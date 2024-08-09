@@ -12,6 +12,7 @@ _$MessageImpl _$$MessageImplFromJson(Map<String, dynamic> json) =>
       request: json['request'] as String,
       response: json['response'] as String?,
       loading: json['loading'] as bool?,
+      createdAt: json['createdAt'] as String,
       actionType: $enumDecode(_$ActionTypeEnumMap, json['actionType']),
     );
 
@@ -21,6 +22,7 @@ Map<String, dynamic> _$$MessageImplToJson(_$MessageImpl instance) =>
       'request': instance.request,
       'response': instance.response,
       'loading': instance.loading,
+      'createdAt': instance.createdAt,
       'actionType': _$ActionTypeEnumMap[instance.actionType]!,
     };
 

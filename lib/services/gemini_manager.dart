@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bandu/constants/prompts.dart';
+import 'package:bandu/models/chat/message.dart';
 import 'package:bandu/models/user/user_project.dart';
 import 'package:bandu/services/db_manager.dart';
 import 'package:bandu/services/user_manager.dart';
@@ -124,7 +125,6 @@ class GeminiManager {
   }
 
   addToHistory(String message, String r) {
-
     _addToHistory(Content.text(message));
     _addToHistory(Content.model([
       TextPart(r),
@@ -188,22 +188,23 @@ class GeminiManager {
         print("Updating subtask");
         String subTaskId = data['subTaskId'];
 
-        List<Task>? tasks = await DbManager.instance.getTasks();
+        List<Task> tasks = await DbManager.instance.getTasks();
 
-        print("Tasks : " + tasks!.map((e) => e.toJson()).toList().toString());
+        print("Tasks : " + tasks.map((e) => e.toJson()).toList().toString());
 
-        Task? task = tasks!.firstWhere((element) => element.id == taskId);
+        Task task = tasks.firstWhere((element) => element.id == taskId);
 
-        SubTask? subTask = task!.subTask.firstWhere((element) => element.id == subTaskId);
+        SubTask? subTask =
+            task.subTask.firstWhere((element) => element.id == subTaskId);
 
         if (valueType == 'status') {
-          subTask!.status = value;
+          subTask.status = value;
         } else if (valueType == 'title') {
-          subTask!.title = value;
+          subTask.title = value;
         } else if (valueType == 'description') {
-          subTask!.description = value;
+          subTask.description = value;
         } else if (valueType == 'deadline') {
-          subTask!.deadline = DateTime.parse(value);
+          subTask.deadline = DateTime.parse(value);
         }
 
         await DbManager.instance.updateSubTask(taskId, subTaskId, task.subTask);
@@ -211,7 +212,6 @@ class GeminiManager {
         return {"status": 'SubTask updated successfully'};
       }
     } catch (e) {
-
       print("Error updating task : " + e.toString());
 
       return Future.value({"status": 'Error updating task'});
@@ -223,11 +223,11 @@ class GeminiManager {
       print(
           "============================= Getting task list ============================ : ");
 
-      List<Task>? tasks = await DbManager.instance.getTasks();
+      List<Task> tasks = await DbManager.instance.getTasks();
 
       return {
         "taskList": [
-          for (var task in tasks!)
+          for (var task in tasks)
             {
               'title': task.title,
               'description': task.description,
@@ -253,7 +253,8 @@ class GeminiManager {
         ]
       };
     } catch (e) {
-      return {"status": 'Error getting task list'};
+      print("Error getting task list : " + e.toString());
+      return {"status": 'Error getting task list : Error :' + e.toString()};
     }
   }
 
@@ -352,6 +353,15 @@ class GeminiManager {
     } catch (e) {
       return {"status": 'Error adding task'};
     }
+  }
+
+  void initHistory(List<Message> messageList) {
+    messageList.map((e) {
+      _addToHistory(Content.text(e.request));
+      _addToHistory(Content.model([
+        TextPart(e.response!),
+      ]));
+    }).toList();
   }
 }
 

@@ -11,6 +11,7 @@ class Message with _$Message {
     required String request,
     required String? response,
     bool? loading,
+    required String createdAt,
     required ActionType actionType,
 
 

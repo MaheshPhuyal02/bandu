@@ -1,5 +1,6 @@
 import 'package:bandu/routes/app_router.dart';
 import 'package:bandu/screens/ai_chat/ai_chat_provider.dart';
+import 'package:bandu/screens/home/home_gantt/home_gantt_provider.dart';
 import 'package:bandu/services/SharedPref.dart';
 import 'package:bandu/services/db_manager.dart';
 import 'package:bandu/services/gemini_manager.dart';
@@ -28,7 +29,8 @@ Future<void> main() async {
         ai_chatProvider.init();
         return ai_chatProvider;
       },
-    )
+    ),
+    ChangeNotifierProvider(create: (_) => Home_ganttProvider()..init()),
   ], child: const MyApp()));
 }
 

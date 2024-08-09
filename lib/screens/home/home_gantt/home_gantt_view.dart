@@ -16,18 +16,10 @@ import 'home_gantt_provider.dart';
 class Home_ganttPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) {
-        Home_ganttProvider provider = Home_ganttProvider();
-        provider.init();
-        return provider;
-      },
-      builder: (context, child) => _buildPage(context),
-    );
+    return _buildPage(context);
   }
 
   Widget _buildPage(BuildContext context) {
-    final provider = context.read<Home_ganttProvider>();
 
     return Consumer<Home_ganttProvider>(
       builder: (context, provider, child) {

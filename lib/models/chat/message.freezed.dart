@@ -24,6 +24,7 @@ mixin _$Message {
   String get request => throw _privateConstructorUsedError;
   String? get response => throw _privateConstructorUsedError;
   bool? get loading => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
   ActionType get actionType => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,6 +42,7 @@ abstract class $MessageCopyWith<$Res> {
       String request,
       String? response,
       bool? loading,
+      String createdAt,
       ActionType actionType});
 }
 
@@ -61,6 +63,7 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
     Object? request = null,
     Object? response = freezed,
     Object? loading = freezed,
+    Object? createdAt = null,
     Object? actionType = null,
   }) {
     return _then(_value.copyWith(
@@ -80,6 +83,10 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
       actionType: null == actionType
           ? _value.actionType
           : actionType // ignore: cast_nullable_to_non_nullable
@@ -100,6 +107,7 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
       String request,
       String? response,
       bool? loading,
+      String createdAt,
       ActionType actionType});
 }
 
@@ -118,6 +126,7 @@ class __$$MessageImplCopyWithImpl<$Res>
     Object? request = null,
     Object? response = freezed,
     Object? loading = freezed,
+    Object? createdAt = null,
     Object? actionType = null,
   }) {
     return _then(_$MessageImpl(
@@ -137,6 +146,10 @@ class __$$MessageImplCopyWithImpl<$Res>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
       actionType: null == actionType
           ? _value.actionType
           : actionType // ignore: cast_nullable_to_non_nullable
@@ -153,6 +166,7 @@ class _$MessageImpl implements _Message {
       required this.request,
       required this.response,
       this.loading,
+      required this.createdAt,
       required this.actionType});
 
   factory _$MessageImpl.fromJson(Map<String, dynamic> json) =>
@@ -167,11 +181,13 @@ class _$MessageImpl implements _Message {
   @override
   final bool? loading;
   @override
+  final String createdAt;
+  @override
   final ActionType actionType;
 
   @override
   String toString() {
-    return 'Message(id: $id, request: $request, response: $response, loading: $loading, actionType: $actionType)';
+    return 'Message(id: $id, request: $request, response: $response, loading: $loading, createdAt: $createdAt, actionType: $actionType)';
   }
 
   @override
@@ -184,14 +200,16 @@ class _$MessageImpl implements _Message {
             (identical(other.response, response) ||
                 other.response == response) &&
             (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
             (identical(other.actionType, actionType) ||
                 other.actionType == actionType));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, request, response, loading, actionType);
+  int get hashCode => Object.hash(
+      runtimeType, id, request, response, loading, createdAt, actionType);
 
   @JsonKey(ignore: true)
   @override
@@ -213,6 +231,7 @@ abstract class _Message implements Message {
       required final String request,
       required final String? response,
       final bool? loading,
+      required final String createdAt,
       required final ActionType actionType}) = _$MessageImpl;
 
   factory _Message.fromJson(Map<String, dynamic> json) = _$MessageImpl.fromJson;
@@ -225,6 +244,8 @@ abstract class _Message implements Message {
   String? get response;
   @override
   bool? get loading;
+  @override
+  String get createdAt;
   @override
   ActionType get actionType;
   @override

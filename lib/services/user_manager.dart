@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bandu/main.dart';
 import 'package:bandu/models/user/user_project.dart';
 import 'package:bandu/routes/app_router.gr.dart';
+import 'package:bandu/screens/home/home_gantt/home_gantt_provider.dart';
 import 'package:bandu/services/SharedPref.dart';
 import 'package:bandu/services/db_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -124,6 +125,8 @@ class AuthManager {
     } else {
       dbManager?.setCurrentProjectId(
           SharedPref.instance.getValue("currentProjectId"));
+
+      Home_ganttProvider().init();
       appRouter.pushAndPopUntil(HomeMainRoute(), predicate: (route) => false);
     }
   }

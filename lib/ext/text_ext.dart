@@ -10,4 +10,7 @@ extension EmailValidator on String {
   String formatDate() {
     return DateFormat('dd-MMM-yyyy').format(DateTime.parse(this));
   }
+  String formatDateS() {
+    return DateFormat('dd-MMM-yyyy hh:mm:s a').format(DateTime.parse(this));
+  }
 }

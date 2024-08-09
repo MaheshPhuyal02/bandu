@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../models/task/sub_task.dart';
 import '../../../models/task/task.dart';
 import '../../../services/db_manager.dart';
+import '../../../services/user_manager.dart';
 
 class Home_ganttProvider extends ChangeNotifier {
 
@@ -17,7 +18,18 @@ class Home_ganttProvider extends ChangeNotifier {
 
   Future<void> init() async {
 
-    taskList.addAll((await DbManager.instance.getTasks())!);
+    if(!AuthManager.instance.hasLoggedIn()){
+      appRouter.push(const LoginRoute());
+      return;
+    }
+    DbManager.instance.streamTasks().listen((event) {
+      taskList.clear();
+      taskList.addAll(event.docs.map((e) => Task.fromJson(e.data())).toList());
+      print("Home_ganttProvider ::: Tasks loaded :" + taskList.length.toString());
+      addAllToSubTaskList();
+      notifyListeners();
+    });
+
     addAllToSubTaskList();
     notifyListeners();
   }
