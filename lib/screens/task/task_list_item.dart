@@ -75,29 +75,94 @@ class TaskListItem extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        5.verticalSpace,
+                        Text(
+                          "Deadline : ${provider.task!.deadline.toString().formatDate()}",
+                          style: TextStyle(
+                            fontSize: 11.sp,
+                          ),
+                        ),
                       ],
                     ),
                   ),
+
                   PopupMenuButton<String>(
+                    icon: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 7.sp, vertical: 4.sp),
+                      decoration: BoxDecoration(
+                        color: parseStatusColor(provider.task!.status),
+                        borderRadius: BorderRadius.circular(5.sp),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            parseStatus(task.status) == TaskStatus.DONE
+                                ? Icons.check_circle
+                                : parseStatus(task.status) ==
+                                TaskStatus.IN_PROGRESS
+                                ? Icons.pending_outlined
+                                : parseStatus(task.status) ==
+                                TaskStatus.DONE
+                                ? Icons.check_circle_outline
+                                : Icons.access_time,
+                            color: Colors.black,
+                            size: 16.sp,
+                          ),
+                          2.horizontalSpace,
+                          Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: Colors.black,
+                            size: 22.sp,
+                          ),
+                        ],
+                      ),
+                    ),
                     onSelected: (String item) {
                       switch (item) {
-                        case 'Delete':
-                          provider.deleteTask(
-                            context,
-                            provider.task!.id,
-                            close: false,
-                          );
+                        case 'To Do':
+                          provider.updateStatus('to_do');
+                          break;
+                        case 'In Progress':
+                          provider.updateStatus('progress');
+                          break;
+                        case 'Done':
+                          provider.updateStatus('done');
+                          print('Done');
+
                           break;
                       }
                     },
                     itemBuilder: (BuildContext context) {
-                      return Options.taskOptions.map((String choice) {
+                      return Options.taskStatusOptions.map((String choice) {
                         return PopupMenuItem<String>(
                           value: choice,
                           child: Text(choice),
                         );
                       }).toList();
                     },
+                  ),
+
+                  5.horizontalSpace,
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    iconSize: 20.sp,
+                    constraints: BoxConstraints(
+                      maxHeight: 20.sp,
+                      maxWidth: 20.sp,
+                    ),
+                    onPressed: () {
+                      provider.deleteTask(
+                        context,
+                        provider.task!.id,
+                        close: false,
+                      );
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                      size: 20.sp,
+                    ),
                   ),
                 ],
               ),

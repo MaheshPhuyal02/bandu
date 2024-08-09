@@ -61,27 +61,8 @@ class TexMarkdown extends StatelessWidget {
       );
     }
     return ClipRRect(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        MdWidget(
-          tex,
-          textDirection: textDirection,
-          style: style,
-          onLinkTab: onLinkTab,
-          textAlign: textAlign,
-          textScaler: textScaler,
-          followLinkColor: followLinkColor,
-          latexWorkaround: latexWorkaround,
-          latexBuilder: latexBuilder,
-          codeBuilder: codeBuilder,
-          maxLines: maxLines,
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        InkWell(
-          onTap: () {
+        child: GestureDetector(
+          onDoubleTap: () {
             Clipboard.setData(ClipboardData(text: tex));
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -89,12 +70,19 @@ class TexMarkdown extends StatelessWidget {
               ),
             );
           },
-          child: Icon(
-            Icons.copy,
-            size: 18,
+          child: MdWidget(
+            tex,
+            textDirection: textDirection,
+            style: style,
+            onLinkTab: onLinkTab,
+            textAlign: textAlign,
+            textScaler: textScaler,
+            followLinkColor: followLinkColor,
+            latexWorkaround: latexWorkaround,
+            latexBuilder: latexBuilder,
+            codeBuilder: codeBuilder,
+            maxLines: maxLines,
           ),
-        ),
-      ],
-    ));
+        ));
   }
 }
