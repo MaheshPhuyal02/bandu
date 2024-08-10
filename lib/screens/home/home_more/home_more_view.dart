@@ -68,18 +68,18 @@ class Home_morePage extends StatelessWidget {
 
           10.verticalSpace,
 
-          Row(
-            children: [
-              Expanded(child: _buildMenuItem("Profile", "assets/icons/person.svg", (){}, context)),
-              Expanded(child: _buildMenuItem("Notes", "assets/icons/notes.svg", (){}, context)),
-              Expanded(child: _buildMenuItem("Profile", "assets/icons/notification.svg", (){}, context)),
-            ],
-          ),
-          20.verticalSpace,
+          // Row(
+          //   children: [
+          //     Expanded(child: _buildMenuItem("Profile", "assets/icons/person.svg", (){}, context)),
+          //     Expanded(child: _buildMenuItem("Notes", "assets/icons/notes.svg", (){}, context)),
+          //     Expanded(child: _buildMenuItem("Profile", "assets/icons/notification.svg", (){}, context)),
+          //   ],
+          // ),
+          // 20.verticalSpace,
 
           Row(
             children: [
-              Expanded(child: _buildMenuItem("Setting", "assets/icons/setting.svg", (){}, context)),
+              // Expanded(child: _buildMenuItem("Setting", "assets/icons/setting.svg", (){}, context)),
               Expanded(child: _buildMenuItem("Logout", "assets/icons/logout.svg", (){
                 provider.logout(context);
               }, context)),

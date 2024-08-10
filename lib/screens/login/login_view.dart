@@ -96,11 +96,16 @@ class LoginPage extends StatelessWidget {
                             ))),
                   ),
                   10.verticalSpace,
-                  Container(
-                    width: double.infinity,
-                    alignment: Alignment.topRight,
-                    child: Text(
-                      "Forgot Password?",
+                  TextButton(
+                    onPressed: () {
+                      appRouter.push(ForgetPasswordRoute());
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        "Forgot Password?",
+                      ),
                     ),
                   ),
                   20.verticalSpace,

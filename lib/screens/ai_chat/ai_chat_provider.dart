@@ -94,11 +94,13 @@ class Ai_chatProvider extends ChangeNotifier {
     }
     msg.response = response;
     msg.loading = false;
-    messageList[messageList.length - 1] = msg;
+    if(messageList.isNotEmpty) {
+      messageList[messageList.length - 1] = msg;
 
-    DbManager.instance.addChatHistory(msg);
+      DbManager.instance.addChatHistory(msg);
 
-    _scrollToLast();
+      // _scrollToLast();
+    }
     loading = false;
     setEditing(true);
 

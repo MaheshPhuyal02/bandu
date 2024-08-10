@@ -24,7 +24,8 @@ class Home_ganttPage extends StatelessWidget {
     return Consumer<Home_ganttProvider>(
       builder: (context, provider, child) {
         return Container(
-          margin: EdgeInsets.symmetric(horizontal: 0, vertical: 20.sp),
+
+          margin: EdgeInsets.symmetric(horizontal: 10.sp, vertical: 20.sp),
           child: dynamicTile(),
         );
       },
