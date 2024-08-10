@@ -57,7 +57,7 @@ class HomeTaskPage extends StatelessWidget {
                               itemCount: provider.taskList.length,
                               itemBuilder: (context, index) {
                                 print("HomeTaskPage ::: TaskList length: " +
-                                    provider.taskList.length.toString());
+                                    provider.taskList.toString());
                                 return TaskListItem(
                                   task: provider.taskList[index],
                                 );

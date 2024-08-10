@@ -27,22 +27,22 @@ class TaskListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (BuildContext context) {
-        TaskDetailsProvider provider = TaskDetailsProvider();
-        provider.init(task);
-        return provider;
+
+        return TaskDetailsProvider(task);
       },
       builder: (context, child) => _buildPage(context),
     );
   }
 
   Widget _buildPage(BuildContext context) {
+    print("TaskListItem ::: _buildPage :" + task.toString());
     return Consumer<TaskDetailsProvider>(
       builder: (context, provider, child) {
         return InkWell(
           onTap: () {
             appRouter.push(
               TaskDetailsRoute(
-                task: provider.task!,
+                task: task,
               ),
             );
           },
@@ -69,7 +69,7 @@ class TaskListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          provider.task!.title,
+                          task!.title,
                           style: TextStyle(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.bold,
@@ -77,7 +77,7 @@ class TaskListItem extends StatelessWidget {
                         ),
                         5.verticalSpace,
                         Text(
-                          "Deadline : ${provider.task!.deadline.toString().formatDate()}",
+                          "Deadline : ${task!.deadline.toString().formatDate()}",
                           style: TextStyle(
                             fontSize: 11.sp,
                           ),
@@ -172,7 +172,7 @@ class TaskListItem extends StatelessWidget {
                       child: ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: provider.task?.subTask.length,
+                        itemCount: task?.subTask.length,
                         itemBuilder: (context, index) => buildSubListItem(
                             context,
                             task: provider.task!.subTask[index],

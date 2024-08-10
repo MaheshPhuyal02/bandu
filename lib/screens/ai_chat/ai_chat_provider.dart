@@ -34,7 +34,7 @@ class Ai_chatProvider extends ChangeNotifier {
         name: "Analyze Budget", prompt: Prompts.analyzeBudget, selected: false),
     Prompt(name: "Analyze Time", prompt: Prompts.analyzeTime, selected: false),
     Prompt(
-        name: "Summarize System",
+        name: "Summarize",
         prompt: Prompts.summarizeSystem,
         selected: false),
   ];
@@ -46,6 +46,7 @@ class Ai_chatProvider extends ChangeNotifier {
   Future<void> init() async {
     messageList = [];
     messageList.addAll(await DbManager.instance.getChatHistory());
+    _scrollToLast();
     GeminiManager.instance.initHistory(messageList);
     notifyListeners();
   }
@@ -68,7 +69,7 @@ class Ai_chatProvider extends ChangeNotifier {
         id: DateTime.now().toString(),
         request: message,
         response: null,
-        createdAt: DateTime.now().toString().formatDate(),
+        createdAt: DateTime.now(),
         loading: true,
         actionType: ActionType.chat);
 
@@ -91,7 +92,8 @@ class Ai_chatProvider extends ChangeNotifier {
       response = await GeminiManager.instance.sendMessage(message);
       GeminiManager.instance.addToHistory(message,  response);
     }
-    msg = msg.copyWith(response: response, loading: false);
+    msg.response = response;
+    msg.loading = false;
     messageList[messageList.length - 1] = msg;
 
     DbManager.instance.addChatHistory(msg);
@@ -122,6 +124,11 @@ class Ai_chatProvider extends ChangeNotifier {
 
   void setEditing(bool value) {
     enableEditing = value;
+    notifyListeners();
+  }
+
+  void clearChat() {
+    messageList.clear();
     notifyListeners();
   }
 

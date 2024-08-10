@@ -42,6 +42,12 @@ class Task {
     this.updatedDate,
   });
 
+  @override
+  String toString() {
+    // TODO: implement toString
+    return toJson().toString();
+  }
+
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
 
 

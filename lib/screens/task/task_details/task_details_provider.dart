@@ -19,15 +19,20 @@ class TaskDetailsProvider extends ChangeNotifier {
 
   bool showSublist = true;
 
+  TaskDetailsProvider(Task task){
+    init(task);
+  }
+
 
   void init(Task task) {
     this.task = task;
+
+    notifyListeners();
 
     textController.text = task.title;
 
     descriptionController.text = task.description;
 
-    notifyListeners();
   }
 
 
@@ -89,7 +94,7 @@ class TaskDetailsProvider extends ChangeNotifier {
           TextButton(
             onPressed: () async {
               task?.subTask.removeWhere((element) => element.id == id);
-              await DbManager.instance.deleteTask(id);
+              await DbManager.instance.updateTask(task!);
               Navigator.pop(context);
               notifyListeners();
             },
@@ -119,7 +124,7 @@ class TaskDetailsProvider extends ChangeNotifier {
           ),
           TextButton(
             onPressed: () async {
-              task?.subTask.removeWhere((element) => element.id == id);
+
               Navigator.pop(context);
               await DbManager.instance.deleteTask(
                   task!.id

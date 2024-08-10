@@ -2,37 +2,45 @@ import 'package:bandu/ext/text_ext.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class Prompts {
-  static const dateFormat = "yyyy-MM-dd";
+  static const String dateFormat = "yyyy-MM-dd";
+
+  static final String _def =
+      "You are TaskGen AI, created by the TaskGen Team. Your primary role is to manage tasks efficiently. "
+          "Do not use outdated messages unless absolutely necessary. Prioritize task creation and execution use functions more than chatting. "
+          "If users paste requirements or messages, perform the tasks as requested without asking additional questions. "
+          "The date format to use is " + dateFormat + ". The current date is " +
+          DateTime.now().toString().formatDate() + ". Your task is to ";
+
   static final String defaultSystem =
-      "Your name is TaskGen AI, You've been designed, developed and created by TaskGen Team. "
+      "You are TaskGen AI, created by the TaskGen Team. Maintain a professional tone and keep responses brief. "
+          "Your responsibilities include chatting, analyzing requirements, managing task lists, creating and updating tasks, "
+          "and providing summaries. Perform these tasks without asking for IDs or budget details, and focus on generating tasks. "
+          "Do not send IDs directly to users. The date format to use is " + dateFormat + ". The current date is " +
+          DateTime.now().toString().formatDate() + ".";
 
-          " Be respectful, use professional language, and give very short and sweet response."
-              "your task is to chat, analyze"
-              " requirements, get task list and show in chat, create task and task list, "
-          "update task first get the task list and find the task or subtask and update it, "
-          "and do it yourself do not ask for id, delze budget, anaete tasks, analylyze time, and summarize. "
-          "use function as user wants to interact with task, less use previous chat messages"
-              " Focus more on task generating, and less on chatting also remember don't send Id directly to user in chat."
-              "Remember date format : " +
-          dateFormat +
-          " and current date is : " +
-          DateTime.now().toString().formatDate();
+  static final String summarizeSystem =
+      _def +
+          "Summarize long messages from users concisely. Present summaries as a list of key points for clarity.";
 
-  static const String summarizeSystem =
-      "Summarize the long message sent by user, send with format, and summarize in points.";
+  static final String createTask =
+      _def +
+          "Thoroughly analyze the requirements and include every detail from start to finish."
+              " Use `addTaskList` for multiple tasks and `addTask` for individual tasks "
+              "(note: multiple tasks are preferred) subtasks are important and you must add at least 1 for each task."
+              " Ensure to include the following details for each task: title, description, created date, deadline, and any sub-tasks (with their own title, description, and deadline). "
+              "After creating the tasks, provide the user with a summary of the actions taken in text format.";
 
-  static const String createTask =
-      "Add task list as needed, call addTask function for single task "
-      "and addTaskList for multiple task, with title, description, created date, deadline and subTask(list of subtasks) with title, description, deadline. Don't ask too many questions just add task as needed.";
+  static final String analyzeRequirements =
+      _def +
+          "Focus exclusively on analyzing the requirements. Provide a detailed feasibility study, summary, and any relevant budget considerations.";
 
-  static const String analyzeRequirements =
-      "Only analyze the requirements, study feasibility, make summary, budget, and so on. Only create task when user asks.";
+  static final String analyzeBudget =
+      _def +
+          "Evaluate the budget, offering an overall estimate and a breakdown by task. Provide a comprehensive budget analysis, focusing less on time details.";
 
-  static const String analyzeBudget =
-      "Analyze the budget, give overall budget, and breakdown in different task.";
-
-  static const String analyzeTime =
-      "Analyze the time, give overall time, and breakdown in different task.";
+  static final String analyzeTime =
+      _def +
+          "Assess the time requirements, giving an overall estimate and a breakdown by task. Provide a detailed analysis of time, excluding budget considerations.";
 
   static final getTaskList = FunctionDeclaration(
       "getTaskList",
@@ -51,24 +59,35 @@ class Prompts {
           enumValues: ['task', 'subTask'],
         ),
         'valueType': Schema.enumString(
-          enumValues: [
-            'title',
-            'description',
-            'deadline',
-            'status'
-          ],
+          enumValues: ['title', 'description', 'deadline', 'status'],
         ),
-        'taskId': Schema(SchemaType.string,
-            description: 'The task id.'),
+        'taskId': Schema(SchemaType.string, description: 'The task id.'),
         'subTaskId': Schema(SchemaType.string,
-            description: 'The id of subtask it can be empty if task is updating.'),
+            description:
+                'The id of subtask it can be empty if task is updating.'),
         'value': Schema(SchemaType.string,
             description:
                 'The value to be updated if status use to_do, pending and done.'),
       },
-      requiredProperties: ['taskType', 'valueType', 'taskId', 'subTaskId', 'value'],
+      requiredProperties: [
+        'taskType',
+        'valueType',
+        'taskId',
+        'subTaskId',
+        'value'
+      ],
     ),
   );
+
+  static final clearChatHistory = FunctionDeclaration(
+      "clearChatHistory",
+      "Clear chat history",
+      Schema(SchemaType.object, properties: {
+        'status': Schema(SchemaType.string,
+            description: 'The status of delete system.'),
+      }, requiredProperties: [
+        "status"
+      ]));
 
   static final deleteAllTaskSchema = FunctionDeclaration(
       "deleteAllTask",

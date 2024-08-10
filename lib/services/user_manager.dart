@@ -56,7 +56,7 @@ class AuthManager {
       status = AuthStatus.authenticated;
 
       await initializeUser();
-      validateUser();
+      await validateUser();
     }).catchError((error) {
       _error = error.toString();
       status = AuthStatus.error;
@@ -98,7 +98,7 @@ class AuthManager {
       status = AuthStatus.authenticated;
       await _handleRegister(name, email, "email");
       await initializeUser();
-      validateUser();
+      await validateUser();
     }).catchError((error) {
       _error = error.toString();
       status = AuthStatus.error;

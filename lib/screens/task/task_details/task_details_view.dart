@@ -23,11 +23,7 @@ class TaskDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (BuildContext context) {
-        TaskDetailsProvider prov = TaskDetailsProvider();
-
-        prov.init(task);
-
-        return prov;
+        return TaskDetailsProvider(task);
       },
       builder: (context, child) => _buildPage(context),
     );

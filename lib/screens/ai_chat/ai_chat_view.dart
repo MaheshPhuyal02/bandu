@@ -85,7 +85,7 @@ class Ai_chatPage extends StatelessWidget {
                         ),
                         Container(
                           constraints: BoxConstraints(
-                            maxHeight: 50.pH,
+                            maxHeight: 20.pH,
                           ),
                           child: Form(
                             key: _formKey,

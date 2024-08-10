@@ -125,7 +125,7 @@ class CustomEventTile2 extends StatelessWidget {
           taskTitle,
           style: TextStyle(
             color: textColor ?? Colors.black,
-            fontSize: 15.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -143,8 +143,7 @@ class CustomEventTile2 extends StatelessWidget {
                 title,
                 style: TextStyle(
                   color: textColor ?? Colors.black,
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 12.sp,
                 ),
               ),
             ),
@@ -164,8 +163,7 @@ class CustomEventTile2 extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: textColor ?? Colors.black,
-            fontSize: 15.sp,
-            fontWeight: FontWeight.w600,
+            fontSize: 11.sp,
           ),
         ),
       ],

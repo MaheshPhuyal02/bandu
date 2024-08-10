@@ -24,14 +24,12 @@ class Home_ganttProvider extends ChangeNotifier {
     }
     DbManager.instance.streamTasks().listen((event) {
       taskList.clear();
+      notifyListeners();
       taskList.addAll(event.docs.map((e) => Task.fromJson(e.data())).toList());
       print("Home_ganttProvider ::: Tasks loaded :" + taskList.length.toString());
-      addAllToSubTaskList();
       notifyListeners();
+      addAllToSubTaskList();
     });
-
-    addAllToSubTaskList();
-    notifyListeners();
   }
 
   addAllToSubTaskList(){

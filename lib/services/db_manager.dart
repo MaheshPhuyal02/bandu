@@ -229,7 +229,8 @@ class DbManager {
     });
   }
 
-  deleteTask(String id) {
+  Future<void> deleteTask(String id) {
+    print('deleting task $id');
     return _firestore
         .collection('projects')
         .doc(_uid)
@@ -283,7 +284,7 @@ class DbManager {
         .collection('user_projects')
         .doc(_currentProjectId)
         .collection('chat')
-        .orderBy('createdAt', descending: true)
+        .orderBy('createdAt', descending: false)
         .get()
         .then((value) {
       if (value.docs.isEmpty) return [];
@@ -292,12 +293,27 @@ class DbManager {
         return Message(
           id: e.id,
           request: e.data()['request'],
-          createdAt: e.data()['createdAt'],
+          createdAt: e.data()['createdAt'].toDate(),
           response: e.data()['response'],
           loading: e.data()['loading'],
           actionType: Tools.parseActionType(e.data()['actionType']),
         );
       }).toList();
+    });
+  }
+
+  clearChat() {
+    return _firestore
+        .collection('projects')
+        .doc(_uid)
+        .collection('user_projects')
+        .doc(_currentProjectId)
+        .collection('chat')
+        .get()
+        .then((value) {
+      for (var doc in value.docs) {
+        doc.reference.delete();
+      }
     });
   }
 }

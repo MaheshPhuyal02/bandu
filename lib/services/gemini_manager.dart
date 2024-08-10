@@ -2,11 +2,14 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bandu/constants/prompts.dart';
+import 'package:bandu/main.dart';
 import 'package:bandu/models/chat/message.dart';
 import 'package:bandu/models/user/user_project.dart';
+import 'package:bandu/screens/ai_chat/ai_chat_provider.dart';
 import 'package:bandu/services/db_manager.dart';
 import 'package:bandu/services/user_manager.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:provider/provider.dart';
 
 import '../models/task/sub_task.dart';
 import '../models/task/task.dart';
@@ -87,11 +90,13 @@ class GeminiManager {
       throw Exception('Gemini is not ready');
     }
 
+    print("Sending messages  ::: " + command);
+
     message = message.trim();
 
     String user = await userInfo();
 
-    _gemModel = _getGemModel(Prompts.defaultSystem + command + user);
+    _gemModel = _getGemModel(command + user);
 
     var chat = _gemModel?.startChat(
       history: history,
@@ -109,6 +114,7 @@ class GeminiManager {
           'addTaskList' => await addListTask(functionCall.args),
           'getTaskList' => await getTaskList(functionCall.args),
           'updateTask' => await updateTask(functionCall.args),
+          'clearChatHistory' => await clearHistory(functionCall.args),
           _ => throw UnimplementedError(
               'Function not implemented: ${functionCall.name}')
         };
@@ -116,12 +122,35 @@ class GeminiManager {
             .sendMessage(Content.functionResponse(functionCall.name, result));
       }
 
-      return response.text!;
+      return response.text ?? "";
     } catch (e) {
       print("Error : " + e.toString());
       _gemModel = null;
       return "Error : " + e.toString();
     }
+  }
+
+  Future<Map<String, String>> clearHistory(Map<String, dynamic> data) async {
+    try {
+      print(
+          "============================= Clearing chat history ============================ : ");
+
+      history.clear();
+
+      _clear();
+
+      return {"status": 'Chat history cleared successfully'};
+    } catch (e) {
+      return {"status": 'Error clearing chat history'};
+    }
+  }
+
+  _clear() async {
+    await DbManager.instance.clearChat();
+
+    appRouter.navigatorKey.currentState?.context
+        .read<Ai_chatProvider>()
+        .clearChat();
   }
 
   addToHistory(String message, String r) {
@@ -145,6 +174,7 @@ class GeminiManager {
           Prompts.deleteAllTaskSchema,
           Prompts.getTaskList,
           Prompts.updateTask,
+          Prompts.clearChatHistory,
         ]),
       ],
     );

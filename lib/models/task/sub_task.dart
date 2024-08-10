@@ -41,9 +41,16 @@ class SubTask {
     this.updatedDate,
   });
 
+  @override
+  String toString() {
+    // TODO: implement toString
+    return toJson().toString();
+  }
+
   factory SubTask.fromJson(Map<String, dynamic> json) => _$SubTaskFromJson(json);
 
   Map<String, dynamic> toJson() => _$SubTaskToJson(this);
+
 
   // Helper methods for Firestore Timestamp conversion
   static DateTime? _dateTimeFromTimestamp(Timestamp? timestamp) =>

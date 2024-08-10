@@ -83,7 +83,7 @@ class Subtask_detailsProvider extends ChangeNotifier {
           TextButton(
             onPressed: () async {
               task?.subTask.removeWhere((element) => element.id == id);
-              await DbManager.instance.deleteTask(id);
+              await DbManager.instance.updateTask(task!);
               Navigator.pop(context);
               notifyListeners();
             },
